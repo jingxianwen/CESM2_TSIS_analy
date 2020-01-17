@@ -21,19 +21,25 @@ from get_parameters import get_area_mean_min_max
 
 #def lon_lat_contour_model_vs_model(varnm,season,scale_ctl,scale_exp,table):
 # data path
-ctl_name="CTL" #os.environ["ctl_name"]
-exp_name="TSIS" #os.environ["exp_name"]
+#ctl_name="E3SM_DECKv1b" #os.environ["ctl_name"]
+ctl_name="E3SM_modified" #os.environ["ctl_name"]
+exp_name="E3SM_modified_noEmis" #os.environ["exp_name"]
+#exp_name="E3SM_modified_noEmis" #os.environ["exp_name"]
 #fpath_ctl=os.environ["fpath_ctl"]+"/"+os.environ["ctl_run_id"]+"_climo_"+season+".nc"
 #fpath_exp=os.environ["fpath_exp"]+"/"+os.environ["exp_run_id"]+"_climo_"+season+".nc"
 #fpath_ctl="./solar_TSIS_cesm211_standard-ETEST-f19_g17-ens1/atm/hist/"
 #fpath_exp="../DATA/tsis_ctl_cesm211_standard-ETEST-f19_g17-ens1/atm/hist/"
-fpath_ctl="../DATA/solar_ctl_cesm211_standard-ETEST-f19_g17-ens0/atm/hist/"
-fpath_exp="../DATA/solar_ctl_cesm211_standard-ETEST-f19_g17-ens1/atm/hist/"
+#fpath_ctl="../../E3SM_output/E3SM_DECKv1b_H1.ne30/climo/"
+fpath_ctl="../../E3SM_output/E3SM_coupled_restart_20TR_Yr2000-emis_Scat.Year2000_2014/climo/"
+fpath_exp="../../E3SM_output/E3SM_coupled_restart_20TR_Yr2000-Scat.Year2000_2014/climo/"
+#fpath_exp="../../E3SM_output/E3SM_coupled_restart_20TR_Yr2000-Scat.Year2000_2014/climo/"
  
 #f1=fpath_ctl+"solar_TSIS_cesm211_standard-ETEST-f19_g17-ens1.cam.h0.0001-01.nc"
 #f2=fpath_exp+"tsis_ctl_cesm211_standard-ETEST-f19_g17-ens1.cam.h0.0001-01.nc"
-f1=fpath_ctl+"solar_ctl_cesm211_standard-ETEST-f19_g17-ens0.cam.h0.0001-01.nc"
-f2=fpath_exp+"solar_ctl_cesm211_standard-ETEST-f19_g17-ens1.cam.h0.0001-01.nc"
+#f1=fpath_ctl+"E3SM_DECKv1b_H1.ne30_climo_ANN.nc"
+f1=fpath_ctl+"E3SM_coupled_restart_20TR_Yr2000-emis_Scat.Year2000_2014_climo_ANN.nc"
+f2=fpath_exp+"E3SM_coupled_restart_20TR_Yr2000-Scat.Year2000_2014_climo_ANN.nc"
+#f2=fpath_exp+"E3SM_coupled_restart_20TR_Yr2000-Scat.Year2000_2014_climo_ANN.nc"
 # open data file
 file_ctl=netcdf_dataset(f1,"r")
 file_exp=netcdf_dataset(f2,"r")
@@ -43,7 +49,7 @@ lat=file_ctl.variables["lat"]
 lon=file_ctl.variables["lon"]
 
 #varnm="FSSDCLRS14"
-varnm="FSNTOA"
+varnm="FLUTC"
 
 # read data and calculate mean/min/max
 dtctl=file_ctl.variables[varnm] #*scale_ctl
@@ -88,9 +94,13 @@ for i in range(0,3):
     levels = None
     norm = None
     if i != 2:
-        cnlevels=np.array([0,10,20,30,40,50,60]) #parameters["contour_levs"]
+        #cnlevels=np.array([0,10,20,30,40,50,60]) #parameters["contour_levs"]
+        cnlevels=np.arange(125,300,20)
+        #cnlevels=np.arange(0,80,8)
     else:
-        cnlevels=np.array([-4,-3.5,-3,-2.5,-2,-1.5,-1.,-0.5,0.5,1.,1.5,2.,2.5,3.,3.5,4.]) #parameters["diff_levs"]
+        #cnlevels=np.arange(-9,10,1.5)
+        cnlevels=np.arange(-6,7,1)
+        #cnlevels=np.array([-4,-3.5,-3,-2.5,-2,-1.5,-1.,-0.5,0.5,1.,1.5,2.,2.5,3.,3.5,4.]) #parameters["diff_levs"]
 
     #if len(cnlevels) >0:
     #        levels = [-1.0e8] + cnlevels + [1.0e8]
@@ -155,6 +165,7 @@ fig.suptitle(varnm, x=0.5, y=0.96, fontdict=plotTitle)
 #if os.environ["fig_save"]=="True":
 #    fname="d1_lon_lat_contour_"+varnm+"_"+season+"."+os.environ["fig_suffix"]
 #    plt.savefig(os.environ["OUTDIR"]+"/figures/"+fname)
+plt.savefig(varnm+"_"+exp_name+"-"+ctl_name+".png")
 #if os.environ["fig_show"]=="True":
 #    plt.show()
 plt.show()
