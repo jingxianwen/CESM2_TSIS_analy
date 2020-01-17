@@ -27,13 +27,13 @@ exp_name="TSIS" #os.environ["exp_name"]
 #fpath_exp=os.environ["fpath_exp"]+"/"+os.environ["exp_run_id"]+"_climo_"+season+".nc"
 #fpath_ctl="./solar_TSIS_cesm211_standard-ETEST-f19_g17-ens1/atm/hist/"
 #fpath_exp="../DATA/tsis_ctl_cesm211_standard-ETEST-f19_g17-ens1/atm/hist/"
-fpath_ctl="../DATA/solar_ctl_cesm211_standard-ETEST-f19_g17-ens0/atm/hist/"
-fpath_exp="../DATA/solar_ctl_cesm211_standard-ETEST-f19_g17-ens1/atm/hist/"
+fpath_ctl="../DATA_tmp/"
+fpath_exp="../DATA_tmp/"
  
 #f1=fpath_ctl+"solar_TSIS_cesm211_standard-ETEST-f19_g17-ens1.cam.h0.0001-01.nc"
 #f2=fpath_exp+"tsis_ctl_cesm211_standard-ETEST-f19_g17-ens1.cam.h0.0001-01.nc"
-f1=fpath_ctl+"solar_ctl_cesm211_standard-ETEST-f19_g17-ens0.cam.h0.0001-01.nc"
-f2=fpath_exp+"solar_ctl_cesm211_standard-ETEST-f19_g17-ens1.cam.h0.0001-01.nc"
+f1=fpath_ctl+"solar_TSIS_cesm211_ETEST-f19_g17-ens0.cam.h0.0001-01.nc"
+f2=fpath_exp+"solar_TSIS_cesm211_ETEST-f19_g17-ens0.cam.h0.2001-01.nc"
 # open data file
 file_ctl=netcdf_dataset(f1,"r")
 file_exp=netcdf_dataset(f2,"r")
