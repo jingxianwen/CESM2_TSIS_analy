@@ -23,10 +23,20 @@ def listToString(s):
 # Input 
 #caseid="E3SM_DECKv1b_H1.ne30"
 #monthly_data_path="./E3SM_DECKv1b_H1.ne30/remap_180x360"
-caseid="solar_CTL_cesm211_ETEST-f19_g17-ens_mean_2010-1019"
+caseid="solar_TSIS_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
 #monthly_data_path="/raid00/xianwen/Yi-Hsuan/E3SM_coupled_restart_20TR_Yr2000-Scat.Year2000_2014/remap_180x360"
-monthly_data_path="/raid00/xianwen/cesm211_solar/"+caseid
+monthly_data_path="/raid00/xianwen/cesm211_solar/"+caseid+"/monthly"
 years=np.arange(2010,2020)
+months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
+
+# check file existence:
+for yr in years:
+    for mon in months_all:
+       checkfile=monthly_data_path+"/"+caseid+".cam.h0."+str(yr)+"-"+mon+".nc"
+       if not os.path.exists(checkfile):
+           print(checkfile+" not found!!!")
+           exit()
+print("All input files have been found ^_^")
 #print(years)
 #exit()
 # Output
@@ -39,7 +49,7 @@ if not os.path.exists(out_path):
 # create list of all input files
 # Monthly climo
 for mon in months_to_do:
-    print("-- doing "+mon+"--")
+    print("-- doing "+mon+" --")
     list_file="list_"+mon+".txt"
     if os.path.exists(list_file):
         os.system("rm "+list_file)
@@ -57,7 +67,7 @@ for mon in months_to_do:
 
 # Seasonal and Annual mean for each year
 for seasn in seasons_to_do:
-    print("-- doing "+seasn+"for each year--")
+    print("-- doing "+seasn+"for each year --")
     if seasn == "ANN":
         mons_for_seasn=["01","02","03","04","05","06","07","08","09","10","11","12"]
         for yr in years:
@@ -150,7 +160,7 @@ for seasn in seasons_to_do:
 
 # Seasonal and Annual climo
 for seasn in seasons_to_do:
-    print("-- doing "+seasn+"--")
+    print("-- doing "+seasn+" --")
     list_file="list_"+seasn+".txt"
     if seasn == "ANN":
         mons_for_seasn=["01","02","03","04","05","06","07","08","09","10","11","12"]
