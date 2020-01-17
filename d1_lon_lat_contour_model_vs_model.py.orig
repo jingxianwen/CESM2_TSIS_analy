@@ -29,7 +29,8 @@ exp_name="E3SM_modified_noEmis" #os.environ["exp_name"]
 #fpath_exp=os.environ["fpath_exp"]+"/"+os.environ["exp_run_id"]+"_climo_"+season+".nc"
 #fpath_ctl="./solar_TSIS_cesm211_standard-ETEST-f19_g17-ens1/atm/hist/"
 #fpath_exp="../DATA/tsis_ctl_cesm211_standard-ETEST-f19_g17-ens1/atm/hist/"
-
+<<<<<<< HEAD
+#fpath_ctl="../../E3SM_output/E3SM_DECKv1b_H1.ne30/climo/"
 fpath_ctl="../../E3SM_output/E3SM_coupled_restart_20TR_Yr2000-emis_Scat.Year2000_2014/climo/"
 fpath_exp="../../E3SM_output/E3SM_coupled_restart_20TR_Yr2000-Scat.Year2000_2014/climo/"
 #fpath_exp="../../E3SM_output/E3SM_coupled_restart_20TR_Yr2000-Scat.Year2000_2014/climo/"
@@ -40,7 +41,7 @@ fpath_exp="../../E3SM_output/E3SM_coupled_restart_20TR_Yr2000-Scat.Year2000_2014
 f1=fpath_ctl+"E3SM_coupled_restart_20TR_Yr2000-emis_Scat.Year2000_2014_climo_ANN.nc"
 f2=fpath_exp+"E3SM_coupled_restart_20TR_Yr2000-Scat.Year2000_2014_climo_ANN.nc"
 #f2=fpath_exp+"E3SM_coupled_restart_20TR_Yr2000-Scat.Year2000_2014_climo_ANN.nc"
-
+=======
 fpath_ctl="../DATA_tmp/"
 fpath_exp="../DATA_tmp/"
  
@@ -48,7 +49,7 @@ fpath_exp="../DATA_tmp/"
 #f2=fpath_exp+"tsis_ctl_cesm211_standard-ETEST-f19_g17-ens1.cam.h0.0001-01.nc"
 f1=fpath_ctl+"solar_TSIS_cesm211_ETEST-f19_g17-ens0.cam.h0.0001-01.nc"
 f2=fpath_exp+"solar_TSIS_cesm211_ETEST-f19_g17-ens0.cam.h0.2001-01.nc"
-
+>>>>>>> 05057577d9a7074a4b8a8ab7680651b679eb7104
 # open data file
 file_ctl=netcdf_dataset(f1,"r")
 file_exp=netcdf_dataset(f2,"r")
