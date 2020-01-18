@@ -40,7 +40,7 @@ fpath_exp="/raid00/xianwen/cesm211_solar/"+exp_pref+"/climo/"
 years=np.arange(2010,2020) 
 months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
-var_group_todo=2
+var_group_todo=1
 # variable group 1:
 #varnms=np.array(["FSSU13","FSSU12","FSSU11","FSSU10","FSSU09",\
 #        "FSSU08","FSSU07","FSSU06","FSSU05","FSSU04",\
