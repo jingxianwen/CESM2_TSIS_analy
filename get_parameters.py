@@ -66,9 +66,11 @@ def get_parameters(varnm,season):
 
     if varnm == "FSNS":
         parameters={"units":"W/m2",\
-		   "contour_levs":[0, 50, 100, 150, 200, 250, 300, 350, 400],\
-		   "diff_levs":[-50, -40, -30, -20, -10, -5, 5, 10, 20, 30, 40, 50],\
-                   "colormap":"PiYG_r",\
+		   #"contour_levs":[0, 50, 100, 150, 200, 250, 300, 350, 400],\
+		   #"diff_levs":[-50, -40, -30, -20, -10, -5, 5, 10, 20, 30, 40, 50],\
+		   "contour_levs":[20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260],\
+		   "diff_levs":[-6,-5, -4, -3, -2, -1, -0.5, 0.5, 1, 2, 3, 4, 5, 6],\
+                   "colormap":"Oranges",\
                    "colormap_diff":"bwr"\
 		   }
 
@@ -120,6 +122,14 @@ def get_parameters(varnm,season):
                    "colormap_diff":"bwr"\
 		   }
 
+    if varnm == "FSUTOA":
+        parameters={"units":r"W/m$^2$",\
+		   "contour_levs":[60,70,80,90,100,110,120,130,140,150,160,170],\
+		   "diff_levs":[-5, -4, -3, -2, -1, -0.5, 0.5, 1, 2, 3, 4, 5],\
+		   "colormap":"Oranges",\
+                   "colormap_diff":"bwr"\
+		   }
+
     if varnm == "LHFLX":
         parameters={"units":"W/m2",\
 		   "contour_levs":[0,5, 15, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300],\
@@ -156,6 +166,22 @@ def get_parameters(varnm,season):
 		   "contour_levs":[0, 10, 20, 30, 40, 50, 60, 70, 80],\
 		   "diff_levs":[-35, -30, -25, -20, -15, -10, -5, -2, 2, 5, 10, 15, 20, 25, 30, 35],\
                    "colormap":"PiYG_r",\
+                   "colormap_diff":"bwr"\
+		   }
+
+    if varnm == "PRECT":
+        parameters={"units":"mm/day",\
+		   "contour_levs":[0.5,1.,2.,3.,4.,5.,6.,7.,8.,9.,10.,11.,12.,13.,14.,15.],\
+		   "diff_levs":[-0.5,-0.4,-0.3,-0.2,-0.1,-0.05,0.05,0.1,0.2,0.3,0.4,0.5],\
+                   "colormap":"CMRmap_r", \
+                   "colormap_diff":"bwr"\
+		   }
+
+    if varnm == "CLDTOT":
+        parameters={"units":"fraction",\
+		   "contour_levs":[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9],\
+		   "diff_levs":[-0.05,-0.04,-0.03,-0.02,-0.01,-0.005,0.005,0.01,0.02,0.03,0.04,0.05],\
+                   "colormap":"GnBu", \
                    "colormap_diff":"bwr"\
 		   }
 
