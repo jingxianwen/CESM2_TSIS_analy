@@ -40,35 +40,39 @@ fpath_exp="/raid00/xianwen/cesm211_solar/"+exp_pref+"/climo/"
 years=np.arange(2010,2020) 
 months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
-var_group_todo=2
+var_group_todo=1
 # variable group 1:
-varnms=np.array(["FSSU13","FSSU12","FSSU11","FSSU10","FSSU09",\
-        "FSSU08","FSSU07","FSSU06","FSSU05","FSSU04",\
-        "FSSU03","FSSU02","FSSU01","FSSU14"])
-var_long_name="Band-by-Band TOA Upward SW"
-figure_name="Band_by_Band_TOA_Upward_SW_ANN"
+varnms=np.array(["FSNTOA"])
+#varnms=np.array(["FSNTOA","FSNS","TS"])
+#var_long_name="Surface Temperature"
+#figure_name="Surface_Temperature_zonal_ANN"
+#units="K"
+#var_long_name="Surface Net SW"
+#figure_name="Surface_Net_SW_zonal_ANN"
+var_long_name="TOA Net SW"
+figure_name="TOA_Net_SW_zonal_ANN"
 units=r"W/m$^2$"
 
 # variable group 2:
-varnms=np.array(["FSSUS13","FSSUS12","FSSUS11","FSSUS10","FSSUS09",\
-        "FSSUS08","FSSUS07","FSSUS06","FSSUS05","FSSUS04",\
-        "FSSUS03","FSSUS02","FSSUS01","FSSUS14"])
-varnms_sub=np.array(["FSSDS13","FSSDS12","FSSDS11","FSSDS10","FSSDS09",\
-        "FSSDS08","FSSDS07","FSSDS06","FSSDS05","FSSDS04",\
-        "FSSDS03","FSSDS02","FSSDS01","FSSDS14"])
-var_long_name="Band-by-Band Surface net Upward SW"
-figure_name="Band_by_Band_surface_net_Upward_SW_ANN"
-units=r"W/m$^2$"
+#varnms=np.array(["FSSUS13","FSSUS12","FSSUS11","FSSUS10","FSSUS09",\
+#        "FSSUS08","FSSUS07","FSSUS06","FSSUS05","FSSUS04",\
+#        "FSSUS03","FSSUS02","FSSUS01","FSSUS14"])
+#varnms_sub=np.array(["FSSDS13","FSSDS12","FSSDS11","FSSDS10","FSSDS09",\
+#        "FSSDS08","FSSDS07","FSSDS06","FSSDS05","FSSDS04",\
+#        "FSSDS03","FSSDS02","FSSDS01","FSSDS14"])
+#var_long_name="Band-by-Band Surface net Upward SW"
+#figure_name="Band_by_Band_surface_net_Upward_SW_ANN"
+#units=r"W/m$^2$"
 
 #f1=fpath_ctl+"solar_TSIS_cesm211_standard-ETEST-f19_g17-ens1.cam.h0.0001-01.nc"
 #f2=fpath_exp+"tsis_ctl_cesm211_standard-ETEST-f19_g17-ens1.cam.h0.0001-01.nc"
-
-means_yby_ctl=np.zeros((years.size,varnms.size)) #year by year mean for each variable
-means_yby_exp=np.zeros((years.size,varnms.size)) #year by year mean for each variable
-means_ctl=np.zeros((varnms.size)) #multi-year mean for each variable
-means_exp=np.zeros((varnms.size)) #multi-year mean for each variable
-diffs=np.zeros((varnms.size)) #multi-year exp-ctl diff for each variable
-pvals=np.zeros((varnms.size)) #pvalues of ttest
+nlat=np.int64(96)
+means_yby_ctl=np.zeros((years.size,varnms.size,nlat)) #year by year mean for each variable
+means_yby_exp=np.zeros((years.size,varnms.size,nlat)) #year by year mean for each variable
+means_ctl=np.zeros((varnms.size,nlat)) #multi-year mean for each variable
+means_exp=np.zeros((varnms.size,nlat)) #multi-year mean for each variable
+diffs=np.zeros((varnms.size,nlat)) #multi-year exp-ctl diff for each variable
+pvals=np.zeros((varnms.size,nlat)) #pvalues of ttest
 
 for iy in range(0,years.size): 
     # open data file
@@ -95,8 +99,8 @@ for iy in range(0,years.size):
            dtctl=file_ctl.variables[varnms[iv]][:,:,:]-file_ctl.variables[varnms_sub[iv]][:,:,:]
            dtexp=file_exp.variables[varnms[iv]][:,:,:]-file_exp.variables[varnms_sub[iv]][:,:,:]
         #dtdif=dtexp[:,:,:]-dtctl[:,:,:]
-        means_yby_ctl[iy,iv]=get_area_mean_min_max(dtctl[:,:,:],lat[:])[0]
-        means_yby_exp[iy,iv]=get_area_mean_min_max(dtexp[:,:,:],lat[:])[0]
+        means_yby_ctl[iy,iv,:]=np.mean(dtctl[:,:,:],axis=2)[0,:]
+        means_yby_exp[iy,iv,:]=np.mean(dtexp[:,:,:],axis=2)[0,:]
         #stats_dif[i]=get_area_mean_min_max(dtdif[:,:,:],lat[:])[0]
         #stats_difp[i]=stats_dif[0]/stats_ctl[0]*100.
 
@@ -106,48 +110,45 @@ means_exp=np.mean(means_yby_exp,axis=0)
 diffs=means_exp-means_ctl
 ttest=stats.ttest_ind(means_yby_ctl,means_yby_exp,axis=0)
 pvalues=ttest.pvalue
-print(pvalues)
 siglev=0.05
-diffs_sig=np.zeros(diffs.size)
-diffs_unsig=np.zeros(diffs.size)
-for ip in range(pvalues.size):
-    if pvalues[ip] < siglev:
-        diffs_sig[ip]=diffs[ip]
-    else:
-        diffs_unsig[ip]=diffs[ip]
+diffs_sig=np.zeros(diffs.shape)
+diffs_sig[:,:]=np.nan
+#diffs_unsig=np.empty(diffs.shape)
+zeros=np.zeros(diffs.shape)
+#print(diffs_sig.size)
+#exit()
+for iv in range(pvalues.shape[0]):
+   for ip in range(pvalues.shape[1]):
+       if pvalues[iv,ip] < siglev:
+           diffs_sig[iv,ip]=diffs[iv,ip]
+       #else:
+       #    diffs_unsig[iv,ip]=diffs[iv,ip]
 
+#print(pvalues[0,:])
+#print(diffs_sig[:,:])
+#print(diffs[:,:])
 
 # make the plot
-fig=plt.figure(figsize=(7,8))
-ax1=fig.add_axes([0.13,0.60,0.78,0.33])
-ax2=fig.add_axes([0.13,0.12,0.78,0.33])
-x=[0,1,2,3,4,5,6,7,8,9,10,11,12,13]
-bands=["0.2-0.26","0.26-0.34","0.34-0.44","0.44-0.63","0.63-0.78","0.78-1.24","1.24-1.3","1.3-1.63","1.63-1.94","1.94-2.15","2.15-2.5","2.5-3.08","3.08-3.85","3.85-12.2"]
+fig=plt.figure(figsize=(8,6))
+ax1=fig.add_axes([0.10,0.58,0.8,0.35])
+ax2=fig.add_axes([0.10,0.10,0.8,0.35])
 
-ax1.bar(bands,means_ctl,color="tab:blue")
+ax1.plot(lat[:],means_ctl[0,:],color="k",lw=2,ls="-",label="CTL")
+ax1.plot(lat[:],means_exp[0,:],color="k",lw=2,ls=":",label="TSIS")
+ax1.legend(loc="upper left",fontsize=12)
 ax1.set_title(var_long_name,fontsize=12)
 ax1.set_ylabel(units,fontsize=12)
-ax1.set_xlabel("Band wave length",fontsize=12)
-ax1.grid(True)
-ax1.set_axisbelow(True)
-ax1.xaxis.grid(color='gray', linestyle=':')
-ax1.yaxis.grid(color='gray', linestyle=':')
-#plt.xticks(x,bands,rotation=-45)
-ax1.set_xticklabels(labels=bands,rotation=-45)
-
-#bars=[None]*diffs_sig.size
-ax2.bar(bands,diffs_sig,color="tab:blue",hatch="//",edgecolor="black")
-ax2.bar(bands,diffs_unsig,color="tab:blue")
-
+ax1.set_xlabel("Latitude",fontsize=12)
+ax1.set_xlim(-90,90)
+ax2.plot(lat[:],diffs[0,:],color="k",lw=2)
+ax2.plot(lat[:],diffs_sig[0,:],color="darkorange",lw=4,alpha=1.)
+ax2.plot(lat[:],zeros[0,:],color="gray",lw=1)
 ax2.set_title("Diff in "+var_long_name,fontsize=12)
 ax2.set_ylabel(units,fontsize=12)
-ax2.set_xlabel("Band wave length",fontsize=12)
-ax2.grid(True)
-ax2.set_axisbelow(True)
-ax2.xaxis.grid(color='gray', linestyle=':')
-ax2.yaxis.grid(color='gray', linestyle=':')
-plt.xticks(x,bands,rotation=-45)
-#plt.savefig(figure_name+".png")
+ax2.set_xlabel("Latitude",fontsize=12)
+ax2.set_xlim(-90,90)
+
+plt.savefig(figure_name+".png")
 plt.show()
 
 exit()

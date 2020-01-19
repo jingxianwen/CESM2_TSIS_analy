@@ -40,25 +40,24 @@ fpath_exp="/raid00/xianwen/cesm211_solar/"+exp_pref+"/climo/"
 years=np.arange(2010,2020) 
 months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
-var_group_todo=2
+var_group_todo=1
 # variable group 1:
-varnms=np.array(["FSSU13","FSSU12","FSSU11","FSSU10","FSSU09",\
-        "FSSU08","FSSU07","FSSU06","FSSU05","FSSU04",\
-        "FSSU03","FSSU02","FSSU01","FSSU14"])
-var_long_name="Band-by-Band TOA Upward SW"
-figure_name="Band_by_Band_TOA_Upward_SW_ANN"
+varnms=np.array(["FLNS","FSNS","LHFLX","SHFLX"])
+labels_fig=varnms
+var_long_name="Surface Energy Budgets"
+figure_name="Surface_Energy_Budgets"
 units=r"W/m$^2$"
 
 # variable group 2:
-varnms=np.array(["FSSUS13","FSSUS12","FSSUS11","FSSUS10","FSSUS09",\
-        "FSSUS08","FSSUS07","FSSUS06","FSSUS05","FSSUS04",\
-        "FSSUS03","FSSUS02","FSSUS01","FSSUS14"])
-varnms_sub=np.array(["FSSDS13","FSSDS12","FSSDS11","FSSDS10","FSSDS09",\
-        "FSSDS08","FSSDS07","FSSDS06","FSSDS05","FSSDS04",\
-        "FSSDS03","FSSDS02","FSSDS01","FSSDS14"])
-var_long_name="Band-by-Band Surface net Upward SW"
-figure_name="Band_by_Band_surface_net_Upward_SW_ANN"
-units=r"W/m$^2$"
+#varnms=np.array(["FSSUS13","FSSUS12","FSSUS11","FSSUS10","FSSUS09",\
+#        "FSSUS08","FSSUS07","FSSUS06","FSSUS05","FSSUS04",\
+#        "FSSUS03","FSSUS02","FSSUS01","FSSUS14"])
+#varnms_sub=np.array(["FSSDS13","FSSDS12","FSSDS11","FSSDS10","FSSDS09",\
+#        "FSSDS08","FSSDS07","FSSDS06","FSSDS05","FSSDS04",\
+#        "FSSDS03","FSSDS02","FSSDS01","FSSDS14"])
+#var_long_name="Band-by-Band Surface net Upward SW"
+#figure_name="Band_by_Band_surface_net_Upward_SW_ANN"
+#units=r"W/m$^2$"
 
 #f1=fpath_ctl+"solar_TSIS_cesm211_standard-ETEST-f19_g17-ens1.cam.h0.0001-01.nc"
 #f2=fpath_exp+"tsis_ctl_cesm211_standard-ETEST-f19_g17-ens1.cam.h0.0001-01.nc"
@@ -115,39 +114,42 @@ for ip in range(pvalues.size):
         diffs_sig[ip]=diffs[ip]
     else:
         diffs_unsig[ip]=diffs[ip]
-
+print(diffs)
+print(diffs_sig)
+print(diffs_unsig)
 
 # make the plot
 fig=plt.figure(figsize=(7,8))
-ax1=fig.add_axes([0.13,0.60,0.78,0.33])
-ax2=fig.add_axes([0.13,0.12,0.78,0.33])
-x=[0,1,2,3,4,5,6,7,8,9,10,11,12,13]
-bands=["0.2-0.26","0.26-0.34","0.34-0.44","0.44-0.63","0.63-0.78","0.78-1.24","1.24-1.3","1.3-1.63","1.63-1.94","1.94-2.15","2.15-2.5","2.5-3.08","3.08-3.85","3.85-12.2"]
-
-ax1.bar(bands,means_ctl,color="tab:blue")
-ax1.set_title(var_long_name,fontsize=12)
+ax1=fig.add_axes([0.13,0.55,0.78,0.40])
+ax2=fig.add_axes([0.13,0.05,0.78,0.40])
+#x=[0,1,2,3,4,5,6,7,8,9,10,11,12,13]
+#bands=["0.2-0.26","0.26-0.34","0.34-0.44","0.44-0.63","0.63-0.78","0.78-1.24","1.24-1.3","1.3-1.63","1.63-1.94","1.94-2.15","2.15-2.5","2.5-3.08","3.08-3.85","3.85-12.2"]
+x=np.array([range(0,varnms.size)])
+ax1.bar(labels_fig,means_ctl,color="tab:blue")
+ax1.set_title(var_long_name+" (ANN)",fontsize=12)
 ax1.set_ylabel(units,fontsize=12)
-ax1.set_xlabel("Band wave length",fontsize=12)
+#ax1.set_xlabel("Band wave length",fontsize=12)
 ax1.grid(True)
 ax1.set_axisbelow(True)
 ax1.xaxis.grid(color='gray', linestyle=':')
 ax1.yaxis.grid(color='gray', linestyle=':')
-#plt.xticks(x,bands,rotation=-45)
-ax1.set_xticklabels(labels=bands,rotation=-45)
+#plt.xticks(x,labels_fig,rotation=-45)
+#ax1.set_xticklabels(labels=labels_fig,rotation=-45)
+ax1.set_xticklabels(labels=labels_fig,rotation=0,fontsize=12)
 
 #bars=[None]*diffs_sig.size
-ax2.bar(bands,diffs_sig,color="tab:blue",hatch="//",edgecolor="black")
-ax2.bar(bands,diffs_unsig,color="tab:blue")
+ax2.bar(labels_fig,diffs_sig,color="tab:blue",hatch="//",edgecolor="black")
+ax2.bar(labels_fig,diffs_unsig,color="tab:blue")
 
-ax2.set_title("Diff in "+var_long_name,fontsize=12)
+ax2.set_title("Diff in "+var_long_name+" (ANN)",fontsize=12)
 ax2.set_ylabel(units,fontsize=12)
-ax2.set_xlabel("Band wave length",fontsize=12)
+#ax2.set_xlabel("Band wave length",fontsize=12)
 ax2.grid(True)
 ax2.set_axisbelow(True)
 ax2.xaxis.grid(color='gray', linestyle=':')
 ax2.yaxis.grid(color='gray', linestyle=':')
-plt.xticks(x,bands,rotation=-45)
-#plt.savefig(figure_name+".png")
+ax2.set_xticklabels(labels=labels_fig,rotation=0,fontsize=12)
+plt.savefig(figure_name+".png")
 plt.show()
 
 exit()
