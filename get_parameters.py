@@ -185,6 +185,14 @@ def get_parameters(varnm,season):
                    "colormap_diff":"bwr"\
 		   }
 
+    if varnm == "ICEFRAC":
+        parameters={"units":"fraction",\
+		   "contour_levs":[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9],\
+		   "diff_levs":[-0.10,-0.08,-0.06,-0.04,-0.02,-0.01,0.01,0.02,0.04,0.06,0.08,0.10],\
+                   "colormap":"GnBu", \
+                   "colormap_diff":"bwr"\
+		   }
+
     return parameters
 
 
