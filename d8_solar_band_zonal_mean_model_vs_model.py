@@ -42,23 +42,25 @@ months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 var_group_todo=2
 # variable group 1:
-varnms=np.array(["FSSU13","FSSU12","FSSU11","FSSU10","FSSU09",\
-        "FSSU08","FSSU07","FSSU06","FSSU05","FSSU04",\
-        "FSSU03","FSSU02","FSSU01","FSSU14"])
-var_long_name="Zonal mean TOA Upward SW"
-figure_name="Band_by_Band_TOA_Upward_SW_zonal_mean_ANN"
-units=r"W/m$^2$"
+if var_group_todo==1:
+   varnms=np.array(["FSSU13","FSSU12","FSSU11","FSSU10","FSSU09",\
+           "FSSU08","FSSU07","FSSU06","FSSU05","FSSU04",\
+           "FSSU03","FSSU02","FSSU01","FSSU14"])
+   var_long_name="Zonal mean TOA Upward SW"
+   figure_name="Band_by_Band_TOA_Upward_SW_zonal_mean_ANN"
+   units=r"W/m$^2$"
 
 # variable group 2:
-varnms=np.array(["FSSUS13","FSSUS12","FSSUS11","FSSUS10","FSSUS09",\
-        "FSSUS08","FSSUS07","FSSUS06","FSSUS05","FSSUS04",\
-        "FSSUS03","FSSUS02","FSSUS01","FSSUS14"])
-varnms_sub=np.array(["FSSDS13","FSSDS12","FSSDS11","FSSDS10","FSSDS09",\
-        "FSSDS08","FSSDS07","FSSDS06","FSSDS05","FSSDS04",\
-        "FSSDS03","FSSDS02","FSSDS01","FSSDS14"])
-var_long_name="Zonal mean Surface net Upward SW"
-figure_name="Band_by_Band_surface_net_Upward_SW_zonal_mean_ANN"
-units=r"W/m$^2$"
+if var_group_todo==2:
+   varnms=np.array(["FSSUS13","FSSUS12","FSSUS11","FSSUS10","FSSUS09",\
+           "FSSUS08","FSSUS07","FSSUS06","FSSUS05","FSSUS04",\
+           "FSSUS03","FSSUS02","FSSUS01","FSSUS14"])
+   varnms_sub=np.array(["FSSDS13","FSSDS12","FSSDS11","FSSDS10","FSSDS09",\
+           "FSSDS08","FSSDS07","FSSDS06","FSSDS05","FSSDS04",\
+           "FSSDS03","FSSDS02","FSSDS01","FSSDS14"])
+   var_long_name="Zonal mean Surface net Upward SW"
+   figure_name="Band_by_Band_surface_net_Upward_SW_zonal_mean_ANN"
+   units=r"W/m$^2$"
 
 nlat=96
 nbnd=varnms.size
@@ -132,23 +134,29 @@ yloc=np.array([1,2,3,4,5,6,7,8,9,10,11,12,13,14])
 bands=np.array(["0.2-0.26","0.26-0.34","0.34-0.44","0.44-0.63","0.63-0.78","0.78-1.24","1.24-1.3","1.3-1.63","1.63-1.94","1.94-2.15","2.15-2.5","2.5-3.08","3.08-3.85","3.85-12.2"])
 
 #ax1.bar(bands,means_ctl,color="tab:blue")
-cntr1=ax1.contourf(lat[:],yloc[:],means_ctl[:,:],cmap="hot_r")
+cntr1=ax1.contourf(lat[:],yloc[:],means_ctl[:,:],cmap="hot_r",origin="lower")
 ax1.set_title(var_long_name+" "+"(CTL)",fontsize=12)
 ax1.set_xlabel("Latitude",fontsize=12)
 ax1.set_ylabel("Band wave length",fontsize=12)
 ax1.set_yticks(yloc[:])
 ax1.set_yticklabels(labels=bands) #,rotation=-45)
+#ax1.yaxis.grid(color='gray', linestyle=':')
 fig.colorbar(cntr1, ax=ax1)
+#ax1.set_ylim(0.1,13.0)
 
-cmap2="bwr"
-cntr2=ax2.contourf(lat[:],yloc[:],diffs[:,:],cmap=cmap2)
-ax2.contourf(lat[:],yloc[:],diffs_sig[:,:],cmap=cmap2,hatches=[".."])
+cmap2="seismic"
+cnlevels=np.array([-1.2,-1.0,-0.8,-0.6,-0.4,-0.2,0.0,0.2,0.4,0.6,0.8,1.0,1.2])
+cntr2=ax2.contourf(lat[:],yloc[:],diffs[:,:],cmap=cmap2,levels=cnlevels,origin="image")
+ax2.contourf(lat[:],yloc[:],diffs_sig[:,:],cmap=cmap2,levels=cnlevels,hatches=[".."])
 ax2.set_title(var_long_name+" "+"(TSIS-CTL)",fontsize=12)
 ax2.set_xlabel("Latitude",fontsize=12)
 ax2.set_ylabel("Band wave length",fontsize=12)
 ax2.set_yticks(yloc[:])
 ax2.set_yticklabels(labels=bands) #,rotation=-45)
+#ax2.xaxis.grid(color='gray', linestyle=':')
+#ax2.yaxis.grid(color='gray', linestyle=':')
 fig.colorbar(cntr2, ax=ax2)
+#ax2.set_ylim(0.0,15.0)
 
 #bars=[None]*diffs_sig.size
 #ax2.bar(bands,diffs_sig,color="tab:blue",hatch="//",edgecolor="black")
@@ -162,7 +170,7 @@ fig.colorbar(cntr2, ax=ax2)
 #ax2.xaxis.grid(color='gray', linestyle=':')
 #ax2.yaxis.grid(color='gray', linestyle=':')
 #plt.xticks(x,bands,rotation=-45)
-#plt.savefig(figure_name+".png")
+plt.savefig(figure_name+".png")
 plt.show()
 
 exit()

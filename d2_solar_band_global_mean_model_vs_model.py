@@ -40,25 +40,27 @@ fpath_exp="/raid00/xianwen/cesm211_solar/"+exp_pref+"/climo/"
 years=np.arange(2010,2020) 
 months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
-var_group_todo=2
+var_group_todo=1
 # variable group 1:
-varnms=np.array(["FSSU13","FSSU12","FSSU11","FSSU10","FSSU09",\
-        "FSSU08","FSSU07","FSSU06","FSSU05","FSSU04",\
-        "FSSU03","FSSU02","FSSU01","FSSU14"])
-var_long_name="Band-by-Band TOA Upward SW"
-figure_name="Band_by_Band_TOA_Upward_SW_ANN"
-units=r"W/m$^2$"
+if var_group_todo==1:
+   varnms=np.array(["FSSU13","FSSU12","FSSU11","FSSU10","FSSU09",\
+           "FSSU08","FSSU07","FSSU06","FSSU05","FSSU04",\
+           "FSSU03","FSSU02","FSSU01","FSSU14"])
+   var_long_name="Band-by-Band TOA Upward SW"
+   figure_name="Band_by_Band_TOA_Upward_SW_ANN"
+   units=r"W/m$^2$"
 
 # variable group 2:
-varnms=np.array(["FSSUS13","FSSUS12","FSSUS11","FSSUS10","FSSUS09",\
-        "FSSUS08","FSSUS07","FSSUS06","FSSUS05","FSSUS04",\
-        "FSSUS03","FSSUS02","FSSUS01","FSSUS14"])
-varnms_sub=np.array(["FSSDS13","FSSDS12","FSSDS11","FSSDS10","FSSDS09",\
-        "FSSDS08","FSSDS07","FSSDS06","FSSDS05","FSSDS04",\
-        "FSSDS03","FSSDS02","FSSDS01","FSSDS14"])
-var_long_name="Band-by-Band Surface net Upward SW"
-figure_name="Band_by_Band_surface_net_Upward_SW_ANN"
-units=r"W/m$^2$"
+if var_group_todo==2:
+   varnms=np.array(["FSSUS13","FSSUS12","FSSUS11","FSSUS10","FSSUS09",\
+           "FSSUS08","FSSUS07","FSSUS06","FSSUS05","FSSUS04",\
+           "FSSUS03","FSSUS02","FSSUS01","FSSUS14"])
+   varnms_sub=np.array(["FSSDS13","FSSDS12","FSSDS11","FSSDS10","FSSDS09",\
+           "FSSDS08","FSSDS07","FSSDS06","FSSDS05","FSSDS04",\
+           "FSSDS03","FSSDS02","FSSDS01","FSSDS14"])
+   var_long_name="Band-by-Band Surface net Upward SW"
+   figure_name="Band_by_Band_surface_net_Upward_SW_ANN"
+   units=r"W/m$^2$"
 
 #f1=fpath_ctl+"solar_TSIS_cesm211_standard-ETEST-f19_g17-ens1.cam.h0.0001-01.nc"
 #f2=fpath_exp+"tsis_ctl_cesm211_standard-ETEST-f19_g17-ens1.cam.h0.0001-01.nc"
