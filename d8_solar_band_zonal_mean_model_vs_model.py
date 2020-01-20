@@ -161,7 +161,6 @@ fig.colorbar(cntr2, ax=ax2)
 #bars=[None]*diffs_sig.size
 #ax2.bar(bands,diffs_sig,color="tab:blue",hatch="//",edgecolor="black")
 #ax2.bar(bands,diffs_unsig,color="tab:blue")
-#
 #ax2.set_title("Diff in "+var_long_name,fontsize=12)
 #ax2.set_ylabel(units,fontsize=12)
 #ax2.set_xlabel("Band wave length",fontsize=12)
