@@ -21,10 +21,9 @@ from get_parameters import get_area_mean_min_max
 
 #def lon_lat_contour_model_vs_model(varnm,season,scale_ctl,scale_exp,table):
 # data path
-#ctl_name="E3SM_DECKv1b" #os.environ["ctl_name"]
+ctl_name="E3SM_standard" #os.environ["ctl_name"]
 ctl_name="E3SM_modified" #os.environ["ctl_name"]
 exp_name="E3SM_modified_noEmis" #os.environ["exp_name"]
-#exp_name="E3SM_modified_noEmis" #os.environ["exp_name"]
 #fpath_ctl=os.environ["fpath_ctl"]+"/"+os.environ["ctl_run_id"]+"_climo_"+season+".nc"
 #fpath_exp=os.environ["fpath_exp"]+"/"+os.environ["exp_run_id"]+"_climo_"+season+".nc"
 #fpath_ctl="./solar_TSIS_cesm211_standard-ETEST-f19_g17-ens1/atm/hist/"
