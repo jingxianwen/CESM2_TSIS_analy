@@ -37,21 +37,21 @@ months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 # variable group 
 #---
-#varnm="PRECT"  #np.array(["FLNS","FSNS","LHFLX","SHFLX"])
+#varnm="PRECT"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
 #season="ANN"
 #figure_name="Precipitation_rate_lat_lon_ANN"
 #---
-#varnm="CLDTOT"  #np.array(["FLNS","FSNS","LHFLX","SHFLX"])
+#varnm="CLDTOT"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
 #season="ANN"
 #figure_name="Cloud_Fraction_lat_lon_ANN"
 
 #---
-#varnm="FSUTOA"  #np.array(["FLNS","FSNS","LHFLX","SHFLX"])
+#varnm="FSUTOA"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
 #season="ANN"
 #figure_name="FSUTOA_lat_lon_ANN"
 
 #---
-varnm="FSNS"  #np.array(["FLNS","FSNS","LHFLX","SHFLX"])
+varnm="FSNS"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
 season="ANN"
 figure_name="FSNS_lat_lon_ANN"
 #units=r"W/m$^2$"
@@ -233,7 +233,7 @@ fig.suptitle(varnm+" "+season, x=0.5, y=0.96, fontdict=plotTitle)
 #if os.environ["fig_save"]=="True":
 #    fname="d1_lon_lat_contour_"+varnm+"_"+season+"."+os.environ["fig_suffix"]
 #    plt.savefig(os.environ["OUTDIR"]+"/figures/"+fname)
-plt.savefig(figure_name+".png")
+#plt.savefig(figure_name+".png")
 #if os.environ["fig_show"]=="True":
 #    plt.show()
 plt.show()
@@ -249,7 +249,7 @@ plt.close()
 #    return 0
     
 #def get_parameters(varnm,season):
-#    #list_rad=["FLUT","FLUTC","FLNT","FLNTC","FSNT","FSNTC","FSDS","FSDSC","FSNS","FSNSC"]
+#    #list_rad=["FLUT","FLUTC","FLNT","FLNTC","FSNT","FSNTC","FSDS","FSDSC","SOLIN","SOLINC"]
 #    if varnm == "FLUT":
 #        parameters={"units":"W/m2",\
 #		   "contour_levs":[120, 140, 160, 180, 200, 220, 240, 260, 280, 300],\
