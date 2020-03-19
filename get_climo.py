@@ -23,9 +23,11 @@ def listToString(s):
 # Input 
 #caseid="E3SM_DECKv1b_H1.ne30"
 #monthly_data_path="./E3SM_DECKv1b_H1.ne30/remap_180x360"
-caseid="solar_TSIS_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
+caseid="solar_CTL_cesm211_VIS_icealb_ETEST-f19_g17-ens_mean"
 #monthly_data_path="/raid00/xianwen/Yi-Hsuan/E3SM_coupled_restart_20TR_Yr2000-Scat.Year2000_2014/remap_180x360"
-monthly_data_path="/raid00/xianwen/cesm211_solar/"+caseid+"/monthly"
+#monthly_data_path="/raid00/xianwen/cesm211_solar/"+caseid+"/monthly"
+monthly_data_path="/glade/scratch/xianwen/archive/"+caseid
+out_path=monthly_data_path+"_2010-2019/climo"
 years=np.arange(2010,2020)
 months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
@@ -43,7 +45,6 @@ print("All input files have been found ^_^")
 months_to_do=["01","02","03","04","05","06","07","08","09","10","11","12"]
 seasons_to_do=["ANN","DJF","MAM","JJA","SON"]
 
-out_path=monthly_data_path+"/climo"
 if not os.path.exists(out_path):
      os.makedirs(out_path)
 # create list of all input files
