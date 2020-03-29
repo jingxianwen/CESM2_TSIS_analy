@@ -23,19 +23,19 @@ def listToString(s):
 # Input 
 #caseid="E3SM_DECKv1b_H1.ne30"
 #monthly_data_path="./E3SM_DECKv1b_H1.ne30/remap_180x360"
-caseid=["solar_CTL_cesm211_ETEST-f19_g17-ens0",\
-        "solar_CTL_cesm211_ETEST-f19_g17-ens1",\
-        "solar_CTL_cesm211_ETEST-f19_g17-ens2",\
-        "solar_CTL_cesm211_ETEST-f19_g17-ens3"]
+caseid=["solar_TSIS_cesm211_VIS_icealb_ETEST-f19_g17-ens0",\
+        "solar_TSIS_cesm211_VIS_icealb_ETEST-f19_g17-ens1",\
+        "solar_TSIS_cesm211_VIS_icealb_ETEST-f19_g17-ens2",\
+        "solar_TSIS_cesm211_VIS_icealb_ETEST-f19_g17-ens3"]
 monthly_data_path="/glade/u/home/xianwen/work/archive/" #+caseid+"/atm/hist/"
 years=np.arange(2010,2020)
 months_to_do=np.array(["01","02","03","04","05","06","07","08","09","10","11","12"])
-caseout="solar_CTL_cesm211_ETEST-f19_g17-ens_mean_2010-1019"
+caseout="solar_TSIS_cesm211_VIS_icealb_ETEST-f19_g17-ens_mean_2010-2019"
 out_path=monthly_data_path+caseout+"/"
 if not os.path.exists(out_path):
      os.makedirs(out_path)
 # create list of all input files
-# Monthly climo
+# Monthly ensemble mean
 for yr in years:
     for mon in months_to_do:
         print("-- doing "+str(yr)+" "+mon+" --")
