@@ -26,8 +26,8 @@ from scipy import stats
 # data path
 ctl_name="CTL" #os.environ["ctl_name"]
 exp_name="TSIS" #os.environ["exp_name"]
-ctl_pref="solar_CTL_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
-exp_pref="solar_TSIS_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
+ctl_pref="solar_CTL_cesm211_VIS_icealb_ETEST-f19_g17-ens_mean_2010-2019"
+exp_pref="solar_TSIS_cesm211_VIS_icealb_ETEST-f19_g17-ens_mean_2010-2019"
 
 fpath_ctl="/raid00/xianwen/cesm211_solar/"+ctl_pref+"/climo/"
 fpath_exp="/raid00/xianwen/cesm211_solar/"+exp_pref+"/climo/"
@@ -37,14 +37,14 @@ months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 varnm="ICEFRAC"
 
-pole='N'
-season="MAM"
+pole='S'
+season="SON"
 if pole is 'N':
    var_long_name="Arctic Sea Ice Fraction "+season
-   figure_name="Arctic_Sea_Ice_contour_"+season
+   figure_name="Arctic_Sea_Ice_contour_"+season+"_VIS_icealb"
 elif pole is 'S':
    var_long_name="Antarctic Sea Ice Fraction "+season
-   figure_name="Antarctic_Sea_Ice_contour_"+season
+   figure_name="Antarctic_Sea_Ice_contour_"+season+"_VIS_icealb"
 units=" " #"Fraction"
 #units=r"W/m$^2$"
 

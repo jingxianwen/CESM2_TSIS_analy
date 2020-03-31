@@ -31,8 +31,8 @@ from get_parameters import get_area_mean_min_max
 # data path
 ctl_name="CTL" #os.environ["ctl_name"]
 exp_name="TSIS" #os.environ["exp_name"]
-ctl_pref="solar_CTL_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
-exp_pref="solar_TSIS_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
+ctl_pref="solar_CTL_cesm211_VIS_icealb_ETEST-f19_g17-ens_mean_2010-2019"
+exp_pref="solar_TSIS_cesm211_VIS_icealb_ETEST-f19_g17-ens_mean_2010-2019"
 
 fpath_ctl="/raid00/xianwen/cesm211_solar/"+ctl_pref+"/climo/"
 fpath_exp="/raid00/xianwen/cesm211_solar/"+exp_pref+"/climo/"
@@ -45,7 +45,7 @@ var_group_todo=1
 varnms=np.array(["FLNS","FSNS","LHFLX","SHFLX"])
 labels_fig=varnms
 var_long_name="Surface Energy Budgets"
-figure_name="Surface_Energy_Budgets"
+figure_name="Surface_Energy_Budgets_VIS_icealb"
 units=r"W/m$^2$"
 
 # variable group 2:
@@ -149,7 +149,7 @@ ax2.set_axisbelow(True)
 ax2.xaxis.grid(color='gray', linestyle=':')
 ax2.yaxis.grid(color='gray', linestyle=':')
 ax2.set_xticklabels(labels=labels_fig,rotation=0,fontsize=12)
-plt.savefig(figure_name+".png")
+#plt.savefig(figure_name+".png")
 plt.show()
 
 exit()

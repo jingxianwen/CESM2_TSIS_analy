@@ -31,8 +31,8 @@ from get_parameters import get_area_mean_min_max
 # data path
 ctl_name="CTL" #os.environ["ctl_name"]
 exp_name="TSIS" #os.environ["exp_name"]
-ctl_pref="solar_CTL_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
-exp_pref="solar_TSIS_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
+ctl_pref="solar_CTL_cesm211_VIS_icealb_ETEST-f19_g17-ens_mean_2010-2019"
+exp_pref="solar_TSIS_cesm211_VIS_icealb_ETEST-f19_g17-ens_mean_2010-2019"
 
 fpath_ctl="/raid00/xianwen/cesm211_solar/"+ctl_pref+"/climo/"
 fpath_exp="/raid00/xianwen/cesm211_solar/"+exp_pref+"/climo/"
@@ -40,14 +40,14 @@ fpath_exp="/raid00/xianwen/cesm211_solar/"+exp_pref+"/climo/"
 years=np.arange(2010,2020) 
 months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
-var_group_todo=1
+var_group_todo=3
 # variable group 1:
 if var_group_todo==1:
    varnms=np.array(["FSSU13","FSSU12","FSSU11","FSSU10","FSSU09",\
            "FSSU08","FSSU07","FSSU06","FSSU05","FSSU04",\
            "FSSU03","FSSU02","FSSU01","FSSU14"])
    var_long_name="Band-by-Band TOA Upward SW"
-   figure_name="Band_by_Band_TOA_Upward_SW_ANN"
+   figure_name="Band_by_Band_TOA_Upward_SW_ANN_VIS_icealb"
    units=r"W/m$^2$"
 
 # variable group 2:
@@ -59,7 +59,19 @@ if var_group_todo==2:
            "FSSDS08","FSSDS07","FSSDS06","FSSDS05","FSSDS04",\
            "FSSDS03","FSSDS02","FSSDS01","FSSDS14"])
    var_long_name="Band-by-Band Surface net Upward SW"
-   figure_name="Band_by_Band_surface_net_Upward_SW_ANN"
+   figure_name="Band_by_Band_surface_net_Upward_SW_ANN_VIS_icealb"
+   units=r"W/m$^2$"
+
+# variable group 3 (clear sky):
+if var_group_todo==3:
+   varnms=np.array(["FSSU13","FSSU12","FSSU11","FSSU10","FSSU09",\
+           "FSSU08","FSSU07","FSSU06","FSSU05","FSSU04",\
+           "FSSU03","FSSU02","FSSU01","FSSU14"])
+   varnms_sub=np.array(["FSSUCLR13","FSSUCLR12","FSSUCLR11","FSSUCLR10","FSSUCLR09",\
+           "FSSUCLR08","FSSUCLR07","FSSUCLR06","FSSUCLR05","FSSUCLR04",\
+           "FSSUCLR03","FSSUCLR02","FSSUCLR01","FSSUCLR14"])
+   var_long_name="Band-by-Band TOA SWCF"
+   figure_name="Band_by_Band_TOA_SWCF_ANN_VIS_icealb"
    units=r"W/m$^2$"
 
 #f1=fpath_ctl+"solar_TSIS_cesm211_standard-ETEST-f19_g17-ens1.cam.h0.0001-01.nc"
@@ -94,6 +106,9 @@ for iy in range(0,years.size):
            dtctl=file_ctl.variables[varnms[iv]]
            dtexp=file_exp.variables[varnms[iv]] 
         elif var_group_todo is 2:
+           dtctl=file_ctl.variables[varnms[iv]][:,:,:]-file_ctl.variables[varnms_sub[iv]][:,:,:]
+           dtexp=file_exp.variables[varnms[iv]][:,:,:]-file_exp.variables[varnms_sub[iv]][:,:,:]
+        elif var_group_todo is 3:
            dtctl=file_ctl.variables[varnms[iv]][:,:,:]-file_ctl.variables[varnms_sub[iv]][:,:,:]
            dtexp=file_exp.variables[varnms[iv]][:,:,:]-file_exp.variables[varnms_sub[iv]][:,:,:]
         #dtdif=dtexp[:,:,:]-dtctl[:,:,:]
@@ -149,7 +164,7 @@ ax2.set_axisbelow(True)
 ax2.xaxis.grid(color='gray', linestyle=':')
 ax2.yaxis.grid(color='gray', linestyle=':')
 plt.xticks(x,bands,rotation=-45)
-plt.savefig(figure_name+".png")
+#plt.savefig(figure_name+".png")
 plt.show()
 
 exit()

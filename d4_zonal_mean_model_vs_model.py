@@ -31,6 +31,8 @@ from get_parameters import get_area_mean_min_max
 # data path
 ctl_name="CTL" #os.environ["ctl_name"]
 exp_name="TSIS" #os.environ["exp_name"]
+#ctl_pref="solar_CTL_cesm211_VIS_icealb_ETEST-f19_g17-ens_mean_2010-2019"
+#exp_pref="solar_TSIS_cesm211_VIS_icealb_ETEST-f19_g17-ens_mean_2010-2019"
 ctl_pref="solar_CTL_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
 exp_pref="solar_TSIS_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
 
@@ -42,16 +44,16 @@ months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 var_group_todo=1
 # variable group 1:
-varnms=np.array(["FSNTOA"])
+varnms=np.array(["TS"])
 #varnms=np.array(["FSNTOA","FSNS","TS"])
-#var_long_name="Surface Temperature"
-#figure_name="Surface_Temperature_zonal_ANN"
-#units="K"
+var_long_name="Surface Temperature"
+figure_name="Surface_Temperature_zonal_ANN"
+units="K"
 #var_long_name="Surface Net SW"
 #figure_name="Surface_Net_SW_zonal_ANN"
-var_long_name="TOA Net SW"
-figure_name="TOA_Net_SW_zonal_ANN"
-units=r"W/m$^2$"
+#var_long_name="TOA Net SW"
+#figure_name="TOA_Net_SW_zonal_ANN_VIS_icealb"
+#units=r"W/m$^2$"
 
 # variable group 2:
 #varnms=np.array(["FSSUS13","FSSUS12","FSSUS11","FSSUS10","FSSUS09",\
@@ -76,8 +78,8 @@ pvals=np.zeros((varnms.size,nlat)) #pvalues of ttest
 
 for iy in range(0,years.size): 
     # open data file
-    fctl=fpath_ctl+ctl_pref+"_ANN_"+str(years[iy])+".nc"
-    fexp=fpath_exp+exp_pref+"_ANN_"+str(years[iy])+".nc"
+    fctl=fpath_ctl+ctl_pref+"_DJF_"+str(years[iy])+".nc"
+    fexp=fpath_exp+exp_pref+"_DJF_"+str(years[iy])+".nc"
     file_ctl=netcdf_dataset(fctl,"r")
     file_exp=netcdf_dataset(fexp,"r")
     
@@ -148,7 +150,7 @@ ax2.set_ylabel(units,fontsize=12)
 ax2.set_xlabel("Latitude",fontsize=12)
 ax2.set_xlim(-90,90)
 
-plt.savefig(figure_name+".png")
+#plt.savefig(figure_name+".png")
 plt.show()
 
 exit()

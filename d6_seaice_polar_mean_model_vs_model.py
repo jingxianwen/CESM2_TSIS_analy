@@ -31,8 +31,8 @@ from get_parameters import get_area_mean_min_max
 # data path
 ctl_name="CTL" #os.environ["ctl_name"]
 exp_name="TSIS" #os.environ["exp_name"]
-ctl_pref="solar_CTL_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
-exp_pref="solar_TSIS_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
+ctl_pref="solar_CTL_cesm211_VIS_icealb_ETEST-f19_g17-ens_mean_2010-2019"
+exp_pref="solar_TSIS_cesm211_VIS_icealb_ETEST-f19_g17-ens_mean_2010-2019"
 
 fpath_ctl="/raid00/xianwen/cesm211_solar/"+ctl_pref+"/monthly/"
 fpath_exp="/raid00/xianwen/cesm211_solar/"+exp_pref+"/monthly/"
@@ -44,13 +44,13 @@ var_group_todo=1
 # variable group 1:
 #varnms=np.array(["ICEFRAC"])
 varnms="ICEFRAC"
-pole='S'
+pole='N'
 if pole is 'N':
    var_long_name="Arctic Sea Ice Fraction"
-   figure_name="Arctic_Sea_Ice_Monthly"
+   figure_name="Arctic_Sea_Ice_Monthly_VIS_icealb"
 elif pole is 'S':
    var_long_name="Antarctic Sea Ice Fraction"
-   figure_name="Antarctic_Sea_Ice_Monthly"
+   figure_name="Antarctic_Sea_Ice_Monthly_VIS_icealb"
 units=" " #"Fraction"
 #units=r"W/m$^2$"
 
@@ -165,7 +165,7 @@ ax2.yaxis.grid(color='gray', linestyle=':')
 ax2.set_xticks(x)
 ax2.set_xticklabels(labels=labels_fig,rotation=0,fontsize=10)
 ax2.set_xlim(1,12)
-plt.savefig(figure_name+".png")
+#plt.savefig(figure_name+".png")
 plt.show()
 
 exit()
