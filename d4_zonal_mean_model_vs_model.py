@@ -90,6 +90,8 @@ means_exp_JJA=np.zeros((varnms.size,nlat)) #multi-year mean for each variable
 diffs_JJA=np.zeros((varnms.size,nlat)) #multi-year exp-ctl diff for each variable
 pvals_JJA=np.zeros((varnms.size,nlat)) #pvalues of ttest
 
+gm_yby_ctl=np.zeros((years.size)) #year by year mean for each variable
+gm_yby_exp=np.zeros((years.size)) #year by year mean for each variable
 for iy in range(0,years.size): 
     # open data file
     fctl=fpath_ctl+ctl_pref+"_ANN_"+str(years[iy])+".nc"
@@ -135,6 +137,15 @@ for iy in range(0,years.size):
         means_yby_exp_JJA[iy,iv,:]=np.mean(dtexp_JJA[:,:,:],axis=2)[0,:]
         #stats_dif[i]=get_area_mean_min_max(dtdif[:,:,:],lat[:])[0]
         #stats_difp[i]=stats_dif[0]/stats_ctl[0]*100.
+        gm_yby_ctl[iy]=get_area_mean_min_max(dtctl[:,:,:],lat[:])[0]
+        gm_yby_exp[iy]=get_area_mean_min_max(dtexp[:,:,:],lat[:])[0]
+
+# compute globam mean
+diffs_ym_toa=np.mean(gm_yby_exp-gm_yby_ctl)
+ttest_ym_toa=stats.ttest_ind(gm_yby_ctl,gm_yby_exp,axis=0)
+print(diffs_ym_toa)
+print(ttest_ym_toa.pvalue)
+exit()
 
 # compute multi-year mean and ttest
 siglev=0.05
