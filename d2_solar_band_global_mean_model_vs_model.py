@@ -161,7 +161,7 @@ bands=["0.2-0.26","0.26-0.34","0.34-0.44","0.44-0.63","0.63-0.78","0.78-1.24","1
 ax1.bar(bands,means_ctl,color="indigo") #"tab:blue"
 #ax1.set_title(var_long_name+" (CESM2)",fontsize=14)
 ax1.set_title("Band-Integrated SSI" +" (CESM2)",fontsize=14)
-ax1.set_ylabel(units,fontsize=12)
+ax1.set_ylabel(units,fontsize=14)
 #ax1.set_xlabel("Band wave length",fontsize=12)
 ax1.grid(True)
 ax1.set_axisbelow(True)
@@ -172,7 +172,7 @@ ax1.set_xticklabels(labels=bands,rotation=-45,fontsize=12)
 #ylocs,ylabels=yticks()
 #print(ylocs,ylabels)
 #ax1.set_yticklabels(labels=ylabels,fontsize=12)
-plt.yticks(fontsize=12)
+plt.yticks(fontsize=14)
 
 ax2=fig.add_axes([0.13,0.14,0.78,0.33])
 #bars=[None]*diffs_sig.size
@@ -189,8 +189,9 @@ ax2.set_ylim(-1.25,1.25)
 ax2.xaxis.grid(color='lightgray', linestyle=':')
 ax2.yaxis.grid(color='lightgray', linestyle=':')
 ax2.set_xticklabels(labels=bands,rotation=-45,fontsize=12)
-plt.yticks(fontsize=12)
+plt.yticks(fontsize=14)
 plt.savefig(figure_name+".eps")
+plt.savefig(figure_name+".png")
 plt.show()
 
 exit()

@@ -72,7 +72,7 @@ if var_group_todo==22:
            "FSSDS08","FSSDS07","FSSDS06","FSSDS05","FSSDS04",\
            "FSSDS03","FSSDS02","FSSDS01","FSSDS14"])
    var_long_name="Band-by-Band Surface net Upward SW"
-   figure_name="Band_by_Band_net_absorb_TOA&SFC_SW_ANN"
+   figure_name="Band_by_Band_net_absorb_TOA_SFC_SW_ANN"
    units=r"Wm$^-$$^2$"
 
 # variable group 3 (clear sky):
@@ -297,7 +297,7 @@ ax1.bar(x-0.2,means_ctl_toa,width=0.5,color="indigo",label="TOA") #"tab:blue"
 ax1.bar(x+0.2,means_ctl_sfc,width=0.5,color="limegreen",label="Surface") #"tab:blue"
 #ax1.set_title(var_long_name+" (CESM2)",fontsize=14)
 ax1.set_title("Net Flux at TOA&Surface" +" (CESM2)",fontsize=14)
-ax1.set_ylabel(units,fontsize=12)
+ax1.set_ylabel(units,fontsize=14)
 #ax1.set_xlabel("Band wave length",fontsize=12)
 ax1.grid(True)
 ax1.set_axisbelow(True)
@@ -305,7 +305,7 @@ ax1.xaxis.grid(color='lightgray', linestyle=':')
 ax1.yaxis.grid(color='lightgray', linestyle=':')
 plt.xticks(x,bands,rotation=-45,fontsize=12)
 #ax1.set_xticklabels(labels=bands,rotation=-45,fontsize=12)
-plt.yticks(fontsize=12)
+plt.yticks(fontsize=14)
 ax1.legend(fontsize=14)
 
 ax2=fig.add_axes([0.13,0.14,0.78,0.33])
@@ -328,8 +328,9 @@ ax2.xaxis.grid(color='lightgray', linestyle=':')
 ax2.yaxis.grid(color='lightgray', linestyle=':')
 #ax2.set_xticklabels(labels=bands,rotation=-45,fontsize=12)
 plt.xticks(x,bands,rotation=-45,fontsize=12)
-plt.yticks(fontsize=12)
+plt.yticks(fontsize=14)
 plt.savefig(figure_name+".eps")
+plt.savefig(figure_name+".png",dpi=(200))
 plt.show()
 
 exit()
