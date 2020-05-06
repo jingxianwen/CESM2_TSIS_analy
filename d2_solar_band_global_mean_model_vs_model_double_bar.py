@@ -164,104 +164,126 @@ for iy in range(0,years.size):
 # compute multi-year mean and ttest
 means_ctl_toa=np.mean(means_yby_ctl_toa,axis=0)
 means_exp_toa=np.mean(means_yby_exp_toa,axis=0)
+# stadard deviation
+s1=np.std(means_yby_ctl_toa,axis=0)
+s2=np.std(means_yby_exp_toa,axis=0)
+nn=years.size
+stddev_diffs_toa=np.sqrt(((nn-1)*(s1**2.) + (nn-1)*s2**2.)/(nn+nn-2))
+
 diffs_toa=means_exp_toa-means_ctl_toa
 ttest_toa=stats.ttest_ind(means_yby_ctl_toa,means_yby_exp_toa,axis=0)
 pvalues_toa= ttest_toa.pvalue
 
 means_ctl_sfc=np.mean(means_yby_ctl_sfc,axis=0)
 means_exp_sfc=np.mean(means_yby_exp_sfc,axis=0)
+# stadard deviation
+s1=np.std(means_yby_ctl_sfc,axis=0)
+s2=np.std(means_yby_exp_sfc,axis=0)
+nn=years.size
+stddev_diffs_sfc=np.sqrt(((nn-1)*(s1**2.) + (nn-1)*s2**2.)/(nn+nn-2))
+
 diffs_sfc=means_exp_sfc-means_ctl_sfc
 ttest_sfc=stats.ttest_ind(means_yby_ctl_sfc,means_yby_exp_sfc,axis=0)
 pvalues_sfc= ttest_sfc.pvalue
 
+print(stddev_diffs_toa)
+print(stddev_diffs_sfc)
+
 #compute annual mean for each year
-print("**** TOT SW-> ****")
-ym_ctl_toa=np.sum(means_yby_ctl_toa[:,:],axis=1)
-ym_exp_toa=np.sum(means_yby_exp_toa[:,:],axis=1)
-diffs_ym_toa=np.mean(ym_exp_toa-ym_ctl_toa)
-ttest_ym_toa=stats.ttest_ind(ym_ctl_toa,ym_exp_toa,axis=0)
-print(" toa->")
-print(diffs_ym_toa)
-print(ttest_ym_toa.pvalue)
-ym_ctl_sfc=np.sum(means_yby_ctl_sfc[:,:],axis=1)
-ym_exp_sfc=np.sum(means_yby_exp_sfc[:,:],axis=1)
-diffs_ym_sfc=np.mean(ym_exp_sfc-ym_ctl_sfc)
-ttest_ym_sfc=stats.ttest_ind(ym_ctl_sfc,ym_exp_sfc,axis=0)
-print(" sfc->")
-print(diffs_ym_sfc)
-print(ttest_ym_sfc.pvalue)
-ym_ctl_atm=ym_ctl_toa-ym_ctl_sfc
-ym_exp_atm=ym_exp_toa-ym_exp_sfc
-diffs_ym_atm=np.mean(ym_exp_atm-ym_ctl_atm)
-ttest_ym_atm=stats.ttest_ind(ym_ctl_atm,ym_exp_atm,axis=0)
-print(" atm->")
-print(diffs_ym_atm)
-print(ttest_ym_atm.pvalue)
-
-print("**** VIS-> ****")
-ym_ctl_toa=np.sum(means_yby_ctl_toa[:,0:5],axis=1)
-ym_exp_toa=np.sum(means_yby_exp_toa[:,0:5],axis=1)
-diffs_ym_toa=np.mean(ym_exp_toa-ym_ctl_toa)
-ttest_ym_toa=stats.ttest_ind(ym_ctl_toa,ym_exp_toa,axis=0)
-print(" toa->")
-print(diffs_ym_toa)
-print(ttest_ym_toa.pvalue)
-ym_ctl_sfc=np.sum(means_yby_ctl_sfc[:,0:5],axis=1)
-ym_exp_sfc=np.sum(means_yby_exp_sfc[:,0:5],axis=1)
-diffs_ym_sfc=np.mean(ym_exp_sfc-ym_ctl_sfc)
-ttest_ym_sfc=stats.ttest_ind(ym_ctl_sfc,ym_exp_sfc,axis=0)
-print(" sfc->")
-print(diffs_ym_sfc)
-print(ttest_ym_sfc.pvalue)
-ym_ctl_atm=ym_ctl_toa-ym_ctl_sfc
-ym_exp_atm=ym_exp_toa-ym_exp_sfc
-diffs_ym_atm=np.mean(ym_exp_atm-ym_ctl_atm)
-ttest_ym_atm=stats.ttest_ind(ym_ctl_atm,ym_exp_atm,axis=0)
-print(" atm->")
-print(diffs_ym_atm)
-print(ttest_ym_atm.pvalue)
-
-print("**** NIR-> ***")
-ym_ctl_toa=np.sum(means_yby_ctl_toa[:,5:],axis=1)
-ym_exp_toa=np.sum(means_yby_exp_toa[:,5:],axis=1)
-diffs_ym_toa=np.mean(ym_exp_toa-ym_ctl_toa)
-ttest_ym_toa=stats.ttest_ind(ym_ctl_toa,ym_exp_toa,axis=0)
-print(" toa->")
-print(diffs_ym_toa)
-print(ttest_ym_toa.pvalue)
-ym_ctl_sfc=np.sum(means_yby_ctl_sfc[:,5:],axis=1)
-ym_exp_sfc=np.sum(means_yby_exp_sfc[:,5:],axis=1)
-diffs_ym_sfc=np.mean(ym_exp_sfc-ym_ctl_sfc)
-ttest_ym_sfc=stats.ttest_ind(ym_ctl_sfc,ym_exp_sfc,axis=0)
-print(" sfc->")
-print(diffs_ym_sfc)
-print(ttest_ym_sfc.pvalue)
-ym_ctl_atm=ym_ctl_toa-ym_ctl_sfc
-ym_exp_atm=ym_exp_toa-ym_exp_sfc
-diffs_ym_atm=np.mean(ym_exp_atm-ym_ctl_atm)
-ttest_ym_atm=stats.ttest_ind(ym_ctl_atm,ym_exp_atm,axis=0)
-print(" atm->")
-print(diffs_ym_atm)
-print(ttest_ym_atm.pvalue)
-exit()
+#print("**** TOT SW-> ****")
+#ym_ctl_toa=np.sum(means_yby_ctl_toa[:,:],axis=1)
+#ym_exp_toa=np.sum(means_yby_exp_toa[:,:],axis=1)
+#diffs_ym_toa=np.mean(ym_exp_toa-ym_ctl_toa)
+#ttest_ym_toa=stats.ttest_ind(ym_ctl_toa,ym_exp_toa,axis=0)
+#print(" toa->")
+#print(diffs_ym_toa)
+#print(ttest_ym_toa.pvalue)
+#ym_ctl_sfc=np.sum(means_yby_ctl_sfc[:,:],axis=1)
+#ym_exp_sfc=np.sum(means_yby_exp_sfc[:,:],axis=1)
+#diffs_ym_sfc=np.mean(ym_exp_sfc-ym_ctl_sfc)
+#ttest_ym_sfc=stats.ttest_ind(ym_ctl_sfc,ym_exp_sfc,axis=0)
+#print(" sfc->")
+#print(diffs_ym_sfc)
+#print(ttest_ym_sfc.pvalue)
+#ym_ctl_atm=ym_ctl_toa-ym_ctl_sfc
+#ym_exp_atm=ym_exp_toa-ym_exp_sfc
+#diffs_ym_atm=np.mean(ym_exp_atm-ym_ctl_atm)
+#ttest_ym_atm=stats.ttest_ind(ym_ctl_atm,ym_exp_atm,axis=0)
+#print(" atm->")
+#print(diffs_ym_atm)
+#print(ttest_ym_atm.pvalue)
+#
+#print("**** VIS-> ****")
+#ym_ctl_toa=np.sum(means_yby_ctl_toa[:,0:5],axis=1)
+#ym_exp_toa=np.sum(means_yby_exp_toa[:,0:5],axis=1)
+#diffs_ym_toa=np.mean(ym_exp_toa-ym_ctl_toa)
+#ttest_ym_toa=stats.ttest_ind(ym_ctl_toa,ym_exp_toa,axis=0)
+#print(" toa->")
+#print(diffs_ym_toa)
+#print(ttest_ym_toa.pvalue)
+#ym_ctl_sfc=np.sum(means_yby_ctl_sfc[:,0:5],axis=1)
+#ym_exp_sfc=np.sum(means_yby_exp_sfc[:,0:5],axis=1)
+#diffs_ym_sfc=np.mean(ym_exp_sfc-ym_ctl_sfc)
+#ttest_ym_sfc=stats.ttest_ind(ym_ctl_sfc,ym_exp_sfc,axis=0)
+#print(" sfc->")
+#print(diffs_ym_sfc)
+#print(ttest_ym_sfc.pvalue)
+#ym_ctl_atm=ym_ctl_toa-ym_ctl_sfc
+#ym_exp_atm=ym_exp_toa-ym_exp_sfc
+#diffs_ym_atm=np.mean(ym_exp_atm-ym_ctl_atm)
+#ttest_ym_atm=stats.ttest_ind(ym_ctl_atm,ym_exp_atm,axis=0)
+#print(" atm->")
+#print(diffs_ym_atm)
+#print(ttest_ym_atm.pvalue)
+#
+#print("**** NIR-> ***")
+#ym_ctl_toa=np.sum(means_yby_ctl_toa[:,5:],axis=1)
+#ym_exp_toa=np.sum(means_yby_exp_toa[:,5:],axis=1)
+#diffs_ym_toa=np.mean(ym_exp_toa-ym_ctl_toa)
+#ttest_ym_toa=stats.ttest_ind(ym_ctl_toa,ym_exp_toa,axis=0)
+#print(" toa->")
+#print(diffs_ym_toa)
+#print(ttest_ym_toa.pvalue)
+#ym_ctl_sfc=np.sum(means_yby_ctl_sfc[:,5:],axis=1)
+#ym_exp_sfc=np.sum(means_yby_exp_sfc[:,5:],axis=1)
+#diffs_ym_sfc=np.mean(ym_exp_sfc-ym_ctl_sfc)
+#ttest_ym_sfc=stats.ttest_ind(ym_ctl_sfc,ym_exp_sfc,axis=0)
+#print(" sfc->")
+#print(diffs_ym_sfc)
+#print(ttest_ym_sfc.pvalue)
+#ym_ctl_atm=ym_ctl_toa-ym_ctl_sfc
+#ym_exp_atm=ym_exp_toa-ym_exp_sfc
+#diffs_ym_atm=np.mean(ym_exp_atm-ym_ctl_atm)
+#ttest_ym_atm=stats.ttest_ind(ym_ctl_atm,ym_exp_atm,axis=0)
+#print(" atm->")
+#print(diffs_ym_atm)
+#print(ttest_ym_atm.pvalue)
+#exit()
 
 siglev=0.05
 diffs_sig_toa=np.zeros(diffs_toa.size)
 diffs_unsig_toa=np.zeros(diffs_toa.size)
 diffs_sig_sfc=np.zeros(diffs_toa.size)
 diffs_unsig_sfc=np.zeros(diffs_toa.size)
-
+stddev_diffs_toa_sig=np.zeros(diffs_toa.size)
+stddev_diffs_toa_unsig=np.zeros(diffs_toa.size)
+stddev_diffs_sfc_sig=np.zeros(diffs_toa.size)
+stddev_diffs_sfc_unsig=np.zeros(diffs_toa.size)
 for ip in range(pvalues_toa.size):
     if pvalues_toa[ip] < siglev:
         diffs_sig_toa[ip]=diffs_toa[ip]
+        stddev_diffs_toa_sig[ip]=stddev_diffs_toa[ip]
     else:
         diffs_unsig_toa[ip]=diffs_toa[ip]
+        stddev_diffs_toa_unsig[ip]=stddev_diffs_toa[ip]
 
 for ip in range(pvalues_sfc.size):
     if pvalues_sfc[ip] < siglev:
         diffs_sig_sfc[ip]=diffs_sfc[ip]
+        stddev_diffs_sfc_sig[ip]=stddev_diffs_sfc[ip]
     else:
         diffs_unsig_sfc[ip]=diffs_sfc[ip]
+        stddev_diffs_sfc_unsig[ip]=stddev_diffs_sfc[ip]
 
 
 # make the plot
@@ -290,10 +312,10 @@ ax2=fig.add_axes([0.13,0.14,0.78,0.33])
 #bars=[None]*diffs_sig.size
 #ax2.bar(bands,diffs_sig_toa,color="indigo",hatch="//",edgecolor="white")
 #ax2.bar(bands,diffs_unsig_toa,color="indigo")
-ax2.bar(x-0.2,diffs_sig_toa,width=0.5,color="indigo",hatch="//",edgecolor="white")
-ax2.bar(x-0.2,diffs_unsig_toa,width=0.5,color="indigo")
-ax2.bar(x+0.2,diffs_sig_sfc,width=0.5,color="limegreen",hatch="//",edgecolor="white")
-ax2.bar(x+0.2,diffs_unsig_sfc,width=0.5,color="limegreen")
+ax2.bar(x-0.2,diffs_sig_toa,width=0.5,yerr=stddev_diffs_toa_sig,color="indigo",hatch="//",edgecolor="white")
+ax2.bar(x-0.2,diffs_unsig_toa,width=0.5,yerr=stddev_diffs_toa_unsig,color="indigo")
+ax2.bar(x+0.2,diffs_sig_sfc,width=0.5,yerr=stddev_diffs_sfc_sig,color="limegreen",hatch="//",edgecolor="white")
+ax2.bar(x+0.2,diffs_unsig_sfc,width=0.5,yerr=stddev_diffs_sfc_unsig,color="limegreen")
 
 #ax2.set_title("Diff in "+var_long_name+" (TSIS-1 - CESM2)",fontsize=14)
 ax2.set_title("Differences"+" (TSIS-1 - CESM2)",fontsize=14)

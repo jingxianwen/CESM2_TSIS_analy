@@ -113,6 +113,13 @@ for iy in range(0,years.size):
 # compute multi-year mean and ttest
 means_ctl=np.mean(means_yby_ctl,axis=0)
 means_exp=np.mean(means_yby_exp,axis=0)
+diffs_yby=means_yby_exp-means_yby_ctl
+# stadard deviation
+s1=np.std(means_yby_exp,axis=0)
+s2=np.std(means_yby_exp,axis=0)
+nn=years.size
+#stddev_diffs=np.std(diffs_yby,axis=0)
+stddev_diffs=np.sqrt(((nn-1)*(s1**2.) + (nn-1)*s2**2.)/(nn+nn-2))
 diffs=means_exp-means_ctl
 ttest=stats.ttest_ind(means_yby_ctl,means_yby_exp,axis=0)
 pvalues=ttest.pvalue
@@ -166,6 +173,7 @@ ax1.set_xlim(1,12)
 ax2=fig.add_axes([0.13,0.12,0.78,0.35])
 #bars=[None]*diffs_sig.size
 #ax2.plot(x[:],diffs[:],color="tab:blue")
+ax2.fill_between(x[:],diffs[:]-stddev_diffs[:],diffs[:]+stddev_diffs[:],facecolor="orangered",alpha=0.3)
 ax2.plot(x[:],diffs[:],color="k",lw=1)
 ax2.plot(x[:],diffs_sig[:],color="orangered",lw=4,alpha=1.0)
 ax2.plot(x[:],zeros[:],color="lightgray",lw=1)
@@ -179,9 +187,11 @@ ax2.yaxis.grid(color='lightgray', linestyle=':')
 ax2.set_xticks(x)
 ax2.set_xticklabels(labels=labels_fig,rotation=0,fontsize=14)
 ax2.set_xlim(1,12)
-#ax2.set_ylim(0.0025,0.0085)
+#ax2.set_ylim(-0.003,0.009)
+#ax2.set_ylim(0.002,0.0105)
 plt.yticks(fontsize=14)
 plt.savefig(figure_name+".eps")
+plt.savefig(figure_name+".png",dpi=(200))
 plt.show()
 
 exit()
