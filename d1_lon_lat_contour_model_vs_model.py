@@ -21,47 +21,54 @@ from get_parameters import get_area_mean_min_max
 
 #def lon_lat_contour_model_vs_model(varnm,season,scale_ctl,scale_exp,table):
 # data path
-ctl_name="E3SM_standard" #os.environ["ctl_name"]
-ctl_name="E3SM_modified" #os.environ["ctl_name"]
-exp_name="E3SM_modified_noEmis" #os.environ["exp_name"]
+ctl_name="CTL" #os.environ["ctl_name"]
+exp_name="TSIS" #os.environ["exp_name"]
 #fpath_ctl=os.environ["fpath_ctl"]+"/"+os.environ["ctl_run_id"]+"_climo_"+season+".nc"
 #fpath_exp=os.environ["fpath_exp"]+"/"+os.environ["exp_run_id"]+"_climo_"+season+".nc"
 #fpath_ctl="./solar_TSIS_cesm211_standard-ETEST-f19_g17-ens1/atm/hist/"
 #fpath_exp="../DATA/tsis_ctl_cesm211_standard-ETEST-f19_g17-ens1/atm/hist/"
 
-fpath_ctl="../../E3SM_output/E3SM_coupled_restart_20TR_Yr2000-emis_Scat.Year2000_2014/climo/"
-fpath_exp="../../E3SM_output/E3SM_coupled_restart_20TR_Yr2000-Scat.Year2000_2014/climo/"
+#fpath_ctl="../../E3SM_output/E3SM_coupled_restart_20TR_Yr2000-emis_Scat.Year2000_2014/climo/"
+#fpath_exp="../../E3SM_output/E3SM_coupled_restart_20TR_Yr2000-Scat.Year2000_2014/climo/"
 #fpath_exp="../../E3SM_output/E3SM_coupled_restart_20TR_Yr2000-Scat.Year2000_2014/climo/"
  
 #f1=fpath_ctl+"solar_TSIS_cesm211_standard-ETEST-f19_g17-ens1.cam.h0.0001-01.nc"
 #f2=fpath_exp+"tsis_ctl_cesm211_standard-ETEST-f19_g17-ens1.cam.h0.0001-01.nc"
 #f1=fpath_ctl+"E3SM_DECKv1b_H1.ne30_climo_ANN.nc"
-f1=fpath_ctl+"E3SM_coupled_restart_20TR_Yr2000-emis_Scat.Year2000_2014_climo_ANN.nc"
-f2=fpath_exp+"E3SM_coupled_restart_20TR_Yr2000-Scat.Year2000_2014_climo_ANN.nc"
+#f1=fpath_ctl+"E3SM_coupled_restart_20TR_Yr2000-emis_Scat.Year2000_2014_climo_ANN.nc"
+#f2=fpath_exp+"E3SM_coupled_restart_20TR_Yr2000-Scat.Year2000_2014_climo_ANN.nc"
 #f2=fpath_exp+"E3SM_coupled_restart_20TR_Yr2000-Scat.Year2000_2014_climo_ANN.nc"
 
-fpath_ctl="../DATA_tmp/"
-fpath_exp="../DATA_tmp/"
+ctl_pref="solar_CTL_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
+exp_pref="solar_CTL_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
+
+fpath_ctl="/raid00/xianwen/cesm211_solar/"+ctl_pref+"/climo/"
+fpath_exp="/raid00/xianwen/cesm211_solar/"+exp_pref+"/climo/"
  
-#f1=fpath_ctl+"solar_TSIS_cesm211_standard-ETEST-f19_g17-ens1.cam.h0.0001-01.nc"
-#f2=fpath_exp+"tsis_ctl_cesm211_standard-ETEST-f19_g17-ens1.cam.h0.0001-01.nc"
-f1=fpath_ctl+"solar_TSIS_cesm211_ETEST-f19_g17-ens0.cam.h0.0001-01.nc"
-f2=fpath_exp+"solar_TSIS_cesm211_ETEST-f19_g17-ens0.cam.h0.2001-01.nc"
+# for a single year 
+#year=2010 
+#fctl=fpath_ctl+ctl_pref+"_ANN_"+str(year)+".nc"
+#fexp=fpath_exp+ctl_pref+"_ANN_"+str(year)+".nc"
+
+# for multi-year mean
+fctl=fpath_ctl+ctl_pref+"_climo_MAM"+".nc"
+fexp=fpath_exp+ctl_pref+"_climo_MAM"+".nc"
 
 # open data file
-file_ctl=netcdf_dataset(f1,"r")
-file_exp=netcdf_dataset(f2,"r")
+file_ctl=netcdf_dataset(fctl,"r")
+file_exp=netcdf_dataset(fexp,"r")
 
 # read lat and lon
 lat=file_ctl.variables["lat"]
 lon=file_ctl.variables["lon"]
 
 #varnm="FSSDCLRS14"
-varnm="FLUTC"
+varnm1="ALDIR"
+varnm2="ASDIR"
 
 # read data and calculate mean/min/max
-dtctl=file_ctl.variables[varnm] #*scale_ctl
-dtexp=file_exp.variables[varnm] #*scale_exp
+dtctl=file_ctl.variables[varnm1] #*scale_ctl
+dtexp=file_ctl.variables[varnm2] #*scale_exp
 dtdif=dtexp[:,:,:]-dtctl[:,:,:]
 stats_ctl=get_area_mean_min_max(dtctl[:,:,:],lat[:])
 stats_exp=get_area_mean_min_max(dtexp[:,:,:],lat[:])
@@ -86,28 +93,32 @@ projection = ccrs.PlateCarree(central_longitude=0)
 
 #fig = plt.figure(figsize=[7.0,11.0],dpi=150.)
 
-fig=plt.figure(figsize=(7,8))
-plotTitle = {'fontsize': 13.}
-plotSideTitle = {'fontsize': 9.}
-plotText = {'fontsize': 8.}
+fig=plt.figure(figsize=(6,9))
+plotTitle = {'fontsize': 16.}
+plotSideTitle = {'fontsize': 12.}
+plotText = {'fontsize': 12.}
 panel = [(0.1691, 0.6810, 0.6465, 0.2258), \
          (0.1691, 0.3961, 0.6465, 0.2258), \
          (0.1691, 0.1112, 0.6465, 0.2258), \
          ]
-labels=[exp_name,ctl_name,exp_name+"-"+ctl_name] 
+#labels=[exp_name,ctl_name,exp_name+"-"+ctl_name] 
+labels=[varnm2,varnm1,varnm2+"-"+varnm1] 
+labels=["VIS","NIR","VIS-NIR"]
 #units=parameters["units"]
-units="W/m2"
+units=""
 for i in range(0,3):
    #1. first plot
     levels = None
     norm = None
     if i != 2:
         #cnlevels=np.array([0,10,20,30,40,50,60]) #parameters["contour_levs"]
-        cnlevels=np.arange(125,300,20)
-        #cnlevels=np.arange(0,80,8)
+        #cnlevels=np.arange(125,300,20)
+        cnlevels=np.arange(0.1,1,0.1)
     else:
         #cnlevels=np.arange(-9,10,1.5)
-        cnlevels=np.arange(-6,7,1)
+        #cnlevels=np.arange(-6,7,1)
+        #cnlevels=np.arange(-0.1,0.11,0.01)
+        cnlevels=np.arange(-0.2,0.24,0.04)
         #cnlevels=np.array([-4,-3.5,-3,-2.5,-2,-1.5,-1.,-0.5,0.5,1.,1.5,2.,2.5,3.,3.5,4.]) #parameters["diff_levs"]
 
     #if len(cnlevels) >0:
@@ -122,15 +133,15 @@ for i in range(0,3):
     #p1 = ax.contourf(lon[:],lat[:],dtexp[0,:,:])
     if i == 0:
         dtplot=dtexp[:,:,:]
-        cmap="PiYG_r" #parameters["colormap"]
+        cmap="Oranges" #parameters["colormap"]
         stats=stats_exp
     elif i == 1:
         dtplot=dtctl[:,:,:]
-        cmap="PiYG_r" #parameters["colormap"]
+        cmap="Oranges" #parameters["colormap"]
         stats=stats_ctl
     else:
         dtplot=dtdif[:,:,:]
-        cmap="bwr" #parameters["colormap_diff"]
+        cmap="RdYlBu_r" #parameters["colormap_diff"]
         stats=stats_dif
     p1 = ax.contourf(lon[:],lat[:],dtplot[0,:,:],\
                 transform=projection,\
@@ -155,27 +166,29 @@ for i in range(0,3):
     ax.xaxis.set_ticks_position('bottom')
     ax.yaxis.set_ticks_position('left')
     # color bar
-    cbax = fig.add_axes((panel[i][0] + 0.6635, panel[i][1] + 0.0215, 0.0326, 0.1792))
+    #cbax = fig.add_axes((panel[i][0] + 0.6635, panel[i][1] + 0.0215, 0.0326, 0.1792))
+    cbax = fig.add_axes((panel[i][0] + 0.6635, panel[i][1] + 0.010, 0.0326, 0.22))
     #cbax = fig.add_axes((panel[i][0] + 0.6635, panel[i][1] + 0.0215, 0.0326, 0.2850))
     cbar = fig.colorbar(p1, cax=cbax, ticks=cnlevels)
     #w, h = get_ax_size(fig, cbax)
-    cbar.ax.tick_params(labelsize=9.0, length=0)
+    cbar.ax.tick_params(labelsize=8.0, length=0)
 
     # Mean, Min, Max
-    fig.text(panel[i][0] + 0.6635, panel[i][1] + 0.2107,
-             "Mean\nMin\nMax", ha='left', fontdict=plotText)
-    fig.text(panel[i][0] + 0.7835, panel[i][1] + 0.2107, "%.2f\n%.2f\n%.2f" %
-             stats[0:3], ha='right', fontdict=plotText)
+    #fig.text(panel[i][0] + 0.6635, panel[i][1] + 0.2107,
+    #         "Mean\nMin\nMax", ha='left', fontdict=plotText)
+    #fig.text(panel[i][0] + 0.7835, panel[i][1] + 0.2107, "%.2f\n%.2f\n%.2f" %
+    #         stats[0:3], ha='right', fontdict=plotText)
 
 #fig.suptitle(varnm, x=0.5, y=0.96, fontsize=14)
-fig.suptitle(varnm, x=0.5, y=0.96, fontdict=plotTitle)
+fig.suptitle("Albedo (MAM)", x=0.5, y=0.96, fontdict=plotTitle)
 #save figure as file
 #if os.environ["fig_save"]=="True":
 #    fname="d1_lon_lat_contour_"+varnm+"_"+season+"."+os.environ["fig_suffix"]
 #    plt.savefig(os.environ["OUTDIR"]+"/figures/"+fname)
-plt.savefig(varnm+"_"+exp_name+"-"+ctl_name+".png")
+#plt.savefig(varnm+"_"+exp_name+"-"+ctl_name+".png")
 #if os.environ["fig_show"]=="True":
 #    plt.show()
+plt.savefig("albedo_VIS-NIR_MAM.eps")
 plt.show()
 plt.close()
 

@@ -44,11 +44,11 @@ months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 var_group_todo=1
 # variable group 1:
-varnms=np.array(["TS"])
+varnms=np.array(["FSNS"])
 #varnms=np.array(["FSNTOA","FSNS","TS"])
-var_long_name="Surface Temperature"
-figure_name="Surface_Temperature_zonal_ANN"
-units="K"
+var_long_name="Surface Net SW Radiation (all-sky)"
+figure_name="Surface_FSNS_ANN"
+units=r"Wm$^-$$^2$"
 #var_long_name="Surface Net SW"
 #figure_name="Surface_Net_SW_zonal_ANN"
 #var_long_name="TOA Net SW"
@@ -137,9 +137,8 @@ for iy in range(0,years.size):
         means_yby_exp_JJA[iy,iv,:]=np.mean(dtexp_JJA[:,:,:],axis=2)[0,:]
         #stats_dif[i]=get_area_mean_min_max(dtdif[:,:,:],lat[:])[0]
         #stats_difp[i]=stats_dif[0]/stats_ctl[0]*100.
-
-        #gm_yby_ctl[iy]=get_area_mean_min_max(dtctl[:,:,:],lat[:])[0]
-        #gm_yby_exp[iy]=get_area_mean_min_max(dtexp[:,:,:],lat[:])[0]
+        gm_yby_ctl[iy]=get_area_mean_min_max(dtctl[:,:,:],lat[:])[0]
+        gm_yby_exp[iy]=get_area_mean_min_max(dtexp[:,:,:],lat[:])[0]
 
 # compute globam mean
 #diffs_ym_toa=np.mean(gm_yby_exp-gm_yby_ctl)
@@ -152,16 +151,6 @@ for iy in range(0,years.size):
 siglev=0.05
 means_ctl=np.mean(means_yby_ctl,axis=0)
 means_exp=np.mean(means_yby_exp,axis=0)
-#diffs_yby=means_yby_exp-means_yby_ctl
-#mins_diffs=np.min(diffs_yby,axis=0)
-#maxs_diffs=np.max(diffs_yby,axis=0)
-#stddev_diffs=np.std(diffs_yby,axis=0)
-# stadard deviation
-s1=np.std(means_yby_exp,axis=0)
-s2=np.std(means_yby_exp,axis=0)
-nn=years.size
-stddev_diffs=np.sqrt(((nn-1)*(s1**2.) + (nn-1)*s2**2.)/(nn+nn-2))
-
 diffs=means_exp-means_ctl
 ttest=stats.ttest_ind(means_yby_ctl,means_yby_exp,axis=0)
 pvalues=ttest.pvalue
@@ -170,16 +159,6 @@ diffs_sig[:,:]=np.nan
 
 means_ctl_DJF=np.mean(means_yby_ctl_DJF,axis=0)
 means_exp_DJF=np.mean(means_yby_exp_DJF,axis=0)
-#diffs_yby_DJF=means_yby_exp_DJF-means_yby_ctl_DJF
-#mins_diffs_DJF=np.min(diffs_yby_DJF,axis=0)
-#maxs_diffs_DJF=np.max(diffs_yby_DJF,axis=0)
-#stddev_diffs_DJF=np.std(diffs_yby_DJF,axis=0)
-# stadard deviation
-s1=np.std(means_yby_exp_DJF,axis=0)
-s2=np.std(means_yby_exp_DJF,axis=0)
-nn=years.size
-stddev_diffs_DJF=np.sqrt(((nn-1)*(s1**2.) + (nn-1)*s2**2.)/(nn+nn-2))
-
 diffs_DJF=means_exp_DJF-means_ctl_DJF
 ttest_DJF=stats.ttest_ind(means_yby_ctl_DJF,means_yby_exp_DJF,axis=0)
 pvalues_DJF=ttest_DJF.pvalue
@@ -188,20 +167,6 @@ diffs_sig_DJF[:,:]=np.nan
 
 means_ctl_JJA=np.mean(means_yby_ctl_JJA,axis=0)
 means_exp_JJA=np.mean(means_yby_exp_JJA,axis=0)
-#diffs_yby_JJA=means_yby_exp_JJA-means_yby_ctl_JJA
-#mins_diffs_JJA=np.min(diffs_yby_JJA,axis=0)
-#maxs_diffs_JJA=np.max(diffs_yby_JJA,axis=0)
-#stddev_diffs_JJA=np.std(diffs_yby_JJA,axis=0)
-# stadard deviation
-s1=np.std(means_yby_exp_JJA,axis=0)
-s2=np.std(means_yby_exp_JJA,axis=0)
-nn=years.size
-stddev_diffs_JJA=np.sqrt(((nn-1)*(s1**2.) + (nn-1)*s2**2.)/(nn+nn-2))
-
-mins_ctl_JJA=np.min(means_yby_ctl_JJA,axis=0)
-mins_exp_JJA=np.min(means_yby_exp_JJA,axis=0)
-maxs_ctl_JJA=np.max(means_yby_ctl_JJA,axis=0)
-maxs_exp_JJA=np.max(means_yby_exp_JJA,axis=0)
 diffs_JJA=means_exp_JJA-means_ctl_JJA
 ttest_JJA=stats.ttest_ind(means_yby_ctl_JJA,means_yby_exp_JJA,axis=0)
 pvalues_JJA=ttest_JJA.pvalue
@@ -232,46 +197,37 @@ for iv in range(pvalues_JJA.shape[0]):
 
 # make the plot
 fig=plt.figure(figsize=(7,8))
-ax1=fig.add_axes([0.12,0.58,0.8,0.36])
+ax1=fig.add_axes([0.14,0.58,0.8,0.36])
 
 ax1.plot(lat[:],means_ctl[0,:],color="k",lw=2,ls="-",label="ANN")
-ax1.plot(lat[:],means_ctl_DJF[0,:],color="royalblue",lw=2,ls="-",label="DJF")
-ax1.plot(lat[:],means_ctl_JJA[0,:],color="darkorange",lw=2,ls="-",label="JJA")
+#ax1.plot(lat[:],means_ctl_DJF[0,:],color="royalblue",lw=2,ls="-",label="DJF")
+#ax1.plot(lat[:],means_ctl_JJA[0,:],color="darkorange",lw=2,ls="-",label="JJA")
 #ax1.plot(lat[:],means_exp[0,:],color="k",lw=2,ls=":",label="TSIS")
 #ax1.legend(loc="upper left",fontsize=12)
-ax1.legend(fontsize=12)
-ax1.set_title("Surface Temperature (CESM2)",fontsize=14)
+#ax1.legend(fontsize=12)
+ax1.set_title("Surface All-sky Net SW (CESM2)",fontsize=14)
 ax1.set_ylabel(units,fontsize=14)
 #ax1.set_xlabel("Latitude",fontsize=14)
 ax1.set_xlim(-90,90)
 plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
 
-ax2=fig.add_axes([0.12,0.12,0.8,0.36])
-#ax2.fill_between(lat[:],diffs[0,:]-stddev_diffs[0,:],diffs[0,:]+stddev_diffs[0,:],facecolor='k', alpha=0.3)
-ax2.fill_between(lat[:],diffs_DJF[0,:]-stddev_diffs_DJF[0,:],diffs_DJF[0,:]+stddev_diffs_DJF[0,:],facecolor='royalblue', alpha=0.3)
-ax2.fill_between(lat[:],diffs[0,:]-stddev_diffs[0,:],diffs[0,:]+stddev_diffs[0,:],facecolor='k', alpha=0.3)
-ax2.fill_between(lat[:],diffs_JJA[0,:]-stddev_diffs_JJA[0,:],diffs_JJA[0,:]+stddev_diffs_JJA[0,:],facecolor='darkorange', alpha=0.3)
-#ax2.fill_between(lat[:],mins_diffs[0,:],maxs_diffs[0,:],facecolor='k', alpha=0.3)
-#ax2.fill_between(lat[:],mins_diffs_DJF[0,:],maxs_diffs_DJF[0,:],facecolor='royalblue', alpha=0.5)
-#ax2.fill_between(lat[:],mins_diffs_JJA[0,:],maxs_diffs_JJA[0,:],facecolor='darkorange', alpha=0.5)
+ax2=fig.add_axes([0.14,0.12,0.8,0.36])
 ax2.plot(lat[:],diffs[0,:],color="k",lw=1)
-ax2.plot(lat[:],diffs_DJF[0,:],color="royalblue",lw=1)
-ax2.plot(lat[:],diffs_JJA[0,:],color="darkorange",lw=1)
-ax2.plot(lat[:],diffs_sig[0,:],color="k",lw=4,alpha=1.)
-ax2.plot(lat[:],diffs_sig_DJF[0,:],color="royalblue",lw=4,alpha=1.)
-ax2.plot(lat[:],diffs_sig_JJA[0,:],color="darkorange",lw=4,alpha=1.)
+#ax2.plot(lat[:],diffs_DJF[0,:],color="royalblue",lw=1)
+#ax2.plot(lat[:],diffs_JJA[0,:],color="darkorange",lw=1)
+ax2.plot(lat[:],diffs_sig[0,:],color="orangered",lw=4,alpha=1.)
+#ax2.plot(lat[:],diffs_sig_DJF[0,:],color="royalblue",lw=4,alpha=1.)
+#ax2.plot(lat[:],diffs_sig_JJA[0,:],color="darkorange",lw=4,alpha=1.)
 ax2.plot(lat[:],zeros[0,:],color="lightgray",lw=1)
 ax2.set_title("Differences (TSIS-1 - CESM2)",fontsize=14) #+var_long_name,fontsize=12)
 ax2.set_ylabel(units,fontsize=14)
 ax2.set_xlabel("Latitude",fontsize=14)
 ax2.set_xlim(-90,90)
-ax2.set_ylim(-1.2,0.3)
 plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
 
 plt.savefig(figure_name+".eps")
-plt.savefig(figure_name+".png",dpi=(200))
 plt.show()
 
 exit()

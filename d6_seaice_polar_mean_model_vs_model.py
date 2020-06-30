@@ -31,6 +31,8 @@ from get_parameters import get_area_mean_min_max
 # data path
 ctl_name="CTL" #os.environ["ctl_name"]
 exp_name="TSIS" #os.environ["exp_name"]
+#ctl_pref="solar_CTL_cesm211_VIS_icealb_ETEST-f19_g17-ens_mean_2010-2019"
+#exp_pref="solar_TSIS_cesm211_VIS_icealb_ETEST-f19_g17-ens_mean_2010-2019"
 ctl_pref="solar_CTL_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
 exp_pref="solar_TSIS_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
 
@@ -44,7 +46,7 @@ var_group_todo=1
 # variable group 1:
 #varnms=np.array(["ICEFRAC"])
 varnms="ICEFRAC"
-pole='S'
+pole='N'
 if pole is 'N':
    var_long_name="Arctic Sea Ice Fraction"
    figure_name="Arctic_Sea_Ice_Monthly"
@@ -111,6 +113,13 @@ for iy in range(0,years.size):
 # compute multi-year mean and ttest
 means_ctl=np.mean(means_yby_ctl,axis=0)
 means_exp=np.mean(means_yby_exp,axis=0)
+diffs_yby=means_yby_exp-means_yby_ctl
+# stadard deviation
+s1=np.std(means_yby_exp,axis=0)
+s2=np.std(means_yby_exp,axis=0)
+nn=years.size
+#stddev_diffs=np.std(diffs_yby,axis=0)
+stddev_diffs=np.sqrt(((nn-1)*(s1**2.) + (nn-1)*s2**2.)/(nn+nn-2))
 diffs=means_exp-means_ctl
 ttest=stats.ttest_ind(means_yby_ctl,means_yby_exp,axis=0)
 pvalues=ttest.pvalue
@@ -127,6 +136,16 @@ for ip in range(diffs.shape[0]):
         diffs_sig[ip]=diffs[ip]
     else:
         diffs_unsig[ip]=diffs[ip]
+
+#compute annual mean for each year
+#ym_ctl=np.mean(means_yby_ctl,axis=1)
+#ym_exp=np.mean(means_yby_exp,axis=1)
+#diffs_ym=np.mean(ym_exp-ym_ctl)
+#ttest_ym=stats.ttest_ind(ym_ctl,ym_exp,axis=0)
+#print(diffs_ym)
+#print(ttest_ym.pvalue)
+
+#exit()
 #print(diffs)
 #print(diffs_sig)
 #print(diffs_unsig)
@@ -134,38 +153,45 @@ for ip in range(diffs.shape[0]):
 # make the plot
 fig=plt.figure(figsize=(7,8))
 ax1=fig.add_axes([0.13,0.57,0.78,0.35])
-ax2=fig.add_axes([0.13,0.10,0.78,0.35])
 x=np.array([1,2,3,4,5,6,7,8,9,10,11,12])
 labels_fig=np.array(["J","F","M","A","M","J","J","A","S","O","N","D"])
 ax1.plot(x[:],means_ctl[:],color="k",lw=2)
-ax1.set_title(var_long_name+" (ANN)",fontsize=12)
-ax1.set_ylabel(units,fontsize=12)
-ax1.set_xlabel("month",fontsize=12)
+#ax1.set_title("Antarctic Sea Ice Fraction (CESM2)",fontsize=14)
+ax1.set_title("Arctic Sea Ice Fraction (CESM2)",fontsize=14)
+ax1.set_ylabel(units,fontsize=14)
+#ax1.set_xlabel("month",fontsize=14)
 ax1.grid(True)
 ax1.set_axisbelow(True)
-ax1.xaxis.grid(color='gray', linestyle=':')
-ax1.yaxis.grid(color='gray', linestyle=':')
+ax1.xaxis.grid(color='lightgray', linestyle=':')
+ax1.yaxis.grid(color='lightgray', linestyle=':')
 ax1.set_xticks(x)
-ax1.set_xticklabels(labels=labels_fig,rotation=0,fontsize=10)
+ax1.set_xticklabels(labels=labels_fig,rotation=0,fontsize=14)
+plt.yticks(fontsize=14)
 ax1.set_xlim(1,12)
 #ax1.set_ylim=([0,means_ctl.max*1.1])
 
+ax2=fig.add_axes([0.13,0.12,0.78,0.35])
 #bars=[None]*diffs_sig.size
 #ax2.plot(x[:],diffs[:],color="tab:blue")
-ax2.plot(x[:],diffs[:],color="k",lw=2)
-ax2.plot(x[:],diffs_sig[:],color="darkorange",lw=4,alpha=1.0)
-ax2.plot(x[:],zeros[:],color="gray",lw=1)
-ax2.set_title("Diff in "+var_long_name+" (ANN)",fontsize=12)
-ax2.set_ylabel(units,fontsize=12)
-ax2.set_xlabel("month",fontsize=12)
+ax2.fill_between(x[:],diffs[:]-stddev_diffs[:],diffs[:]+stddev_diffs[:],facecolor="orangered",alpha=0.3)
+ax2.plot(x[:],diffs[:],color="k",lw=1)
+ax2.plot(x[:],diffs_sig[:],color="orangered",lw=4,alpha=1.0)
+ax2.plot(x[:],zeros[:],color="lightgray",lw=1)
+ax2.set_title("Differences"+" (TSIS-1 - CESM2)",fontsize=14)
+ax2.set_ylabel(units,fontsize=14)
+ax2.set_xlabel("Month",fontsize=14)
 ax2.grid(True)
 ax2.set_axisbelow(True)
-ax2.xaxis.grid(color='gray', linestyle=':')
-ax2.yaxis.grid(color='gray', linestyle=':')
+ax2.xaxis.grid(color='lightgray', linestyle=':')
+ax2.yaxis.grid(color='lightgray', linestyle=':')
 ax2.set_xticks(x)
-ax2.set_xticklabels(labels=labels_fig,rotation=0,fontsize=10)
+ax2.set_xticklabels(labels=labels_fig,rotation=0,fontsize=14)
 ax2.set_xlim(1,12)
-plt.savefig(figure_name+".png")
+#ax2.set_ylim(-0.003,0.009)
+#ax2.set_ylim(0.002,0.0105)
+plt.yticks(fontsize=14)
+plt.savefig(figure_name+".eps")
+plt.savefig(figure_name+".png",dpi=(200))
 plt.show()
 
 exit()
