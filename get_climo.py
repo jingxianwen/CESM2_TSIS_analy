@@ -23,12 +23,12 @@ def listToString(s):
 # Input 
 #caseid="E3SM_DECKv1b_H1.ne30"
 #monthly_data_path="./E3SM_DECKv1b_H1.ne30/remap_180x360"
-caseid="solar_TSIS_cesm211_VIS_icealb_ETEST-f19_g17-ens_mean_2010-2019"
+caseid="solar_CTL_cesm211_ETEST-f19_g17-ens0_fssd"
 #monthly_data_path="/raid00/xianwen/Yi-Hsuan/E3SM_coupled_restart_20TR_Yr2000-Scat.Year2000_2014/remap_180x360"
 #monthly_data_path="/raid00/xianwen/cesm211_solar/"+caseid+"/monthly"
-monthly_data_path="/glade/scratch/xianwen/archive/"+caseid
+monthly_data_path="/glade/scratch/xianwen/archive/"+caseid+"/atm/hist"
 out_path=monthly_data_path+"/climo"
-years=np.arange(2010,2020)
+years=np.arange(2000,2001)
 months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 # check file existence:
