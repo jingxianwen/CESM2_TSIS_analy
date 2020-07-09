@@ -43,68 +43,71 @@ pdf_samp_S3=np.zeros((num_tcbin,num_zebin),dtype=np.float32) # PDF of cnt_sampl 
 #------------------------
 #-- open and read file --
 #------------------------
-file_path="./results_ocn_lnd_noprecp_ice95/01/"
-fileN1=open(file_path+'cnt_cld_ocn_NH_0-30.txt','r')
-fileN2=open(file_path+'cnt_cld_ocn_NH_30-60.txt','r')
-fileN3=open(file_path+'cnt_cld_ocn_NH_60-90.txt','r')
-fileS1=open(file_path+'cnt_cld_ocn_SH_0-30.txt','r')
-fileS2=open(file_path+'cnt_cld_ocn_SH_30-60.txt','r')
-fileS3=open(file_path+'cnt_cld_ocn_SH_60-90.txt','r')
+file_path="./results_ocn_lnd_noprecp_ice95/"
+months=['01','02','03','04','05','06','07','08','09','10','11','12']
 
-data=fileN1.read()
-data_n=data.replace('[',' ')
-data_nn=data_n.replace(']',' ')
-data_list=data_nn.split()
-data_dig=[]
-for num in data_list:
-   data_dig.append(int(num))
-cnt_samp_N1=np.array(data_dig).reshape(num_tcbin,num_zebin)
-
-data=fileN2.read()
-data_n=data.replace('[',' ')
-data_nn=data_n.replace(']',' ')
-data_list=data_nn.split()
-data_dig=[]
-for num in data_list:
-   data_dig.append(int(num))
-cnt_samp_N2=np.array(data_dig).reshape(num_tcbin,num_zebin)
-
-data=fileN3.read()
-data_n=data.replace('[',' ')
-data_nn=data_n.replace(']',' ')
-data_list=data_nn.split()
-data_dig=[]
-for num in data_list:
-   data_dig.append(int(num))
-cnt_samp_N3=np.array(data_dig).reshape(num_tcbin,num_zebin)
-
-data=fileS1.read()
-data_n=data.replace('[',' ')
-data_nn=data_n.replace(']',' ')
-data_list=data_nn.split()
-data_dig=[]
-for num in data_list:
-   data_dig.append(int(num))
-cnt_samp_S1=np.array(data_dig).reshape(num_tcbin,num_zebin)
-
-data=fileS2.read()
-data_n=data.replace('[',' ')
-data_nn=data_n.replace(']',' ')
-data_list=data_nn.split()
-data_dig=[]
-for num in data_list:
-   data_dig.append(int(num))
-cnt_samp_S2=np.array(data_dig).reshape(num_tcbin,num_zebin)
-
-data=fileS3.read()
-data_n=data.replace('[',' ')
-data_nn=data_n.replace(']',' ')
-data_list=data_nn.split()
-data_dig=[]
-for num in data_list:
-   data_dig.append(int(num))
-cnt_samp_S3=np.array(data_dig).reshape(num_tcbin,num_zebin)
-
+for im in months:
+    fileN1=open(file_path+im+'/cnt_cld_lnd_NH_0-30.txt','r')
+    fileN2=open(file_path+im+'/cnt_cld_lnd_NH_30-60.txt','r')
+    fileN3=open(file_path+im+'/cnt_cld_lnd_NH_60-90.txt','r')
+    fileS1=open(file_path+im+'/cnt_cld_lnd_SH_0-30.txt','r')
+    fileS2=open(file_path+im+'/cnt_cld_lnd_SH_30-60.txt','r')
+    fileS3=open(file_path+im+'/cnt_cld_lnd_SH_60-90.txt','r')
+    
+    data=fileN1.read()
+    data_n=data.replace('[',' ')
+    data_nn=data_n.replace(']',' ')
+    data_list=data_nn.split()
+    data_dig=[]
+    for num in data_list:
+       data_dig.append(int(num))
+    cnt_samp_N1=cnt_samp_N1+np.array(data_dig).reshape(num_tcbin,num_zebin)
+    
+    data=fileN2.read()
+    data_n=data.replace('[',' ')
+    data_nn=data_n.replace(']',' ')
+    data_list=data_nn.split()
+    data_dig=[]
+    for num in data_list:
+       data_dig.append(int(num))
+    cnt_samp_N2=cnt_samp_N2+np.array(data_dig).reshape(num_tcbin,num_zebin)
+    
+    data=fileN3.read()
+    data_n=data.replace('[',' ')
+    data_nn=data_n.replace(']',' ')
+    data_list=data_nn.split()
+    data_dig=[]
+    for num in data_list:
+       data_dig.append(int(num))
+    cnt_samp_N3=cnt_samp_N3+np.array(data_dig).reshape(num_tcbin,num_zebin)
+    
+    data=fileS1.read()
+    data_n=data.replace('[',' ')
+    data_nn=data_n.replace(']',' ')
+    data_list=data_nn.split()
+    data_dig=[]
+    for num in data_list:
+       data_dig.append(int(num))
+    cnt_samp_S1=cnt_samp_S1+np.array(data_dig).reshape(num_tcbin,num_zebin)
+    
+    data=fileS2.read()
+    data_n=data.replace('[',' ')
+    data_nn=data_n.replace(']',' ')
+    data_list=data_nn.split()
+    data_dig=[]
+    for num in data_list:
+       data_dig.append(int(num))
+    cnt_samp_S2=cnt_samp_S2+np.array(data_dig).reshape(num_tcbin,num_zebin)
+    
+    data=fileS3.read()
+    data_n=data.replace('[',' ')
+    data_nn=data_n.replace(']',' ')
+    data_list=data_nn.split()
+    data_dig=[]
+    for num in data_list:
+       data_dig.append(int(num))
+    cnt_samp_S3=cnt_samp_S3+np.array(data_dig).reshape(num_tcbin,num_zebin)
+# end of month loop
 #-- calculate PDF--
 for ir in range(num_tcbin):
    pdf_samp_N1[ir,:]=np.float32(cnt_samp_N1[ir,:])/sum(cnt_samp_N1[ir,:])*100.
