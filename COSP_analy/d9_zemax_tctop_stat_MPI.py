@@ -51,7 +51,7 @@ months=['01','02','03','04','05','06','07','08','09','10','11','12']
 # get dimention info from a data file.
 #------------------------
 fsample=sorted(glob.glob(data_path+"*2001-01-01*.nc"))
-ftmp=netcdf_dataset(flist[0],"r")
+ftmp=netcdf_dataset(fsample[0],"r")
 time = ftmp.variables["time"]
 lat  = ftmp.variables["lat"]
 lon  = ftmp.variables["lon"]
