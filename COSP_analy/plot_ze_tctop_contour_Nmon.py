@@ -43,7 +43,7 @@ pdf_samp_S3=np.zeros((num_tcbin,num_zebin),dtype=np.float32) # PDF of cnt_sampl 
 #------------------------
 #-- open and read file --
 #------------------------
-file_path="./results_ocn_lnd_noprecp_ice95/"
+file_path="./results_ocn_lnd_noprecp_ice95_clayze/"
 months=['01','02','03','04','05','06','07','08','09','10','11','12']
 
 for im in months:

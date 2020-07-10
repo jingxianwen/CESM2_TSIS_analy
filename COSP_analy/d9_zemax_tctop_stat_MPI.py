@@ -36,7 +36,7 @@ cnt_samp_S3=np.zeros((2,num_tcbin,num_zebin),dtype=np.int64) # counted number of
 #------------------------
 #--output file location--
 #------------------------
-out_path='./results_ocn_lnd_noprecp_ice95/'
+out_path='./results_ocn_lnd_noprecp_ice95_clayze/'
 if not os.path.exists(out_path):
    os.mkdir(out_path)
    print('Created output directory: '+out_path)
@@ -138,7 +138,7 @@ for im in months:
                         continue  # not complete land or ocean
     
                # compute maximum ze and cloud top temperature
-                    dbze_max = dbze_1col.max() # maximum ze over all levels
+                    dbze_max = dbze_1col[idclays].max() # maximum ze over all levels
                     for ilev in range(nlev):
                         if dbze_1col[ilev] > -35.: 
                             tctop = tair[itime,ilev,ilat,ilon] - 273.15
