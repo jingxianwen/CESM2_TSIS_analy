@@ -35,16 +35,16 @@ fpath_exp="/raid00/xianwen/cesm211_solar/"+exp_pref+"/climo/"
 years=np.arange(2010,2020)
 months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
-varnm="ICEFRAC"
-
-pole='S'
-season="SON"
+varnm="PRECL"
+varnm2="PRECSL"
+pole='N'
+season="JJA"
 if pole is 'N':
-   var_long_name="Arctic Sea Ice Fraction "+season
-   figure_name="Arctic_Sea_Ice_contour_"+season+"_VIS_icealb"
+   var_long_name="Arctic Rain "+season
+   figure_name="Arctic_Rain_contour_"+season
 elif pole is 'S':
-   var_long_name="Antarctic Sea Ice Fraction "+season
-   figure_name="Antarctic_Sea_Ice_contour_"+season+"_VIS_icealb"
+   var_long_name="Antarctic Rain"+season
+   figure_name="Antarctic_Rain_contour_"+season
 units=" " #"Fraction"
 #units=r"W/m$^2$"
 
@@ -72,20 +72,27 @@ for iy in range(0,years.size):
     lon=file_ctl.variables["lon"]
     #nlat=lat[:].size
     #nlon=lon[:].size
+    means_yby_ctl[iy,:,:]=file_ctl.variables[varnm][0,:,:]\
+		          *24.*3600.*1000.
+    means_yby_exp[iy,:,:]=file_exp.variables[varnm][0,:,:]\
+		          *24.*3600.*1000.
  
-    means_yby_ctl[iy,:,:]=file_ctl.variables[varnm][0,:,:]
-    means_yby_exp[iy,:,:]=file_exp.variables[varnm][0,:,:]
+#    means_yby_ctl[iy,:,:]=(file_ctl.variables[varnm][0,:,:]-file_ctl.variables[varnm2][0,:,:])\
+#    	                  *24.*3600.*1000.
+#    means_yby_exp[iy,:,:]=(file_exp.variables[varnm][0,:,:]-file_exp.variables[varnm2][0,:,:])\
+#    		          *24.*3600.*1000.
 
 means_ctl[:,:]=np.mean(means_yby_ctl,axis=0)
 means_exp[:,:]=np.mean(means_yby_exp,axis=0)
 diffs=means_exp-means_ctl
+print(diffs)
 
 if pole == "N":
-    latbound1=np.min(np.where(lat[:]>50))
+    latbound1=np.min(np.where(lat[:]>65))
     latbound2=nlat
 elif pole == "S":
     latbound1=0
-    latbound2=np.max(np.where(lat[:]<-50))+1
+    latbound2=np.max(np.where(lat[:]<-65))+1
 
 tmp=np.zeros((1,nlat,nlon))
 tmp[0,:,:]=means_ctl[:,:]
@@ -166,18 +173,18 @@ for i in range(0,3):
     #ax.grid(c='gray',ls=':')
     
     if pole == "N":
-        ax.set_extent([-180, 180, 50, 90], crs=ccrs.PlateCarree())
+        ax.set_extent([-180, 180, 65, 90], crs=ccrs.PlateCarree())
     elif pole == "S":
-        ax.set_extent([-180, 180, -50, -90], crs=ccrs.PlateCarree())
+        ax.set_extent([-180, 180, -65, -90], crs=ccrs.PlateCarree())
 
     if i == 0:
-        dtplot=dtexp[:,:]
-        cmap=parameters["colormap"]
-        stats_now=stats_exp
-    elif i == 1:
         dtplot=dtctl[:,:]
         cmap=parameters["colormap"]
         stats_now=stats_ctl
+    elif i == 1:
+        dtplot=dtexp[:,:]
+        cmap=parameters["colormap"]
+        stats_now=stats_exp
     else:
         dtplot=dtdif[:,:]
         cmap=parameters["colormap_diff"]

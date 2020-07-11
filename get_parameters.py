@@ -193,21 +193,33 @@ def get_parameters(varnm,season):
                    "colormap_diff":"bwr"\
 		   }
 
+    if varnm == "PRECL" or varnm == "PRECSL":
+        parameters={"units":"fraction",\
+		   "contour_levs":[0.0,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0],\
+		   "diff_levs":[-0.5,-0.4,-0.3,-0.2,-0.1,-0.05,0.05,0.1,0.2,0.3,0.4,0.5],\
+                   "colormap":"GnBu", \
+                   "colormap_diff":"bwr"\
+		   }
+
     return parameters
 
 
 
-def get_area_mean_min_max(varnm,lat):
+def get_area_mean_min_max(varin,lat):
+    # varin dimention: [lat,lon]
+    if np.array((varin)).ndim != 2:
+        print('ERROR: input variable should be 2D [lat,lon]. (get_area_mean_max)')
+        exit()
    # 1. area weighted average 
     #convert latitude to radians
     latr=np.deg2rad(lat)
     #use cosine of latitudes as weights for the mean
     weights=np.cos(latr)
     #first calculate zonal mean
-    zonal_mean=varnm.mean(axis=2)
+    zonal_mean=varin.mean(axis=1)
     #then calculate weighted global mean
-    area_mean=np.average(zonal_mean,axis=1,weights=weights)
+    area_mean=np.average(zonal_mean,axis=0,weights=weights)
    # 2. min and max
-    minval=varnm.min()
-    maxval=varnm.max()
+    minval=varin.min()
+    maxval=varin.max()
     return area_mean,minval,maxval
