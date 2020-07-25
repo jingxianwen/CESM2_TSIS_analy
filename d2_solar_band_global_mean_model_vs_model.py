@@ -80,9 +80,10 @@ if var_group_todo==3:
 
 # variable group 4:
 if var_group_todo==4:
-   varnms=np.array(["FSSD13","FSSD12","FSSD11","FSSD10","FSSD09",\
-           "FSSD08","FSSD07","FSSD06","FSSD05","FSSD04",\
-           "FSSD03","FSSD02","FSSD01","FSSD14"])
+   #varnms=np.array(["FSSD13","FSSD12","FSSD11","FSSD10","FSSD09",\
+   #        "FSSD08","FSSD07","FSSD06","FSSD05","FSSD04",\
+   #        "FSSD03","FSSD02","FSSD01","FSSD14"])
+   varnms=np.array(['SOLIN'])
    var_long_name="Band-by-Band TOA Downward SW"
    figure_name="Band_by_Band_TOA_downward_SW_ANN"
    units=r"Wm$^-$$^2$"
@@ -99,8 +100,12 @@ pvals=np.zeros((varnms.size)) #pvalues of ttest
 
 for iy in range(0,years.size): 
     # open data file
-    fctl=fpath_ctl+ctl_pref+"_ANN_"+str(years[iy])+".nc"
-    fexp=fpath_exp+exp_pref+"_ANN_"+str(years[iy])+".nc"
+    #fctl=fpath_ctl+ctl_pref+"_ANN_"+str(years[iy])+".nc"
+    #fexp=fpath_exp+exp_pref+"_ANN_"+str(years[iy])+".nc"
+
+    fctl=fpath_ctl+ctl_pref+"_climo_ANN"+".nc"
+    fexp=fpath_exp+exp_pref+"_climo_ANN"+".nc"
+
     file_ctl=netcdf_dataset(fctl,"r")
     file_exp=netcdf_dataset(fexp,"r")
     
@@ -128,8 +133,8 @@ for iy in range(0,years.size):
            dtctl=file_ctl.variables[varnms[iv]]
            dtexp=file_exp.variables[varnms[iv]] 
         #dtdif=dtexp[:,:,:]-dtctl[:,:,:]
-        means_yby_ctl[iy,iv]=get_area_mean_min_max(dtctl[:,:,:],lat[:])[0]
-        means_yby_exp[iy,iv]=get_area_mean_min_max(dtexp[:,:,:],lat[:])[0]
+        means_yby_ctl[iy,iv]=get_area_mean_min_max(dtctl[0,:,:],lat[:])[0]
+        means_yby_exp[iy,iv]=get_area_mean_min_max(dtexp[0,:,:],lat[:])[0]
         #stats_dif[i]=get_area_mean_min_max(dtdif[:,:,:],lat[:])[0]
         #stats_difp[i]=stats_dif[0]/stats_ctl[0]*100.
 
@@ -137,6 +142,14 @@ for iy in range(0,years.size):
 means_ctl=np.mean(means_yby_ctl,axis=0)
 means_exp=np.mean(means_yby_exp,axis=0)
 diffs=means_exp-means_ctl
+
+print(np.round(means_ctl*4.,3))
+print(np.round(means_exp*4.,3))
+print(np.round(diffs*4.,3))
+print(np.sum(means_ctl*4))
+print(np.sum(means_exp*4))
+print(np.sum(diffs*4))
+exit()
 #ttest=stats.ttest_ind(means_yby_ctl,means_yby_exp,axis=0)
 pvalues=0. # ttest.pvalue
 print(pvalues)
