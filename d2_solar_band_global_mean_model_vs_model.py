@@ -80,10 +80,10 @@ if var_group_todo==3:
 
 # variable group 4:
 if var_group_todo==4:
-   #varnms=np.array(["FSSD13","FSSD12","FSSD11","FSSD10","FSSD09",\
-   #        "FSSD08","FSSD07","FSSD06","FSSD05","FSSD04",\
-   #        "FSSD03","FSSD02","FSSD01","FSSD14"])
-   varnms=np.array(['SOLIN'])
+   varnms=np.array(["FSSD13","FSSD12","FSSD11","FSSD10","FSSD09",\
+           "FSSD08","FSSD07","FSSD06","FSSD05","FSSD04",\
+           "FSSD03","FSSD02","FSSD01","FSSD14"])
+   #varnms=np.array(['SOLIN'])
    var_long_name="Band-by-Band TOA Downward SW"
    figure_name="Band_by_Band_TOA_downward_SW_ANN"
    units=r"Wm$^-$$^2$"
