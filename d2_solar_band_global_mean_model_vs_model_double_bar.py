@@ -72,7 +72,7 @@ if var_group_todo==22:
            "FSSDS08","FSSDS07","FSSDS06","FSSDS05","FSSDS04",\
            "FSSDS03","FSSDS02","FSSDS01","FSSDS14"])
    var_long_name="Band-by-Band Surface net Upward SW"
-   figure_name="Band_by_Band_net_absorb_TOA_SFC_SW_ANN"
+   figure_name="Band_by_Band_net_absorb_TOA_SFC_SW_ANN_update"
    units=r"Wm$^-$$^2$"
 
 # variable group 3 (clear sky):
@@ -117,8 +117,10 @@ for iy in range(0,years.size):
     # open data file
     fctl=fpath_ctl+ctl_pref+"_ANN_"+str(years[iy])+".nc"
     fexp=fpath_exp+exp_pref+"_ANN_"+str(years[iy])+".nc"
-    fctl_fssd=fpath_ctl_fssd+ctl_fssd_pref+"_ANN_"+"2000.nc"
-    fexp_fssd=fpath_exp_fssd+exp_fssd_pref+"_ANN_"+"2000.nc"
+    #fctl_fssd=fpath_ctl_fssd+ctl_fssd_pref+"_ANN_"+"2000.nc"
+    #fexp_fssd=fpath_exp_fssd+exp_fssd_pref+"_ANN_"+"2000.nc"
+    fctl_fssd=fpath_ctl_fssd+ctl_fssd_pref+"_climo_ANN.nc"
+    fexp_fssd=fpath_exp_fssd+exp_fssd_pref+"_climo_ANN.nc"
 
     file_ctl=netcdf_dataset(fctl,"r")
     file_exp=netcdf_dataset(fexp,"r")
@@ -154,10 +156,10 @@ for iy in range(0,years.size):
            dtctl_sfc=file_ctl.variables[varnms_sfc[iv]][:,:,:]-file_ctl.variables[varnms_sub_sfc[iv]][:,:,:]
            dtexp_sfc=file_exp.variables[varnms_sfc[iv]][:,:,:]-file_exp.variables[varnms_sub_sfc[iv]][:,:,:]
         #dtdif=dtexp[:,:,:]-dtctl[:,:,:]
-        means_yby_ctl_toa[iy,iv]=get_area_mean_min_max(dtctl_toa[:,:,:],lat[:])[0]
-        means_yby_exp_toa[iy,iv]=get_area_mean_min_max(dtexp_toa[:,:,:],lat[:])[0]
-        means_yby_ctl_sfc[iy,iv]=get_area_mean_min_max(dtctl_sfc[:,:,:],lat[:])[0]
-        means_yby_exp_sfc[iy,iv]=get_area_mean_min_max(dtexp_sfc[:,:,:],lat[:])[0]
+        means_yby_ctl_toa[iy,iv]=get_area_mean_min_max(dtctl_toa[0,:,:],lat[:])[0]
+        means_yby_exp_toa[iy,iv]=get_area_mean_min_max(dtexp_toa[0,:,:],lat[:])[0]
+        means_yby_ctl_sfc[iy,iv]=get_area_mean_min_max(dtctl_sfc[0,:,:],lat[:])[0]
+        means_yby_exp_sfc[iy,iv]=get_area_mean_min_max(dtexp_sfc[0,:,:],lat[:])[0]
         #stats_dif[i]=get_area_mean_min_max(dtdif[:,:,:],lat[:])[0]
         #stats_difp[i]=stats_dif[0]/stats_ctl[0]*100.
 
@@ -287,14 +289,22 @@ for ip in range(pvalues_sfc.size):
 
 
 # make the plot
-fig=plt.figure(figsize=(7,8.5))
-ax1=fig.add_axes([0.15,0.62,0.78,0.33])
+#fig=plt.figure(figsize=(7,8.5))
+#ax1=fig.add_axes([0.15,0.62,0.78,0.33])
+#ax2=fig.add_axes([0.15,0.14,0.78,0.33])
+fig=plt.figure(figsize=(10,5))
+ax1=fig.add_axes([0.1,0.25,0.35,0.4])
+#ax2=fig.add_axes([0.6,0.2,0.35,0.5])
 #ax2=fig.add_axes([0.13,0.14,0.78,0.33])
 x=np.array([0,1,2,3,4,5,6,7,8,9,10,11,12,13])
 #x=[0.5,1.0,1.5,2.0,2.5,3.,3.5,4.,4.5,5.,5.5,6.,6.5,7.]
 bands=["0.2-0.26","0.26-0.34","0.34-0.44","0.44-0.63","0.63-0.78","0.78-1.24","1.24-1.3","1.3-1.63","1.63-1.94","1.94-2.15","2.15-2.5","2.5-3.08","3.08-3.85","3.85-12.2"]
-ax1.bar(x-0.2,means_ctl_toa,width=0.5,color="indigo",label="TOA") #"tab:blue"
-ax1.bar(x+0.2,means_ctl_sfc,width=0.5,color="limegreen",label="Surface") #"tab:blue"
+#color1="indigo"
+#color2="limegreen"
+color1="k"
+color2="r"
+ax1.bar(x-0.2,means_ctl_toa,width=0.5,color=color1,label="TOA") #"tab:blue"
+ax1.bar(x+0.2,means_ctl_sfc,width=0.5,color=color2,label="Surface") #"tab:blue"
 #ax1.set_title(var_long_name+" (CESM2)",fontsize=14)
 ax1.set_title("Net Flux at TOA&Surface" +" (CESM2)",fontsize=14)
 ax1.set_ylabel(units,fontsize=14)
@@ -303,34 +313,37 @@ ax1.grid(True)
 ax1.set_axisbelow(True)
 ax1.xaxis.grid(color='lightgray', linestyle=':')
 ax1.yaxis.grid(color='lightgray', linestyle=':')
-plt.xticks(x,bands,rotation=-45,fontsize=12)
+plt.xticks(x,bands,rotation=-90,fontsize=12)
 #ax1.set_xticklabels(labels=bands,rotation=-45,fontsize=12)
 plt.yticks(fontsize=14)
 ax1.legend(fontsize=14)
 
-ax2=fig.add_axes([0.15,0.14,0.78,0.33])
+#ax2=fig.add_axes([0.15,0.14,0.78,0.33])
+ax2=fig.add_axes([0.55,0.25,0.35,0.4])
 #bars=[None]*diffs_sig.size
 #ax2.bar(bands,diffs_sig_toa,color="indigo",hatch="//",edgecolor="white")
 #ax2.bar(bands,diffs_unsig_toa,color="indigo")
-ax2.bar(x-0.2,diffs_sig_toa,width=0.5,yerr=stddev_diffs_toa_sig,color="indigo",hatch="//",edgecolor="white")
-ax2.bar(x-0.2,diffs_unsig_toa,width=0.5,yerr=stddev_diffs_toa_unsig,color="indigo")
-ax2.bar(x+0.2,diffs_sig_sfc,width=0.5,yerr=stddev_diffs_sfc_sig,color="limegreen",hatch="//",edgecolor="white")
-ax2.bar(x+0.2,diffs_unsig_sfc,width=0.5,yerr=stddev_diffs_sfc_unsig,color="limegreen")
+#ax2.bar(x-0.2,diffs_sig_toa,width=0.5,yerr=stddev_diffs_toa_sig,color="indigo",hatch="//",edgecolor="white")
+ax2.bar(x-0.2,diffs_sig_toa,width=0.5,yerr=stddev_diffs_toa_sig,color=color1,ecolor="gray",edgecolor="white")
+ax2.bar(x-0.2,diffs_unsig_toa,width=0.5,yerr=stddev_diffs_toa_unsig,color=color1,ecolor="gray",)
+#ax2.bar(x+0.2,diffs_sig_sfc,width=0.5,yerr=stddev_diffs_sfc_sig,color="limegreen",hatch="//",edgecolor="white")
+ax2.bar(x+0.2,diffs_sig_sfc,width=0.5,yerr=stddev_diffs_sfc_sig,color=color2,ecolor="gray",edgecolor="white")
+ax2.bar(x+0.2,diffs_unsig_sfc,width=0.5,yerr=stddev_diffs_sfc_unsig,color=color2,ecolor="gray",)
 
 #ax2.set_title("Diff in "+var_long_name+" (TSIS-1 - CESM2)",fontsize=14)
 ax2.set_title("Differences"+" (TSIS-1 - CESM2)",fontsize=14)
 ax2.set_ylabel(units,fontsize=14)
-ax2.set_xlabel("Band wave length",fontsize=14)
+#ax2.set_xlabel("Band wave length",fontsize=14)
 ax2.grid(True)
 ax2.set_axisbelow(True)
 #ax2.set_ylim(-1.05,0.8)
 ax2.xaxis.grid(color='lightgray', linestyle=':')
 ax2.yaxis.grid(color='lightgray', linestyle=':')
 #ax2.set_xticklabels(labels=bands,rotation=-45,fontsize=12)
-plt.xticks(x,bands,rotation=-45,fontsize=12)
+plt.xticks(x,bands,rotation=-90,fontsize=12)
 plt.yticks(fontsize=14)
 plt.savefig(figure_name+".eps")
-plt.savefig(figure_name+".png",dpi=(200))
+plt.savefig(figure_name+".png",dpi=(150))
 plt.show()
 
 exit()
