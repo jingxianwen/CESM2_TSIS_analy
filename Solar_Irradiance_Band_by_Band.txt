@@ -12,4 +12,4 @@ Differences (W/m^2) (TSIS-control) (band 1-14):
 
 Note: 
   1. These values are calculated from band-by-band model output, not directly from the solar input files. 
-  2. It is noticed that the sum of the band-by-band values (1352.668 for control, 1352.868 for TSIS) are not consistent with the SOLIN output (1361.683 for control, 1361,733 for TSIS). I wonder the discrepency comes from the model's band-by-band flux calculation.
+  2. It is noticed that the sum of the band-by-band values (1352.668 for control, 1352.868 for TSIS) are not consistent with the SOLIN output (1361.683 for control, 1361,733 for TSIS). I wonder the discrepancy comes from the model's band-by-band flux calculation.
