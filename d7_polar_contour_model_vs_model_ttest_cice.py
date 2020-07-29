@@ -37,8 +37,8 @@ months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 varnm="ICEFRAC"
 
-pole='N'
-season="JJA"
+pole='S'
+season="DJF"
 if pole is 'N':
    var_long_name="Arctic Sea Ice Fraction ("+season+")"
    figure_name="Arctic_Sea_Ice_contour_"+season
@@ -162,7 +162,7 @@ for i in range(0,3):
     		xlocs=[0,60,120,180,240,300,360],ylocs=[50,60,70,80,89.5])
     elif pole == "S":
         ax.gridlines(color="gray",linestyle=":",\
-    		xlocs=[0,60,120,180,240,300,360],ylocs=[-50,-60,-70,-80])
+    		xlocs=[0,60,120,180,240,300,360],ylocs=[-50,-60,-70,-80,-89.5])
     #ax.grid(c='gray',ls=':')
     
     if pole == "N":
