@@ -46,7 +46,7 @@ var_group_todo=1
 # variable group 1:
 #varnms=np.array(["ICEFRAC"])
 varnms="ICEFRAC"
-pole='S'
+pole='N'
 if pole is 'N':
    var_long_name="Arctic Sea Ice Extent"
    figure_name="Arctic_Sea_Ice_Extent_Monthly"
@@ -211,11 +211,11 @@ ax2.set_xticks(x)
 ax2.set_xticklabels(labels=labels_fig,rotation=0,fontsize=14)
 ax2.set_xlim(1,12)
 #ax2.set_ylim(-0.003,0.009)
-ax2.set_ylim(1.0e5,6.9e5)
+#ax2.set_ylim(1.0e5,6.9e5)
 plt.yticks(fontsize=14)
 plt.ticklabel_format(axis="y", style="sci", scilimits=(0,0))
-plt.savefig(figure_name+".eps")
-#plt.savefig(figure_name+".png",dpi=(200))
+plt.savefig(figure_name+".ps")
+plt.savefig(figure_name+".png",dpi=(150))
 plt.show()
 
 exit()
