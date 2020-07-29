@@ -222,4 +222,48 @@ def get_area_mean_min_max(varin,lat):
    # 2. min and max
     minval=varin.min()
     maxval=varin.max()
-    return area_mean,minval,maxval
+    output=np.array([area_mean,minval,maxval])
+    return output
+
+def get_seaice_extent(icefrac,lat,lon,pole):
+    # varin dimention: [lat,lon]
+    if np.array((icefrac)).ndim != 2:
+        print('ERROR: input variable should be 2D [lat,lon]. (get_seaice_extent)')
+        exit()
+   # 1. area weighted average 
+    #convert latitude to radians
+    latr=np.deg2rad(lat[:]+90.)
+    lonr=np.deg2rad(lon)
+    nlat=len(latr)
+    nlon=len(lonr)
+    
+    delt_lon=lonr[1]-lonr[0]
+
+    #use cosine of latitudes as weights for the mean
+    r_earth=6371.0 # Earth Radius in km
+    #weights=np.cos(latr) * 2. * np.pi * (r_earth**2)
+
+    ice_ext=np.zeros((1))
+
+    if pole == "N": 
+        for ilat in range(1,nlat):   
+            #for ilon in range(0,nlon):
+            #    ice_ext = icefrac[ilat,ilon] * delt_lon * (np.cos(latr[ilat-1])-np.cos(latr[ilat])) * (r_earth**2.) \
+            #            + ice_ext
+            #print(icefrac[ilat,:].mean())
+            ice_ext = icefrac[ilat,:].mean() * 2.*np.pi* (r_earth**2.) * \
+                      np.absolute(np.cos(latr[ilat-1])-np.cos(latr[ilat])) \
+                    + ice_ext
+    elif pole == "S":
+        for ilat in range(0,nlat-1):   
+            #for ilon in range(0,nlon):
+            #print(icefrac[ilat,:].mean())
+            ice_ext = icefrac[ilat,:].mean() * 2. *np.pi*(r_earth**2.) *  \
+                      np.absolute(np.cos(latr[ilat+1])-np.cos(latr[ilat])) \
+                    + ice_ext
+
+    else:
+        print('ERROR: pole should be either "N" or "S"')
+        exit()
+
+    return ice_ext

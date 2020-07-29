@@ -24,7 +24,7 @@ from get_parameters import *
 from scipy import stats
 
 # data path
-ctl_name="CTL" #os.environ["ctl_name"]
+ctl_name="CESM2" #os.environ["ctl_name"]
 exp_name="TSIS" #os.environ["exp_name"]
 ctl_pref="solar_CTL_cesm211_VIS_icealb_ETEST-f19_g17-ens_mean_2010-2019"
 exp_pref="solar_TSIS_cesm211_VIS_icealb_ETEST-f19_g17-ens_mean_2010-2019"
@@ -37,14 +37,14 @@ months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 varnm="ICEFRAC"
 
-pole='S'
-season="SON"
+pole='N'
+season="JJA"
 if pole is 'N':
-   var_long_name="Arctic Sea Ice Fraction "+season
-   figure_name="Arctic_Sea_Ice_contour_"+season+"_VIS_icealb"
+   var_long_name="Arctic Sea Ice Fraction ("+season+")"
+   figure_name="Arctic_Sea_Ice_contour_"+season
 elif pole is 'S':
-   var_long_name="Antarctic Sea Ice Fraction "+season
-   figure_name="Antarctic_Sea_Ice_contour_"+season+"_VIS_icealb"
+   var_long_name="Antarctic Sea Ice Fraction ("+season+")"
+   figure_name="Antarctic_Sea_Ice_contour_"+season
 units=" " #"Fraction"
 #units=r"W/m$^2$"
 
@@ -81,20 +81,20 @@ means_exp[:,:]=np.mean(means_yby_exp,axis=0)
 diffs=means_exp-means_ctl
 
 if pole == "N":
-    latbound1=np.min(np.where(lat[:]>50))
+    latbound1=np.min(np.where(lat[:]>55))
     latbound2=nlat
 elif pole == "S":
     latbound1=0
-    latbound2=np.max(np.where(lat[:]<-50))+1
+    latbound2=np.max(np.where(lat[:]<-55))+1
 
-tmp=np.zeros((1,nlat,nlon))
-tmp[0,:,:]=means_ctl[:,:]
+tmp=np.zeros((nlat,nlon))
+tmp[:,:]=means_ctl[:,:]
 #print(tmp[:,:,:].shape)
-stats_ctl=get_area_mean_min_max(tmp[:,latbound1:latbound2,:],lat[latbound1:latbound2])
-tmp[0,:,:]=means_exp[:,:]
-stats_exp=get_area_mean_min_max(tmp[:,latbound1:latbound2,:],lat[latbound1:latbound2])
-tmp[0,:,:]=diffs[:,:]
-stats_dif=get_area_mean_min_max(tmp[:,latbound1:latbound2,:],lat[latbound1:latbound2])
+stats_ctl=get_area_mean_min_max(tmp[latbound1:latbound2,:],lat[latbound1:latbound2])
+tmp[:,:]=means_exp[:,:]
+stats_exp=get_area_mean_min_max(tmp[latbound1:latbound2,:],lat[latbound1:latbound2])
+tmp[:,:]=diffs[:,:]
+stats_dif=get_area_mean_min_max(tmp[latbound1:latbound2,:],lat[latbound1:latbound2])
 
 #t-test
 ttest=stats.ttest_ind(means_yby_ctl,means_yby_exp,axis=0)
@@ -134,8 +134,8 @@ fig = plt.figure(figsize=[8.0,11.0],dpi=150.)
 #fig.set_size_inches(4.5, 6.5, forward=True)
 plotTitle = {'fontsize': 13.}
 #plotSideTitle = {'fontsize': 9., 'verticalalignment':'center'}
-plotSideTitle = {'fontsize': 9.}
-plotText = {'fontsize': 8.}
+plotSideTitle = {'fontsize': 12.}
+plotText = {'fontsize': 10.}
 panel = [(0.27, 0.65, 0.3235, 0.25),\
          (0.27, 0.35, 0.3235, 0.25),\
          (0.27, 0.05, 0.3235, 0.25),\
@@ -147,9 +147,9 @@ for i in range(0,3):
     levels = None
     norm = None
     if i != 2:
-        cnlevels=parameters["contour_levs"]
+        cnlevels= np.linspace(0.1,0.8,8) #parameters["contour_levs"]
     else:
-        cnlevels=parameters["diff_levs"]
+        cnlevels= np.linspace(-0.11,0.11,12) #parameters["diff_levs"]
 
     #if len(cnlevels) >0:
     #        levels = [-1.0e8] + cnlevels + [1.0e8]
@@ -166,18 +166,18 @@ for i in range(0,3):
     #ax.grid(c='gray',ls=':')
     
     if pole == "N":
-        ax.set_extent([-180, 180, 50, 90], crs=ccrs.PlateCarree())
+        ax.set_extent([-180, 180, 55, 90], crs=ccrs.PlateCarree())
     elif pole == "S":
-        ax.set_extent([-180, 180, -50, -90], crs=ccrs.PlateCarree())
+        ax.set_extent([-180, 180, -55, -90], crs=ccrs.PlateCarree())
 
     if i == 0:
-        dtplot=dtexp[:,:]
-        cmap=parameters["colormap"]
-        stats_now=stats_exp
-    elif i == 1:
         dtplot=dtctl[:,:]
         cmap=parameters["colormap"]
         stats_now=stats_ctl
+    elif i == 1:
+        dtplot=dtexp[:,:]
+        cmap=parameters["colormap"]
+        stats_now=stats_exp
     else:
         dtplot=dtdif[:,:]
         cmap=parameters["colormap_diff"]
@@ -198,7 +198,8 @@ for i in range(0,3):
     theta = np.linspace(0, 2 * np.pi, 100)
     #center, radius = [0.5, 0.5], 0.5
     # correct center location to match latitude circle and contours.
-    center, radius = [0.5, 0.495], 0.50
+    #center, radius = [0.5, 0.495], 0.50
+    center, radius = [0.5, 0.5], 0.50
     verts = np.vstack([np.sin(theta), np.cos(theta)]).T
     circle = mpath.Path(verts * radius + center)
     ax.set_boundary(circle, transform=ax.transAxes)
@@ -229,16 +230,16 @@ for i in range(0,3):
 
     # Mean, Min, Max
     fig.text(panel[i][0] + 0.35, panel[i][1] + 0.225,
-             "Mean\nMin\nMax", ha='left', fontdict=plotText)
+             "Max\nMean\nMin", ha='left', fontdict=plotText)
     fig.text(panel[i][0] + 0.45, panel[i][1] + 0.225, "%.2f\n%.2f\n%.2f" %
-             stats_now[0:3], ha='right', fontdict=plotText)
+             (stats_now[2],stats_now[0],stats_now[1]), ha='right', fontdict=plotText)
 
     if i==2 and plot_sig:
         p1 = ax.contourf(lon[:],lat[latbound1:latbound2],dtdif_sig[latbound1:latbound2,:],\
                     transform=data_crs,\
                     #norm=norm,\
                     levels=cnlevels,\
-		    hatches=['......'], \
+		    hatches=['...'], \
                     cmap=cmap,\
                     extend="both",\
                     #autoscale_on=True\
@@ -248,8 +249,7 @@ fig.suptitle(var_long_name, x=0.5, y=0.96, fontdict=plotTitle)
 #save figure as file
 #if os.environ["fig_save"]=="True":
 #    fname="d2_polar_contour_"+pole+"_"+varnm+"_"+season+"."+os.environ["fig_suffix"]
-#plt.savefig(figure_name+".png")
-#if os.environ["fig_show"]=="True":
+plt.savefig(figure_name+".eps")
 plt.show()
 plt.close()
 
