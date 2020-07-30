@@ -178,6 +178,10 @@ pvalues_toa= ttest_toa.pvalue
 
 means_ctl_sfc=np.mean(means_yby_ctl_sfc,axis=0)
 means_exp_sfc=np.mean(means_yby_exp_sfc,axis=0)
+
+#print(diffs_toa)
+#print(diffs_toa.sum())
+
 # stadard deviation
 s1=np.std(means_yby_ctl_sfc,axis=0)
 s2=np.std(means_yby_exp_sfc,axis=0)
@@ -188,8 +192,10 @@ diffs_sfc=means_exp_sfc-means_ctl_sfc
 ttest_sfc=stats.ttest_ind(means_yby_ctl_sfc,means_yby_exp_sfc,axis=0)
 pvalues_sfc= ttest_sfc.pvalue
 
-print(stddev_diffs_toa)
-print(stddev_diffs_sfc)
+#print(diffs_sfc)
+#print(diffs_sfc.sum())
+#print(stddev_diffs_toa)
+#print(stddev_diffs_sfc)
 
 #compute annual mean for each year
 #print("**** TOT SW-> ****")
