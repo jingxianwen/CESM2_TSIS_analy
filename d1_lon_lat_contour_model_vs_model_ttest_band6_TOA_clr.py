@@ -199,6 +199,6 @@ for i in range(0,1):
 #plt.savefig(figure_name+".png")
 #if os.environ["fig_show"]=="True":
 #    plt.show()
-plt.savefig("./figures/diff_sfc_clr_band_0.78-1.24.eps")
+plt.savefig("./figures/diff_toa_clr_band_0.78-1.24.eps")
 plt.show()
 plt.close()
