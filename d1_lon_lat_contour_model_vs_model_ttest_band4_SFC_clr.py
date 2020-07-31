@@ -154,7 +154,7 @@ for i in range(0,1):
     ax.coastlines(lw=0.3)
 
     # title
-    ax.set_title("Diff in SFC Net Flux (TSIS - CESM2, Band 0.44-0.63)",loc="center",fontdict=plotSideTitle)
+    ax.set_title("Diff in SFC CLR Net Flux (TSIS - CESM2, Band 0.44-0.63)",loc="center",fontdict=plotSideTitle)
     ax.set_xticks([0, 60, 120, 180, 240, 300, 359.99], crs=ccrs.PlateCarree())
     ax.set_yticks([ -60, -30, 0, 30, 60 ], crs=ccrs.PlateCarree())
     lon_formatter = LongitudeFormatter(zero_direction_label=True, number_format='.0f')

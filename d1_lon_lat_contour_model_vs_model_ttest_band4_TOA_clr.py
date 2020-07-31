@@ -33,13 +33,15 @@ exp_pref_2="solar_TSIS_cesm211_ETEST-f19_g17-ens0_fssd"
 
 fpath_ctl="/raid00/xianwen/cesm211_solar/"+ctl_pref+"/climo/"
 fpath_exp="/raid00/xianwen/cesm211_solar/"+exp_pref+"/climo/"
+fpath_ctl_2="/raid00/xianwen/cesm211_solar/"+ctl_pref_2+"/climo/"
+fpath_exp_2="/raid00/xianwen/cesm211_solar/"+exp_pref_2+"/climo/"
 
 years=np.arange(2010,2020)
 months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 #---
-varnm="FSSDCLRS08"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
-varnm_sub="FSSUCLRS08"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
+varnm="FSSD10"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
+varnm_sub="FSSUCLR10"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
 season="ANN"
 #figure_name="FSNT_vis_lat_lon_ANN"
 #units=r"W/m$^2$"
@@ -57,18 +59,22 @@ pvals=np.zeros((nlat,nlon)) #pvalues of ttest
 
 for iy in range(0,years.size):
    # open data file
-   fctl=fpath_ctl+ctl_pref+"_"+season+"_"+str(years[iy])+".nc"
-   fexp=fpath_exp+exp_pref+"_"+season+"_"+str(years[iy])+".nc"
+   fctl=fpath_ctl+ctl_pref+"_ANN_"+str(years[iy])+".nc"
+   fexp=fpath_exp+exp_pref+"_ANN_"+str(years[iy])+".nc"
+   fctl_2=fpath_ctl_2+ctl_pref_2+"_climo_ANN.nc"
+   fexp_2=fpath_exp_2+exp_pref_2+"_climo_ANN.nc"
    file_ctl=netcdf_dataset(fctl,"r")
    file_exp=netcdf_dataset(fexp,"r")
+   file_ctl_2=netcdf_dataset(fctl_2,"r")
+   file_exp_2=netcdf_dataset(fexp_2,"r")
    
    # read lat and lon
    lat=file_ctl.variables["lat"]
    lon=file_ctl.variables["lon"]
    scale=np.float32(24.*3600.*1000.)
    # read data and calculate mean/min/max
-   means_yby_ctl[iy,:,:]=file_ctl.variables[varnm][0,:,:]-file_ctl.variables[varnm_sub][0,:,:]
-   means_yby_exp[iy,:,:]=file_exp.variables[varnm][0,:,:]-file_exp.variables[varnm_sub][0,:,:]
+   means_yby_ctl[iy,:,:]=file_ctl_2.variables[varnm][0,:,:]-file_ctl.variables[varnm_sub][0,:,:]
+   means_yby_exp[iy,:,:]=file_exp_2.variables[varnm][0,:,:]-file_exp.variables[varnm_sub][0,:,:]
 
 means_ctl[:,:]=np.mean(means_yby_ctl,axis=0)
 means_exp[:,:]=np.mean(means_yby_exp,axis=0)
@@ -154,7 +160,7 @@ for i in range(0,1):
     ax.coastlines(lw=0.3)
 
     # title
-    ax.set_title("Diff in SFC CLR Net Flux (TSIS - CESM2, Band 0.78-1.24)",loc="center",fontdict=plotSideTitle)
+    ax.set_title("Diff in TOA CLR Net Flux (TSIS - CESM2, Band 0.44-0.63)",loc="center",fontdict=plotSideTitle)
     ax.set_xticks([0, 60, 120, 180, 240, 300, 359.99], crs=ccrs.PlateCarree())
     ax.set_yticks([ -60, -30, 0, 30, 60 ], crs=ccrs.PlateCarree())
     lon_formatter = LongitudeFormatter(zero_direction_label=True, number_format='.0f')
@@ -193,6 +199,6 @@ for i in range(0,1):
 #plt.savefig(figure_name+".png")
 #if os.environ["fig_show"]=="True":
 #    plt.show()
-plt.savefig("./figures/diff_sfc_clr_band_0.78-1.24.eps")
+plt.savefig("./figures/diff_sfc_clr_band_0.44-0.63.eps")
 plt.show()
 plt.close()
