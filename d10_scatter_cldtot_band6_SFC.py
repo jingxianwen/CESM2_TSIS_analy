@@ -37,7 +37,7 @@ months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 #---
 varnm_1="CLDTOT"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
-varnm_2=["FSSDS10","FSSUS10"]  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
+varnm_2=["FSSDS08","FSSUS08"]  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
 season="ANN"
 #figure_name="FSNT_vis_lat_lon_ANN"
 #units=r"W/m$^2$"
@@ -125,10 +125,10 @@ for ib in range(0,6):
   #    ax.set(ylabel='Diff in Net Flux (Band 0.44-0.63)')
   axs[iy,ix].set_xlim(-3.,3.)
   axs[iy,ix].set_title(titles[ib],loc="center",fontsize=13)
-fig.suptitle("Band 0.44-0.63",fontsize=14)
+fig.suptitle("Band 0.78-1.24",fontsize=14)
 fig.text(0.5,0.04,"Diff in CLDTOT (%)",fontsize=14,va='center',ha='center')
 fig.text(0.07,0.5,r"Diff in SFC Net Flux (Wm$^-$$^2$)",fontsize=14,va='center',ha='center',rotation='vertical')
-plt.savefig("./figures/scat_cldtot_band4_sfc.eps")
+plt.savefig("./figures/scat_cldtot_band6_sfc.eps")
 plt.show()
 
 '''

@@ -36,7 +36,7 @@ years=np.arange(2010,2020)
 months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 #---
-varnm_1="CLDTOT"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
+varnm_1="ICEFRAC"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
 varnm_2=["FSSDS10","FSSUS10"]  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
 season="ANN"
 #figure_name="FSNT_vis_lat_lon_ANN"
@@ -59,8 +59,8 @@ diffs_rad=np.zeros((nlat,nlon)) #multi-year exp-ctl diff for each variable
 
 for iy in range(0,years.size):
    # open data file
-   fctl=fpath_ctl+ctl_pref+"_ANN_"+str(years[iy])+".nc"
-   fexp=fpath_exp+exp_pref+"_ANN_"+str(years[iy])+".nc"
+   fctl=fpath_ctl+ctl_pref+"_"+season+"_"+str(years[iy])+".nc"
+   fexp=fpath_exp+exp_pref+"_"+season+"_"+str(years[iy])+".nc"
 
    file_ctl=netcdf_dataset(fctl,"r")
    file_exp=netcdf_dataset(fexp,"r")
@@ -75,6 +75,7 @@ for iy in range(0,years.size):
                              file_ctl.variables[varnm_2[1]][0,:,:]
    means_yby_exp_rad[iy,:,:]=file_exp.variables[varnm_2[0]][0,:,:]-\
                              file_exp.variables[varnm_2[1]][0,:,:]
+   lndfrac=file_exp.variables["LANDFRAC"][0,:,:]
 
 means_ctl_cld[:,:]=np.mean(means_yby_ctl_cld,axis=0)
 means_exp_cld[:,:]=np.mean(means_yby_exp_cld,axis=0)
@@ -84,21 +85,33 @@ means_exp_rad[:,:]=np.mean(means_yby_exp_rad,axis=0)
 diffs_cld=means_exp_cld-means_ctl_cld
 diffs_rad=means_exp_rad-means_ctl_rad
 
-i_60S=np.max(np.where(lat[:]<-60))+1
-i_30S=np.max(np.where(lat[:]<-30))+1
-i_0=np.max(np.where(lat[:]<0))+1
-i_30N=np.max(np.where(lat[:]<30))+1
-i_60N=np.max(np.where(lat[:]<60))+1
+diffs_cld=np.where(lndfrac[:,:]<0.01,diffs_cld,np.nan)
+diffs_rad=np.where(lndfrac[:,:]<0.01,diffs_rad,np.nan)
+
+#i_60S=np.max(np.where(lat[:]<-60))+1
+#i_30S=np.max(np.where(lat[:]<-30))+1
+#i_0=np.max(np.where(lat[:]<0))+1
+#i_30N=np.max(np.where(lat[:]<30))+1
+#i_60N=np.max(np.where(lat[:]<60))+1
+i_50S=np.max(np.where(lat[:]<-50))+1
+i_50N=np.max(np.where(lat[:]<50))+1
+i_70S=np.max(np.where(lat[:]<-70))+1
+i_70N=np.max(np.where(lat[:]<70))+1
 nlat=len(lat[:])
 
-il_1=[i_0   , i_30N , i_60N, i_30S, i_60S,     0 ]
-il_2=[i_30N , i_60N , nlat , i_0  , i_30S, i_60S ]
+#il_1=[i_0   , i_30N , i_60N, i_30S, i_60S,     0 ]
+#il_2=[i_30N , i_60N , nlat , i_0  , i_30S, i_60S ]
+il_1=[i_50N,0]
+il_2=[nlat,i_50S]
 
-titles=["0-30"+u"\xb0"+"N","30"+u"\xb0"+"N-60"+u"\xb0"+"N",r"60"+u"\xb0"+"N-90"+u"\xb0"+"N",\
-        "0-30"+u"\xb0"+"S","30"+u"\xb0"+"S-60"+u"\xb0"+"S","60"+u"\xb0"+"S-90"+u"\xb0"+"S"]
+
+#titles=["0-30"+u"\xb0"+"N","30"+u"\xb0"+"N-60"+u"\xb0"+"N",r"60"+u"\xb0"+"N-90"+u"\xb0"+"N",\
+#        "0-30"+u"\xb0"+"S","30"+u"\xb0"+"S-60"+u"\xb0"+"S","60"+u"\xb0"+"S-90"+u"\xb0"+"S"]
+
+titles=[r"50"+u"\xb0"+"N-90"+u"\xb0"+"N",r"50"+u"\xb0"+"S-90"+u"\xb0"+"S"]
 # make plot
 
-fig,axs=plt.subplots(2,3,figsize=(10,6),sharex=True)
+fig,axs=plt.subplots(2,1,figsize=(6,8),sharex=True)
 
 panel = [(0.06, 0.15, 0.25, 0.25), \
          (0.41, 0.15, 0.25, 0.25), \
@@ -110,25 +123,30 @@ panel = [(0.06, 0.15, 0.25, 0.25), \
 
 #panel = [(0.20,0.20,0.6,0.6)]
 print(axs.shape)
-for ib in range(0,6):
-  #ax[ib] = fig.add_axes(panel[ib])
-  if ib <3:
-      ix=ib
-      iy=0
-  else:
-      ix=ib%3
-      iy=1
-  axs[iy,ix].scatter(diffs_cld[il_1[ib]:il_2[ib],:],diffs_rad[il_1[ib]:il_2[ib],:],c='k',s=1)
-  #if ib < 3:
-  #    ax.set(xlabel='Diff in CLDTOT')
-  #if ib ==0 or ib==3:
-  #    ax.set(ylabel='Diff in Net Flux (Band 0.44-0.63)')
-  axs[iy,ix].set_xlim(-3.,3.)
-  axs[iy,ix].set_title(titles[ib],loc="center",fontsize=13)
-fig.suptitle("Band 0.44-0.63",fontsize=14)
-fig.text(0.5,0.04,"Diff in CLDTOT (%)",fontsize=14,va='center',ha='center')
-fig.text(0.07,0.5,r"Diff in SFC Net Flux (Wm$^-$$^2$)",fontsize=14,va='center',ha='center',rotation='vertical')
-plt.savefig("./figures/scat_cldtot_band4_sfc.eps")
+
+for ib in range(0,2):
+  ix=ib
+  iy=0
+#---box plot---
+  dice_0=(diffs_cld[il_1[ib]:il_2[ib],:]>-.5)*(diffs_cld[il_1[ib]:il_2[ib],:]<.5) #*(means_exp_cld[il_1[ib]:il_2[ib],:] >10.)
+  box_data=diffs_rad[il_1[ib]:il_2[ib],:][dice_0]
+  bplot=axs[ib].boxplot(box_data,positions=[0],widths=[0.7],vert=True,showmeans=True, showfliers=False,\
+                  patch_artist=True)
+  for patch, color in  zip(bplot['boxes'],'r'):
+      patch.set_facecolor((0.7,0.4,0.3,0.3))
+#-------------
+  axs[ib].scatter(diffs_cld[il_1[ib]:il_2[ib],:],diffs_rad[il_1[ib]:il_2[ib],:],c='k',s=1)
+  axs[ib].set_title(titles[ib],loc="center",fontsize=13)
+  axs[ib].axhline(y=0,lw=1,c="gray")
+  axs[ib].axvline(x=0,lw=1,c="gray")
+  axs[ib].set_xlim(-4,8)
+
+plt.xticks([-4,-3,-2,-1,0,1,2,3,4,5,6,7,8],["-4","-3","-2","-1","0","1","2","3","4","5","6","7","8"])
+
+fig.text(0.5,0.94,"Band 0.44-0.63",fontsize=14,va='center',ha='center')
+fig.text(0.5,0.05,"Diff in FICE (%)",fontsize=14,va='center',ha='center')
+fig.text(0.03,0.5,r"Diff in SFC Net Flux (Wm$^-$$^2$)",fontsize=14,va='center',ha='center',rotation='vertical')
+plt.savefig("./figures/scat_icefrac_band4_sfc.eps")
 plt.show()
 
 '''
