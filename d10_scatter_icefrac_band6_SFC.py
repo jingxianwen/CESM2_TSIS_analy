@@ -146,7 +146,7 @@ plt.xticks([-4,-3,-2,-1,0,1,2,3,4,5,6,7,8],["-4","-3","-2","-1","0","1","2","3",
 fig.text(0.5,0.94,"Band 0.78-1.24",fontsize=14,va='center',ha='center')
 fig.text(0.5,0.05,"Diff in FICE (%)",fontsize=14,va='center',ha='center')
 fig.text(0.03,0.5,r"Diff in SFC Net Flux (Wm$^-$$^2$)",fontsize=14,va='center',ha='center',rotation='vertical')
-plt.savefig("./figures/scat_icefrac_band6_sfc.eps")
+plt.savefig("./figures/scat_icefrac_band6_sfc.png",dpi=150)
 plt.show()
 
 '''
