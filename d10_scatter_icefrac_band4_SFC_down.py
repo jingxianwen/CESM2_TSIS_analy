@@ -37,7 +37,7 @@ months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 #---
 varnm_1="ICEFRAC"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
-varnm_2=["FSSDCLRS10","FSSUCLRS10"]  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
+varnm_2=["FSSDS10","FSSUS10"]  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
 season="ANN"
 #figure_name="FSNT_vis_lat_lon_ANN"
 #units=r"W/m$^2$"
@@ -85,8 +85,8 @@ means_exp_rad[:,:]=np.mean(means_yby_exp_rad,axis=0)
 diffs_cld=means_exp_cld-means_ctl_cld
 diffs_rad=means_exp_rad-means_ctl_rad
 
-diffs_cld=np.where(lndfrac[:,:]<0.01,diffs_cld,np.nan)
-diffs_rad=np.where(lndfrac[:,:]<0.01,diffs_rad,np.nan)
+diffs_cld=np.where((lndfrac[:,:]<0.01)*(means_ctl_cld[:,:]>1.0)*(means_exp_cld[:,:]>1.0),diffs_cld,np.nan)
+diffs_rad=np.where((lndfrac[:,:]<0.01)*(means_ctl_cld[:,:]>1.0)*(means_exp_cld[:,:]>1.0),diffs_rad,np.nan)
 
 #i_60S=np.max(np.where(lat[:]<-60))+1
 #i_30S=np.max(np.where(lat[:]<-30))+1
@@ -128,26 +128,25 @@ for ib in range(0,2):
   ix=ib
   iy=0
 #---box plot---
-  dice_0=(diffs_cld[il_1[ib]:il_2[ib],:]>-0.5)*(diffs_cld[il_1[ib]:il_2[ib],:]<0.5)*(means_exp_cld[il_1[ib]:il_2[ib],:] >20.)
-  box_data=diffs_rad[il_1[ib]:il_2[ib],:][dice_0]
-  print(len(box_data))
-  bplot=axs[ib].boxplot(box_data,positions=[0],widths=[0.7],vert=True,showmeans=True, showfliers=False,\
-                  patch_artist=True)
-  for patch, color in  zip(bplot['boxes'],'r'):
-      patch.set_facecolor((0.7,0.4,0.3,0.3))
+  #dice_0=(diffs_cld[il_1[ib]:il_2[ib],:]>-.5)*(diffs_cld[il_1[ib]:il_2[ib],:]<.5) #*(means_exp_cld[il_1[ib]:il_2[ib],:] >10.)
+  #box_data=diffs_rad[il_1[ib]:il_2[ib],:][dice_0]
+  #bplot=axs[ib].boxplot(box_data,positions=[0],widths=[0.7],vert=True,showmeans=True, showfliers=False,\
+  #                patch_artist=True)
+  #for patch, color in  zip(bplot['boxes'],'r'):
+  #    patch.set_facecolor((0.7,0.4,0.3,0.3))
 #-------------
-  axs[ib].scatter(diffs_cld[il_1[ib]:il_2[ib],:],diffs_rad[il_1[ib]:il_2[ib],:],c='k',s=1)
+  axs[ib].scatter(diffs_rad[il_1[ib]:il_2[ib],:],diffs_cld[il_1[ib]:il_2[ib],:],c='k',s=1)
   axs[ib].set_title(titles[ib],loc="center",fontsize=13)
   axs[ib].axhline(y=0,lw=1,c="gray")
   axs[ib].axvline(x=0,lw=1,c="gray")
-  axs[ib].set_xlim(-4,8)
+  #axs[ib].set_xlim(-4,8)
 
-plt.xticks([-4,-3,-2,-1,0,1,2,3,4,5,6,7,8],["-4","-3","-2","-1","0","1","2","3","4","5","6","7","8"])
+#plt.xticks([-4,-3,-2,-1,0,1,2,3,4,5,6,7,8],["-4","-3","-2","-1","0","1","2","3","4","5","6","7","8"])
 
 fig.text(0.5,0.94,"Band 0.44-0.63",fontsize=14,va='center',ha='center')
-fig.text(0.5,0.05,"Diff in FICE (%)",fontsize=14,va='center',ha='center')
-fig.text(0.03,0.5,r"Diff in SFC_CLR Net Flux (Wm$^-$$^2$)",fontsize=14,va='center',ha='center',rotation='vertical')
-#plt.savefig("./figures/scat_icefrac_band4_sfc_clr.png",dpi=150)
+fig.text(0.5,0.05,r"Diff in SFC Down Flux (Wm$^-$$^2$)",fontsize=14,va='center',ha='center')
+fig.text(0.03,0.5,"Diff in FICE (%)",fontsize=14,va='center',ha='center',rotation='vertical')
+plt.savefig("./figures/scat_band4_sfc_down_icefrac.png",dpi=150)
 plt.show()
 
 '''
