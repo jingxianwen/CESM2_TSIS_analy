@@ -137,8 +137,8 @@ for ib in range(0,2):
 #-------------
   axs[ib].scatter(diffs_rad[il_1[ib]:il_2[ib],:],diffs_cld[il_1[ib]:il_2[ib],:],c='k',s=1)
   axs[ib].set_title(titles[ib],loc="center",fontsize=13)
-  #axs[ib].axhline(y=0,lw=1,c="gray")
-  #axs[ib].axvline(x=0,lw=1,c="gray")
+  axs[ib].axhline(y=0,lw=1,c="gray")
+  axs[ib].axvline(x=0,lw=1,c="gray")
   #axs[ib].set_xlim(-4,8)
 
 #plt.xticks([-4,-3,-2,-1,0,1,2,3,4,5,6,7,8],["-4","-3","-2","-1","0","1","2","3","4","5","6","7","8"])
