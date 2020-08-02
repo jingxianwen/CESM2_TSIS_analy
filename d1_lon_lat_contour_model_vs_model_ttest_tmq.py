@@ -36,7 +36,7 @@ years=np.arange(2010,2020)
 months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 #---
-varnm="CLDTOT"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
+varnm="TMQ"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
 season="ANN"
 #figure_name="FSNT_vis_lat_lon_ANN"
 #units=r"W/m$^2$"
@@ -63,8 +63,8 @@ for iy in range(0,years.size):
    lat=file_ctl.variables["lat"]
    lon=file_ctl.variables["lon"]
    # read data and calculate mean/min/max
-   means_yby_ctl[iy,:,:]=file_ctl.variables[varnm][0,:,:]*100.
-   means_yby_exp[iy,:,:]=file_exp.variables[varnm][0,:,:]*100.
+   means_yby_ctl[iy,:,:]=file_ctl.variables[varnm][0,:,:]
+   means_yby_exp[iy,:,:]=file_exp.variables[varnm][0,:,:]
 
 means_ctl[:,:]=np.mean(means_yby_ctl,axis=0)
 means_exp[:,:]=np.mean(means_yby_exp,axis=0)
@@ -121,9 +121,9 @@ plotText = {'fontsize': 8.}
 panel = [(0.10,0.15,0.70,0.65)]
 labels=[ctl_name,exp_name,exp_name+"-"+ctl_name] 
 
-units=r"Wm$^-$$^2$"
+units=r"kgm$^-$$^2$"
 contour_levs=np.linspace(5,85,11) #[120, 140, 160, 180, 200, 220, 240, 260, 280, 300]
-diff_levs=np.linspace(-3,3,13) #[-50, -40, -30, -20, -10, -5, 5, 10, 20, 30, 40, 50]
+diff_levs=np.linspace(-1,1,11) #[-50, -40, -30, -20, -10, -5, 5, 10, 20, 30, 40, 50]
 colormap="PiYG_r"
 colormap_diff="bwr"
 
@@ -150,7 +150,7 @@ for i in range(0,1):
     ax.coastlines(lw=0.3)
 
     # title
-    ax.set_title("Diff in "+season+" CLDTOT (TSIS - CESM2)",loc="center",fontdict=plotSideTitle)
+    ax.set_title("Diff in WV (TSIS - CESM2)",loc="center",fontdict=plotSideTitle)
     ax.set_xticks([0, 60, 120, 180, 240, 300, 359.99], crs=ccrs.PlateCarree())
     ax.set_yticks([ -60, -30, 0, 30, 60 ], crs=ccrs.PlateCarree())
     lon_formatter = LongitudeFormatter(zero_direction_label=True, number_format='.0f')
@@ -189,6 +189,6 @@ for i in range(0,1):
 #plt.savefig(figure_name+".png")
 #if os.environ["fig_show"]=="True":
 #    plt.show()
-#plt.savefig("./figures/diff_cldtot_"+season+".eps")
+plt.savefig("./figures/diff_wv_"+season+".eps")
 plt.show()
 plt.close()

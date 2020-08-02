@@ -54,8 +54,8 @@ pvals=np.zeros((nlat,nlon)) #pvalues of ttest
 
 for iy in range(0,years.size):
    # open data file
-   fctl=fpath_ctl+ctl_pref+"_ANN_"+str(years[iy])+".nc"
-   fexp=fpath_exp+exp_pref+"_ANN_"+str(years[iy])+".nc"
+   fctl=fpath_ctl+ctl_pref+"_"+season+"_"+str(years[iy])+".nc"
+   fexp=fpath_exp+exp_pref+"_"+season+"_"+str(years[iy])+".nc"
    file_ctl=netcdf_dataset(fctl,"r")
    file_exp=netcdf_dataset(fexp,"r")
    
@@ -123,7 +123,7 @@ labels=[ctl_name,exp_name,exp_name+"-"+ctl_name]
 
 units=r"Wm$^-$$^2$"
 contour_levs=np.linspace(5,85,11) #[120, 140, 160, 180, 200, 220, 240, 260, 280, 300]
-diff_levs=np.linspace(-5,5,11) #[-50, -40, -30, -20, -10, -5, 5, 10, 20, 30, 40, 50]
+diff_levs=np.linspace(-6,6,13) #[-50, -40, -30, -20, -10, -5, 5, 10, 20, 30, 40, 50]
 colormap="PiYG_r"
 colormap_diff="bwr"
 
@@ -189,6 +189,6 @@ for i in range(0,1):
 #plt.savefig(figure_name+".png")
 #if os.environ["fig_show"]=="True":
 #    plt.show()
-#plt.savefig("./figures/diff_cldtot.eps")
+plt.savefig("./figures/diff_lwp_"+season+".eps")
 plt.show()
 plt.close()
