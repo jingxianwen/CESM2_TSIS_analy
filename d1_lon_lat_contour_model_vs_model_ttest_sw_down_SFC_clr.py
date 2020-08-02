@@ -38,7 +38,7 @@ years=np.arange(2010,2020)
 months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 #---
-varnm="FSDS"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
+varnm="FSDSC"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
 #varnm_sub="FSSUCLRS10"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
 season="ANN"
 #figure_name="FSNT_vis_lat_lon_ANN"
@@ -154,7 +154,7 @@ for i in range(0,1):
     ax.coastlines(lw=0.3)
 
     # title
-    ax.set_title("Diff in SFC CLR SW Net Flux (TSIS - CESM2)",loc="center",fontdict=plotSideTitle)
+    ax.set_title("Diff in SFC CLR SW Down Flux (TSIS - CESM2)",loc="center",fontdict=plotSideTitle)
     ax.set_xticks([0, 60, 120, 180, 240, 300, 359.99], crs=ccrs.PlateCarree())
     ax.set_yticks([ -60, -30, 0, 30, 60 ], crs=ccrs.PlateCarree())
     lon_formatter = LongitudeFormatter(zero_direction_label=True, number_format='.0f')
@@ -193,6 +193,6 @@ for i in range(0,1):
 #plt.savefig(figure_name+".png")
 #if os.environ["fig_show"]=="True":
 #    plt.show()
-#plt.savefig("./figures/diff_sfc_clr_band_0.44-0.63.eps")
+plt.savefig("./figures/diff_sfc_clr_down_sw.eps")
 plt.show()
 plt.close()
