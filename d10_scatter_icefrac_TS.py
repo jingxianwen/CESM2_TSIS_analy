@@ -111,7 +111,7 @@ il_2=[nlat,i_50S]
 titles=[r"50"+u"\xb0"+"N-90"+u"\xb0"+"N",r"50"+u"\xb0"+"S-90"+u"\xb0"+"S"]
 # make plot
 
-fig,axs=plt.subplots(2,1,figsize=(6,8),sharex=True)
+fig,axs=plt.subplots(2,1,figsize=(6,8),sharex=True,sharey=True)
 
 panel = [(0.06, 0.15, 0.25, 0.25), \
          (0.41, 0.15, 0.25, 0.25), \
@@ -139,14 +139,15 @@ for ib in range(0,2):
   axs[ib].set_title(titles[ib],loc="center",fontsize=13)
   axs[ib].axhline(y=0,lw=1,c="gray")
   axs[ib].axvline(x=0,lw=1,c="gray")
-  #axs[ib].set_xlim(-4,8)
+  #axs[ib].set_xlim(ax.get_xlim()[::-1])
 
 #plt.xticks([-4,-3,-2,-1,0,1,2,3,4,5,6,7,8],["-4","-3","-2","-1","0","1","2","3","4","5","6","7","8"])
+plt.gca().invert_xaxis()
 
 #fig.text(0.5,0.94,"Band 0.44-0.63",fontsize=14,va='center',ha='center')
 fig.text(0.03,0.5,"Diff in Diff in FICE(%)",fontsize=14,va='center',ha='center',rotation='vertical')
 fig.text(0.5,0.05,"Diff in TS (K)",fontsize=14,va='center',ha='center')
-#plt.savefig("./figures/scat_icefrac_ts_polar.png",dpi=150)
+plt.savefig("./figures/scat_icefrac_ts_polar.png",dpi=150)
 plt.show()
 
 '''

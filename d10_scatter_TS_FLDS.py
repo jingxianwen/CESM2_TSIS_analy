@@ -139,12 +139,14 @@ for ib in range(0,2):
   axs[ib].set_title(titles[ib],loc="center",fontsize=13)
   axs[ib].axhline(y=0,lw=1,c="gray")
   axs[ib].axvline(x=0,lw=1,c="gray")
+  #axs[ib].set_xlim(axs[ib].get_xlim()[::-1])
   #axs[ib].set_xlim(-4,8)
 
 #plt.xticks([-4,-3,-2,-1,0,1,2,3,4,5,6,7,8],["-4","-3","-2","-1","0","1","2","3","4","5","6","7","8"])
+plt.gca().invert_xaxis()
 
 #fig.text(0.5,0.94,"Band 0.44-0.63",fontsize=14,va='center',ha='center')
-fig.text(0.03,0.5,"Diff in TS (%)",fontsize=14,va='center',ha='center',rotation='vertical')
+fig.text(0.03,0.5,"Diff in TS (K)",fontsize=14,va='center',ha='center',rotation='vertical')
 fig.text(0.5,0.05,r"Diff in SFC Down LW (Wm$^-$$^2$)",fontsize=14,va='center',ha='center')
 plt.savefig("./figures/scat_ts_flds_polar.png",dpi=150)
 plt.show()
