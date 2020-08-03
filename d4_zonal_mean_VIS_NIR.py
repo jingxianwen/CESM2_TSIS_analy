@@ -41,7 +41,7 @@ years=np.arange(2010,2020)
 months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 #var_long_name="Surface Net SW Radiation (all-sky)"
-figure_name="zonal_sfc_down_uv+vis_nir_ANN"
+figure_name="zonal_sfc_down_uv+vis_nir_ANN_2"
 units=r"Wm$^-$$^2$"
 
 varnms_vis=np.array(["FSSDS13","FSSDS12","FSSDS11","FSSDS10","FSSDS09"])
@@ -150,8 +150,8 @@ plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
 
 ax2=fig.add_axes([0.14,0.12,0.8,0.36])
-ax2.plot(lat[:],diffs[0,:],color="k",lw=2,label="\u0394UV+VIS")
-ax2.plot(lat[:],diffs[1,:],color="r",lw=2,label="\u0394NIR")
+ax2.plot(lat[:],diffs[0,:],color="k",lw=1,label="\u0394UV+VIS")
+ax2.plot(lat[:],diffs[1,:],color="r",lw=1,label="\u0394NIR")
 #ax2.plot(lat[:],diffs_DJF[0,:],color="royalblue",lw=1)
 #ax2.plot(lat[:],diffs_JJA[0,:],color="darkorange",lw=1)
 ax2.plot(lat[:],diffs_sig[0,:],color="blue",lw=8,alpha=0.5)
