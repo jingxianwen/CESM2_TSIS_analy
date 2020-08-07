@@ -17,6 +17,7 @@ from cartopy.util import add_cyclic_point
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import AxesGrid
 import matplotlib.colors as colors
+import matplotlib.collections as collections
 
 # numpy
 import numpy as np
@@ -41,7 +42,7 @@ years=np.arange(2010,2020)
 months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 #var_long_name="Surface Net SW Radiation (all-sky)"
-figure_name="zonal_sfc_net_uv+vis_nir_ANN"
+figure_name="zonal_sfc_net_uv+vis_nir_ANN_shaded"
 units=r"Wm$^-$$^2$"
 
 varnms_vis_dn=np.array(["FSSDS13","FSSDS12","FSSDS11","FSSDS10","FSSDS09"])
@@ -79,6 +80,9 @@ diffs_net=np.zeros((2,nlat)) #multi-year exp-ctl diff for each variable
 gm_yby_ctl_net=np.zeros((2,years.size)) #year by year mean for each variable
 gm_yby_exp_net=np.zeros((2,years.size)) #year by year mean for each variable
 
+means_yby_exp_fice=np.zeros((years.size,nlat)) #year by year mean for each variable
+means_exp_fice=np.zeros((nlat)) #multi-year mean for each variable
+
 for iy in range(0,years.size): 
     # open data file
     fctl=fpath_ctl+ctl_pref+"_ANN_"+str(years[iy])+".nc"
@@ -89,12 +93,8 @@ for iy in range(0,years.size):
     # read lat and lon
     lat=file_ctl.variables["lat"]
     lon=file_ctl.variables["lon"]
-    
-    #stats_ctl=np.zeros((14))
-    #stats_exp=np.zeros((14))
-    #stats_dif=np.zeros((14))
-    #stats_difp=np.zeros((14))
-    #print(stats_ctl)
+ 
+    means_yby_exp_fice[iy,:]=means_yby_exp_fice[iy,:]+np.mean(file_exp.variables["ICEFRAC"][0,:,:],axis=1)   
 
     # read data and calculate mean/min/max
     for vn in varnms_vis_dn:
@@ -133,6 +133,14 @@ for iy in range(0,years.size):
     gm_yby_ctl_net[:,iy]=gm_yby_ctl_dn[:,iy]-gm_yby_ctl_up[:,iy]
     gm_yby_exp_net[:,iy]=gm_yby_exp_dn[:,iy]-gm_yby_exp_up[:,iy]
 
+#print(np.mean(gm_yby_ctl_dn,axis=1))
+#print(np.mean(gm_yby_ctl_up,axis=1))
+#print(np.mean(gm_yby_ctl_net,axis=1))
+#print(np.mean(gm_yby_exp_dn,axis=1))
+#print(np.mean(gm_yby_exp_up,axis=1))
+#print(np.mean(gm_yby_exp_net,axis=1))
+#exit()
+
 # compute globam mean
 #diffs_ym_toa=np.mean(gm_yby_exp-gm_yby_ctl)
 #ttest_ym_toa=stats.ttest_ind(gm_yby_ctl,gm_yby_exp,axis=0)
@@ -166,6 +174,8 @@ ttest=stats.ttest_ind(means_yby_ctl_net,means_yby_exp_net,axis=0)
 pvalues_net=ttest.pvalue
 diffs_sig_net=np.zeros(diffs_net.shape)
 diffs_sig_net[:,:]=np.nan
+
+means_exp_fice=np.mean(means_yby_exp_fice,axis=0)
 
 zeros=np.zeros(diffs_dn.shape)
 
@@ -210,6 +220,7 @@ ax1.set_title("SFC Fluxes (CESM2)",fontsize=14)
 ax1.set_ylabel(units,fontsize=14)
 #ax1.set_xlabel("Latitude",fontsize=14)
 ax1.set_xlim(-90,90)
+ax1.set_ylim(-4,160)
 plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
 
@@ -237,8 +248,14 @@ ax2.set_title("Diff in SFC Flux (TSIS-1 - CESM2)",fontsize=14) #+var_long_name,f
 ax2.set_ylabel(units,fontsize=14)
 ax2.set_xlabel("Latitude",fontsize=14)
 ax2.set_xlim(-90,90)
+ax2.set_ylim(-1.6,2.15)
 plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
+
+# add shading 
+collection = collections.BrokenBarHCollection.span_where(lat[:], ymin=-1.6, ymax=2.15, \
+             where=means_exp_fice >0.1,facecolor='y',alpha=0.3)
+ax2.add_collection(collection)
 
 plt.savefig(figure_name+".png",dpi=150)
 plt.show()
