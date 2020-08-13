@@ -35,17 +35,17 @@ fpath_exp="/raid00/xianwen/cesm211_solar/"+exp_pref+"/climo/"
 years=np.arange(2010,2020)
 months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
-varnm="ICEFRAC"
+varnm="TS"
 
-pole='S'
+pole='N'
 season="ANN"
 if pole is 'N':
-   var_long_name="Arctic Sea Ice Fraction ("+season+")"
-   figure_name="Arctic_Sea_Ice_contour_"+season
+   var_long_name="Arctic Surface Temperature ("+season+")"
+   figure_name="Arctic_TS_contour_"+season
 elif pole is 'S':
-   var_long_name="Antarctic Sea Ice Fraction ("+season+")"
-   figure_name="Antarctic_Sea_Ice_contour_"+season
-units=" " #"Fraction"
+   var_long_name="Antarctic Surface Temperature ("+season+")"
+   figure_name="Antarctic_TS_contour_"+season
+units="K" #"Fraction"
 #units=r"W/m$^2$"
 
 nlat=96
@@ -147,10 +147,10 @@ for i in range(0,3):
     levels = None
     norm = None
     if i != 2:
-        cnlevels= np.linspace(0.1,0.8,8) #parameters["contour_levs"]
+        cnlevels= np.linspace(250,300,11) #parameters["contour_levs"]
     else:
-        cnlevels=np.array([-0.08,-0.06,-0.04,-0.02,-0.01,0.01,0.02,0.04,0.06,0.08])
-          #np.linspace(-0.08,0.08,9) #parameters["diff_levs"]
+        #cnlevels=np.array([-0.08,-0.06,-0.04,-0.02,-0.01,0.01,0.02,0.04,0.06,0.08])
+         cnlevels=np.linspace(-1.5,1.5,11) #parameters["diff_levs"]
 
     #if len(cnlevels) >0:
     #        levels = [-1.0e8] + cnlevels + [1.0e8]

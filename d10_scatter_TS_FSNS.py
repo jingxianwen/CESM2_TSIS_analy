@@ -16,6 +16,8 @@ from mpl_toolkits.axes_grid1 import AxesGrid
 import matplotlib.colors as colors
 # numpy
 import numpy as np
+#import numpy.ma as ma 
+
 # parameters
 from get_parameters import *  #get_area_mean_min_max
 
@@ -36,8 +38,8 @@ years=np.arange(2010,2020)
 months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 #---
-varnm_1="ICEFRAC"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
-varnm_2="TS"     #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
+varnm_1="TS"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
+varnm_2="FSNS"     #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
 season="ANN"
 #figure_name="FSNT_vis_lat_lon_ANN"
 #units=r"W/m$^2$"
@@ -69,8 +71,8 @@ for iy in range(0,years.size):
    lat=file_ctl.variables["lat"]
    lon=file_ctl.variables["lon"]
    # read data and calculate mean/min/max
-   means_yby_ctl_cld[iy,:,:]=file_ctl.variables[varnm_1][0,:,:]*100. #fraction to %
-   means_yby_exp_cld[iy,:,:]=file_exp.variables[varnm_1][0,:,:]*100. #fraction to %
+   means_yby_ctl_cld[iy,:,:]=file_ctl.variables[varnm_1][0,:,:] #fraction to %
+   means_yby_exp_cld[iy,:,:]=file_exp.variables[varnm_1][0,:,:] #fraction to %
    means_yby_ctl_rad[iy,:,:]=file_ctl.variables[varnm_2][0,:,:] #-\
                              #file_ctl.variables[varnm_2[1]][0,:,:]
    means_yby_exp_rad[iy,:,:]=file_exp.variables[varnm_2][0,:,:] #-\
@@ -90,21 +92,23 @@ diffs_rad=np.where(lndfrac[:,:]<0.01,diffs_rad,np.nan)
 
 coeff=np.zeros((2))
 
-i_60S=np.max(np.where(lat[:]<-60))+1
+#i_60S=np.max(np.where(lat[:]<-60))+1
 #i_30S=np.max(np.where(lat[:]<-30))+1
 #i_0=np.max(np.where(lat[:]<0))+1
 #i_30N=np.max(np.where(lat[:]<30))+1
+#i_60N=np.max(np.where(lat[:]<60))+1
+i_60S=np.max(np.where(lat[:]<-60))+1
 i_60N=np.max(np.where(lat[:]<60))+1
-#i_50S=np.max(np.where(lat[:]<-50))+1
-#i_50N=np.max(np.where(lat[:]<50))+1
-#i_70S=np.max(np.where(lat[:]<-70))+1
-#i_70N=np.max(np.where(lat[:]<70))+1
+i_70S=np.max(np.where(lat[:]<-70))+1
+i_70N=np.max(np.where(lat[:]<70))+1
 nlat=len(lat[:])
 
 #il_1=[i_0   , i_30N , i_60N, i_30S, i_60S,     0 ]
 #il_2=[i_30N , i_60N , nlat , i_0  , i_30S, i_60S ]
 il_1=[i_60N,0]
 il_2=[nlat,i_60S]
+#il_1=[i_60N,i_70S]
+#il_2=[i_70N,i_60S]
 
 
 #titles=["0-30"+u"\xb0"+"N","30"+u"\xb0"+"N-60"+u"\xb0"+"N",r"60"+u"\xb0"+"N-90"+u"\xb0"+"N",\
@@ -124,7 +128,7 @@ fig,axs=plt.subplots(2,1,figsize=(7,9),sharex=True,sharey=True)
 #         ]
 
 #panel = [(0.20,0.20,0.6,0.6)]
-print(axs.shape)
+#print(axs.shape)
 
 for ib in range(0,2):
   ix=ib
@@ -141,8 +145,10 @@ for ib in range(0,2):
   axs[ib].set_title(titles[ib],loc="center",fontsize=13)
   axs[ib].axhline(y=0,lw=1,c="gray")
   axs[ib].axvline(x=0,lw=1,c="gray")
-  #axs[ib].set_xlim(ax.get_xlim()[::-1])
+  #axs[ib].set_xlim(axs[ib].get_xlim()[::-1])
+  #axs[ib].set_xlim(-4,8)
   axs[ib].tick_params(labelsize=12.0, direction='out', width=1)
+
   coeff[ib]=np.ma.corrcoef(np.ma.masked_invalid(diffs_rad[il_1[ib]:il_2[ib],:].ravel()),\
                         np.ma.masked_invalid(diffs_cld[il_1[ib]:il_2[ib],:].ravel()))[0,1]
   print(coeff[ib])
@@ -151,12 +157,11 @@ for ib in range(0,2):
 #plt.gca().invert_xaxis()
 
 #fig.text(0.5,0.94,"Band 0.44-0.63",fontsize=14,va='center',ha='center')
-fig.text(0.03,0.5,"Diff in Sea Ice Fraction (%)",fontsize=14,va='center',ha='center',rotation='vertical')
-fig.text(0.5,0.05,"Diff in Surface Temperature (K)",fontsize=14,va='center',ha='center')
-fig.text(0.75,0.817,r"R$^2$="+str(round(coeff[0]**2,2)),fontsize=12)
-fig.text(0.75,0.4,r"R$^2$="+str(round(coeff[1]**2,2)),fontsize=12)
-
-plt.savefig("./figures/scat_icefrac_ts_polar.png",dpi=150)
+fig.text(0.03,0.5,"Diff in Surface Temperature (K)",fontsize=14,va='center',ha='center',rotation='vertical')
+fig.text(0.5,0.05,r"Diff in Surface Net SW (Wm$^-$$^2$)",fontsize=14,va='center',ha='center')
+fig.text(0.28,0.847,r"R$^2$="+str(round(coeff[0]**2,2)),fontsize=12)
+fig.text(0.28,0.43,r"R$^2$="+str(round(coeff[1]**2,2)),fontsize=12)
+plt.savefig("./figures/scat_ts_fsns_polar.png",dpi=150)
 plt.show()
 
 '''

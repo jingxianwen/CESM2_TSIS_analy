@@ -43,7 +43,11 @@ lon=file_ctl.variables["lon"]
 #lev500=np.min(np.where(lev[:]>500.))
 lat_N=np.min(np.where(lat[:]>60.))
 lat_S=np.max(np.where(lat[:]<-60.))+1
+pole="N"
 for var in varlst:
     dtctl=file_ctl.variables[var][0,:,:] #[time,lat,lon]
-    stat=get_area_mean_min_max(dtctl[0:lat_S,:],lat[lat_N:])
+    if pole == "S":
+        stat=get_area_mean_min_max(dtctl[0:lat_S,:],lat[0:lat_S])
+    elif pole == "N":
+        stat=get_area_mean_min_max(dtctl[lat_N:,:],lat[lat_N:])
     print(var,round(stat[0],1))

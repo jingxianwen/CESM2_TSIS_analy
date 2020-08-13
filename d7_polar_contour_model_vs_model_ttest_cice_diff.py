@@ -37,14 +37,14 @@ months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 varnm="ICEFRAC"
 
-pole='S'
+pole='N'
 season="ANN"
 if pole is 'N':
    var_long_name="Arctic Sea Ice Fraction ("+season+")"
-   figure_name="Arctic_Sea_Ice_contour_"+season
+   figure_name="Arctic_Sea_Ice_contour_diff"+season
 elif pole is 'S':
    var_long_name="Antarctic Sea Ice Fraction ("+season+")"
-   figure_name="Antarctic_Sea_Ice_contour_"+season
+   figure_name="Antarctic_Sea_Ice_contour_diff"+season
 units=" " #"Fraction"
 #units=r"W/m$^2$"
 
@@ -130,26 +130,32 @@ if pole == "N":
 elif pole == "S":
     projection = ccrs.SouthPolarStereo(central_longitude=0)
 
-fig = plt.figure(figsize=[8.0,11.0],dpi=150.)
+fig = plt.figure(figsize=[5.0,6.0],dpi=150.)
 #fig.set_size_inches(4.5, 6.5, forward=True)
 plotTitle = {'fontsize': 13.}
 #plotSideTitle = {'fontsize': 9., 'verticalalignment':'center'}
-plotSideTitle = {'fontsize': 12.}
-plotText = {'fontsize': 10.}
-panel = [(0.27, 0.65, 0.3235, 0.25),\
-         (0.27, 0.35, 0.3235, 0.25),\
-         (0.27, 0.05, 0.3235, 0.25),\
-        ]
-labels=[ctl_name,exp_name,exp_name+" - "+ctl_name] 
+plotSideTitle = {'fontsize': 13.}
+plotText = {'fontsize': 11.}
+#panel = [(0.27, 0.65, 0.3235, 0.25),\
+#         (0.27, 0.35, 0.3235, 0.25),\
+#         (0.27, 0.05, 0.3235, 0.25),\
+#        ]
+panel = [(0.1,0.1,0.6,0.6)]
+
+#labels=[ctl_name,exp_name,exp_name+" - "+ctl_name] 
+label = "Diff in Sea Ice Fraction"
+
 units=parameters["units"]
-for i in range(0,3):
+for i in range(0,1):
    #1. first plot
     levels = None
     norm = None
-    if i != 2:
-        cnlevels= np.linspace(0.1,0.8,8) #parameters["contour_levs"]
-    else:
-        cnlevels=np.array([-0.08,-0.06,-0.04,-0.02,-0.01,0.01,0.02,0.04,0.06,0.08])
+    #if i != 2:
+    #    cnlevels= np.linspace(0.1,0.8,8) #parameters["contour_levs"]
+    #else:
+    #    cnlevels=np.array([-0.08,-0.06,-0.04,-0.02,-0.01,0.01,0.02,0.04,0.06,0.08])
+
+    cnlevels=np.array([-0.08,-0.06,-0.04,-0.02,-0.01,0.01,0.02,0.04,0.06,0.08])
           #np.linspace(-0.08,0.08,9) #parameters["diff_levs"]
 
     #if len(cnlevels) >0:
@@ -171,18 +177,22 @@ for i in range(0,3):
     elif pole == "S":
         ax.set_extent([-180, 180, -55, -90], crs=ccrs.PlateCarree())
 
-    if i == 0:
-        dtplot=dtctl[:,:]
-        cmap=parameters["colormap"]
-        stats_now=stats_ctl
-    elif i == 1:
-        dtplot=dtexp[:,:]
-        cmap=parameters["colormap"]
-        stats_now=stats_exp
-    else:
-        dtplot=dtdif[:,:]
-        cmap=parameters["colormap_diff"]
-        stats_now=stats_dif
+    #if i == 0:
+    #    dtplot=dtctl[:,:]
+    #    cmap=parameters["colormap"]
+    #    stats_now=stats_ctl
+    #elif i == 1:
+    #    dtplot=dtexp[:,:]
+    #    cmap=parameters["colormap"]
+    #    stats_now=stats_exp
+    #else:
+    #    dtplot=dtdif[:,:]
+    #    cmap=parameters["colormap_diff"]
+    #    stats_now=stats_dif
+
+    dtplot=dtdif[:,:]
+    cmap=parameters["colormap_diff"]
+    stats_now=stats_dif
 
     p1 = ax.contourf(lon[:],lat[latbound1:latbound2],dtplot[latbound1:latbound2,:],\
                 transform=data_crs,\
@@ -220,37 +230,37 @@ for i in range(0,3):
     #ax.annotate("80N", xy=(-17.5,81), xycoords=transf,fontsize=8)
 
     # title
-    ax.set_title(labels[i],loc="center",fontdict=plotSideTitle)
+    ax.set_title(label,loc="center",fontdict=plotSideTitle)
     #ax.set_title(units,loc="right",fontdict=plotSideTitle)
 
     # color bar
-    cbax = fig.add_axes((panel[i][0] + 0.32, panel[i][1] + 0.0354, 0.0326, 0.1792))
+    cbax = fig.add_axes((panel[i][0] + 0.62, panel[i][1] + 0.1, 0.04, 0.35))
     cbar = fig.colorbar(p1, cax=cbax, ticks=cnlevels)
     #w, h = get_ax_size(fig, cbax)
-    cbar.ax.tick_params(labelsize=9.0, length=0)
+    cbar.ax.tick_params(labelsize=12.0, length=0)
 
     # Mean, Min, Max
-    fig.text(panel[i][0] + 0.32, panel[i][1] + 0.225,
+    fig.text(panel[i][0] + 0.62, panel[i][1] + 0.48,
              "Max\nMean\nMin", ha='left', fontdict=plotText)
-    fig.text(panel[i][0] + 0.42, panel[i][1] + 0.225, "%.2f\n%.2f\n%.2f" %
+    fig.text(panel[i][0] + 0.78, panel[i][1] + 0.48, "%.2f\n%.2f\n%.2f" %
              (stats_now[2],stats_now[0],stats_now[1]), ha='right', fontdict=plotText)
 
-    if i==2 and plot_sig:
-        p1 = ax.contourf(lon[:],lat[latbound1:latbound2],dtdif_sig[latbound1:latbound2,:],\
-                    transform=data_crs,\
-                    #norm=norm,\
-                    levels=cnlevels,\
-		    hatches=['...'], \
-                    cmap=cmap,\
-                    extend="both",\
-                    #autoscale_on=True\
-            	    )
+    #if i==2 and plot_sig:
+    p1 = ax.contourf(lon[:],lat[latbound1:latbound2],dtdif_sig[latbound1:latbound2,:],\
+                transform=data_crs,\
+                #norm=norm,\
+                levels=cnlevels,\
+	    hatches=['...'], \
+                cmap=cmap,\
+                extend="both",\
+                #autoscale_on=True\
+        	    )
          
-fig.suptitle(var_long_name, x=0.5, y=0.96, fontdict=plotTitle)
+#fig.suptitle(var_long_name, x=0.5, y=0.96, fontdict=plotTitle)
 #save figure as file
 #if os.environ["fig_save"]=="True":
 #    fname="d2_polar_contour_"+pole+"_"+varnm+"_"+season+"."+os.environ["fig_suffix"]
-#plt.savefig(figure_name+".eps")
+plt.savefig(figure_name+".png",dpi=150)
 plt.show()
 plt.close()
 

@@ -180,6 +180,20 @@ means_ctl_net=means_yby_ctl_net
 means_exp_net=means_yby_exp_net
 diffs_net=means_exp_net-means_ctl_net
 diffs_net_bb=diffs_net[0,:]+diffs_net[1,:]
+
+#compute domain mean
+#diffs_net_bb_mask=np.where(means_yby_ctl_fice[:]>0.1,diffs_net_bb,np.nan)
+diffs_net_bb_mask=np.ma.MaskedArray(diffs_net_bb,mask=means_yby_ctl_fice[:]>0.1)
+#print(diffs_net_bb_mask)
+latr=np.deg2rad(lat)
+weights=np.cos(latr)
+avg_Antarctic=np.average(diffs_net_bb_mask[0:40],axis=0,weights=weights[0:40]) 
+avg_Arctic=np.average(diffs_net_bb_mask[60:],axis=0,weights=weights[60:]) 
+
+print(avg_Antarctic)
+print(avg_Arctic)
+exit()
+
 ###ttest=stats.ttest_ind(means_yby_ctl_net,means_yby_exp_net,axis=0)
 ###pvalues_net=ttest.pvalue
 ###diffs_sig_net=np.zeros(diffs_net.shape)
