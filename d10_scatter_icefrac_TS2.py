@@ -38,8 +38,8 @@ years=np.arange(2010,2020)
 months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 #---
-varnm_1="TS"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
-varnm_2="FSNS"     #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
+varnm_1="ICEFRAC"  #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
+varnm_2="TS"     #np.array(["FLNS","SOLIN","LHFLX","SHFLX"])
 season="ANN"
 #figure_name="FSNT_vis_lat_lon_ANN"
 #units=r"W/m$^2$"
@@ -71,8 +71,8 @@ for iy in range(0,years.size):
    lat=file_ctl.variables["lat"]
    lon=file_ctl.variables["lon"]
    # read data and calculate mean/min/max
-   means_yby_ctl_cld[iy,:,:]=file_ctl.variables[varnm_1][0,:,:] #fraction to %
-   means_yby_exp_cld[iy,:,:]=file_exp.variables[varnm_1][0,:,:] #fraction to %
+   means_yby_ctl_cld[iy,:,:]=file_ctl.variables[varnm_1][0,:,:]*100. #fraction to %
+   means_yby_exp_cld[iy,:,:]=file_exp.variables[varnm_1][0,:,:]*100. #fraction to %
    means_yby_ctl_rad[iy,:,:]=file_ctl.variables[varnm_2][0,:,:] #-\
                              #file_ctl.variables[varnm_2[1]][0,:,:]
    means_yby_exp_rad[iy,:,:]=file_exp.variables[varnm_2][0,:,:] #-\
@@ -178,11 +178,11 @@ for ib in range(0,2):
 
 #fig.text(0.5,0.94,"Band 0.44-0.63",fontsize=14,va='center',ha='center')
 #fig.text(0.03,0.5,"Diff in Surface Temperature (K)",fontsize=14,va='center',ha='center',rotation='vertical')
-fig.text(0.2,0.5,"Diff in Surface Temperature (K)",fontsize=14,va='center',ha='center',rotation='vertical')
-fig.text(0.62,0.05,r"Diff in Surface Net SW (Wm$^-$$^2$)",fontsize=14,va='center',ha='center')
-fig.text(0.45,0.84,r"R$^2$="+str(round(coeff[0]**2,2)),fontsize=14)
-fig.text(0.45,0.42,r"R$^2$="+str(round(coeff[1]**2,2)),fontsize=14)
-plt.savefig("./figures/scat_ts_fsns_polar.png",dpi=150)
+fig.text(0.62,0.05,"Diff in Surface Temperature (K)",fontsize=14,va='center',ha='center')
+fig.text(0.24,0.5,r"Diff in Sea Ice Fraction (%)",fontsize=14,va='center',ha='center',rotation='vertical')
+fig.text(0.57,0.84,r"R$^2$="+str(round(coeff[0]**2,2)),fontsize=14)
+fig.text(0.57,0.42,r"R$^2$="+str(round(coeff[1]**2,2)),fontsize=14)
+plt.savefig("./figures/scat_icefrac_ts_polar.png",dpi=150)
 plt.show()
 
 '''
