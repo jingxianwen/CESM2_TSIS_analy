@@ -176,6 +176,10 @@ diffs_toa=means_exp_toa-means_ctl_toa
 ttest_toa=stats.ttest_ind(means_yby_ctl_toa,means_yby_exp_toa,axis=0)
 pvalues_toa= ttest_toa.pvalue
 
+print(diffs_toa[:])
+print("UV+VIS_toa=",np.sum(diffs_toa[0:5]))
+print("NIR_toa=",np.sum(diffs_toa[5:]))
+
 means_ctl_sfc=np.mean(means_yby_ctl_sfc,axis=0)
 means_exp_sfc=np.mean(means_yby_exp_sfc,axis=0)
 
@@ -191,6 +195,10 @@ stddev_diffs_sfc=np.sqrt(((nn-1)*(s1**2.) + (nn-1)*s2**2.)/(nn+nn-2))
 diffs_sfc=means_exp_sfc-means_ctl_sfc
 ttest_sfc=stats.ttest_ind(means_yby_ctl_sfc,means_yby_exp_sfc,axis=0)
 pvalues_sfc= ttest_sfc.pvalue
+
+print(diffs_sfc[:])
+print("UV+VIS_surface=",np.sum(diffs_sfc[0:5]))
+print("NIR_surface=",np.sum(diffs_sfc[5:]))
 
 #print(diffs_sfc)
 #print(diffs_sfc.sum())
@@ -348,8 +356,8 @@ ax2.yaxis.grid(color='lightgray', linestyle=':')
 #ax2.set_xticklabels(labels=bands,rotation=-45,fontsize=12)
 plt.xticks(x,bands,rotation=-90,fontsize=12)
 plt.yticks(fontsize=14)
-plt.savefig(figure_name+".eps")
-plt.savefig(figure_name+".png",dpi=(150))
+#plt.savefig(figure_name+".eps")
+#plt.savefig(figure_name+".png",dpi=(150))
 plt.show()
 
 exit()
