@@ -142,12 +142,12 @@ means_yby_exp_net[:,:]=means_yby_exp_dn[:,:]-means_yby_exp_up[:,:]
 gm_yby_ctl_net[:]=gm_yby_ctl_dn[:]-gm_yby_ctl_up[:]
 gm_yby_exp_net[:]=gm_yby_exp_dn[:]-gm_yby_exp_up[:]
 
-print(gm_yby_ctl_dn)
-print(gm_yby_ctl_up)
-print(gm_yby_ctl_net)
-print(gm_yby_exp_dn)
-print(gm_yby_exp_up)
-print(gm_yby_exp_net)
+#print(gm_yby_ctl_dn)
+#print(gm_yby_ctl_up)
+#print(gm_yby_ctl_net)
+#print(gm_yby_exp_dn)
+#print(gm_yby_exp_up)
+#print(gm_yby_exp_net)
 #exit()
 
 # compute globam mean
@@ -190,9 +190,9 @@ weights=np.cos(latr)
 avg_Antarctic=np.average(diffs_net_bb_mask[0:40],axis=0,weights=weights[0:40]) 
 avg_Arctic=np.average(diffs_net_bb_mask[60:],axis=0,weights=weights[60:]) 
 
-print(avg_Antarctic)
-print(avg_Arctic)
-exit()
+#print(avg_Antarctic)
+#print(avg_Arctic)
+#exit()
 
 ###ttest=stats.ttest_ind(means_yby_ctl_net,means_yby_exp_net,axis=0)
 ###pvalues_net=ttest.pvalue
@@ -267,7 +267,7 @@ ax2.plot(lat[:],diffs_net[1,:],color="r",lw=2,ls="--",label="\u0394NIR net")
 #ax2.plot(lat[:],diffs_sig_JJA[0,:],color="darkorange",lw=4,alpha=1.)
 ax2.plot(lat[:],zeros[0,:],color="gray",lw=1)
 ax2.legend(fontsize=8)
-ax2.set_title("Diff in SFC Flux (TSIS-1 - CESM2)",fontsize=14) #+var_long_name,fontsize=12)
+ax2.set_title("Diff in SFC Flux (TSIS-1 - CESM2, diag)",fontsize=14) #+var_long_name,fontsize=12)
 ax2.set_ylabel(units,fontsize=14)
 ax2.set_xlabel("Latitude",fontsize=14)
 ax2.set_xlim(-90,90)
