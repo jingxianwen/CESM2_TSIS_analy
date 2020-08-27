@@ -74,6 +74,11 @@ diffs_lwp=np.zeros((nlat)) #multi-year exp-ctl diff for each variable
 gm_yby_ctl_lwp=np.zeros((years.size)) #year by year mean for each variable
 gm_yby_exp_lwp=np.zeros((years.size)) #year by year mean for each variable
 
+means_yby_ctl_ts=np.zeros((years.size,nlat)) #year by year mean for each variable
+means_yby_exp_ts=np.zeros((years.size,nlat)) #year by year mean for each variable
+means_ctl_ts=np.zeros((nlat)) #multi-year mean for each variable
+means_exp_ts=np.zeros((nlat)) #multi-year mean for each variable
+
 means_yby_exp_fice=np.zeros((years.size,nlat)) #year by year mean for each variable
 means_exp_fice=np.zeros((nlat)) #multi-year mean for each variable
 
@@ -107,6 +112,11 @@ for iy in range(0,years.size):
     gm_yby_ctl_lwp[iy]=gm_yby_ctl_lwp[iy]+get_area_mean_min_max(dtctl_lwp[:,:],lat[:])[0]
     gm_yby_exp_lwp[iy]=gm_yby_exp_lwp[iy]+get_area_mean_min_max(dtexp_lwp[:,:],lat[:])[0]
 
+    vn="TS"
+    dtctl_ts=file_ctl.variables[vn][0,:,:]
+    dtexp_ts=file_exp.variables[vn][0,:,:] 
+    means_yby_ctl_ts[iy,:]= means_yby_ctl_ts[iy,:] + np.mean(dtctl_ts[:,:],axis=1)
+    means_yby_exp_ts[iy,:]= means_yby_exp_ts[iy,:] + np.mean(dtexp_ts[:,:],axis=1)
 
 #print(np.mean(gm_yby_ctl_wv,axis=1))
 #print(np.mean(gm_yby_ctl_wv,axis=1))
@@ -142,6 +152,10 @@ pvalues_lwp=ttest.pvalue
 diffs_sig_lwp=np.zeros(diffs_lwp.shape)
 diffs_sig_lwp[:]=np.nan
 
+means_ctl_ts=np.mean(means_yby_ctl_ts,axis=0)
+means_exp_ts=np.mean(means_yby_exp_ts,axis=0)
+diffs_ts=means_exp_ts-means_ctl_ts
+
 means_exp_fice=np.mean(means_yby_exp_fice,axis=0)
 
 zeros=np.zeros(diffs_wv.shape)
@@ -162,6 +176,7 @@ for iv in range(pvalues_lwp.shape[0]):
        #else:
        #    diffs_unsig[iv,ip]=diffs[iv,ip]
 
+diffs_wv_cc=diffs_ts[:]*means_ctl_wv[:]*0.078
 
 # make the plot
 fig=plt.figure(figsize=(7,8))
@@ -201,6 +216,7 @@ ax2.plot(lat[:],diffs_sig_wv[:],color="k",lw=4,alpha=1.0)
 #ax2.plot(lat[:],diffs_sig_net[1,:],color="orange",lw=6,alpha=0.9)
 
 ax2.plot(lat[:],diffs_wv[:],color="k",lw=1 ) #,label="\u0394TPW"
+ax2.plot(lat[:],diffs_wv_cc[:],color="k",lw=2,ls=":") #,label="\u0394TPW"
 #ax2.plot(lat[:],diffs_wv[1,:],color="r",lw=1,label="\u0394NIR down")
 #ax2.plot(lat[:],diffs_wv[0,:],color="g",lw=1,ls="-",label="\u0394UV+VIS up")
 #ax2.plot(lat[:],diffs_wv[1,:],color="darkorchid",lw=1,ls="-",label="\u0394NIR up")
