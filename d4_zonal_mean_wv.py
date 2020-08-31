@@ -176,7 +176,7 @@ for iv in range(pvalues_lwp.shape[0]):
        #else:
        #    diffs_unsig[iv,ip]=diffs[iv,ip]
 
-diffs_wv_cc=diffs_ts[:]*means_ctl_wv[:]*0.078
+diffs_wv_cc=diffs_ts[:]*means_ctl_wv[:]*0.075
 
 # make the plot
 fig=plt.figure(figsize=(7,8))
