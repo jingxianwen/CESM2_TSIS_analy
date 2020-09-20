@@ -37,7 +37,7 @@ months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 varnm="TS"
 
-pole='S'
+pole='N'
 season="ANN"
 if pole is 'N':
    var_long_name="Arctic Surface Temperature ("+season+")"
@@ -262,7 +262,7 @@ for i in range(0,1):
 #save figure as file
 #if os.environ["fig_save"]=="True":
 #    fname="d2_polar_contour_"+pole+"_"+varnm+"_"+season+"."+os.environ["fig_suffix"]
-plt.savefig(figure_name+".png",dpi=150)
+plt.savefig(figure_name+".pdf")
 plt.show()
 plt.close()
 
