@@ -303,8 +303,7 @@ ax1.set_xlabel("Latitude",fontsize=13)
 #plt.xticks(fontsize=15)
 #plt.yticks(fontsize=15)
 
-plt.savefig(figure_name+".eps")
-plt.savefig(figure_name+".png",dpi=(150))
+plt.savefig(figure_name+".pdf")
 plt.show()
 
 exit()

@@ -292,7 +292,7 @@ ax2.add_collection(collection)
 #plt.xticks(fontsize=12)
 #plt.yticks(fontsize=12)
 
-plt.savefig(figure_name+".png",dpi=150)
+plt.savefig(figure_name+".pdf")
 plt.show()
 
 exit()
