@@ -318,8 +318,8 @@ bands=["0.2-0.26","0.26-0.34","0.34-0.44","0.44-0.63","0.63-0.78","0.78-1.24","1
 #color2="limegreen"
 color1="k"
 color2="r"
-ax1.bar(x-0.2,means_ctl_toa,width=0.5,color=color1,label="TOA") #"tab:blue"
-ax1.bar(x+0.2,means_ctl_sfc,width=0.5,color=color2,label="Surface") #"tab:blue"
+ax1.bar(x-0.2,means_ctl_toa,width=0.5,color=color1,label="TOA",edgecolor="white") #"tab:blue"
+ax1.bar(x+0.2,means_ctl_sfc,width=0.5,color=color2,label="Surface",edgecolor="white") #"tab:blue"
 ax1.text(13.7, -24.0, r'$\mu$m',fontsize=12)
 #ax1.set_title(var_long_name+" (CESM2)",fontsize=14)
 ax1.set_title("Net SW Flux at TOA&Surface" +" (CESM2)",fontsize=12)
@@ -363,7 +363,7 @@ ax2.yaxis.grid(color='lightgray', linestyle=':')
 plt.xticks(x,bands,rotation=-90,fontsize=12)
 plt.yticks(fontsize=12)
 #plt.savefig(figure_name+".eps")
-#plt.savefig(figure_name+".png",dpi=(150))
+#plt.savefig(figure_name+".png",dpi=800)
 plt.show()
 
 exit()
