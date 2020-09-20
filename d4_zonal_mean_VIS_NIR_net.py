@@ -227,7 +227,7 @@ plt.yticks(fontsize=12)
 ax2=fig.add_axes([0.14,0.12,0.8,0.36])
 ax2.plot(lat[:],diffs_sig_dn[0,:],color="k",lw=6,alpha=0.5)
 #ax2.plot(lat[:],diffs_sig_dn[1,:],color="peachpuff",lw=6,alpha=0.9)
-ax2.plot(lat[:],diffs_sig_dn[1,:],color="indianred",lw=6,alpha=0.6)
+ax2.plot(lat[:],diffs_sig_dn[1,:],color="red",lw=6,alpha=0.5)
 ax2.plot(lat[:],diffs_sig_up[0,:],color="yellowgreen",lw=6,alpha=0.9)
 ax2.plot(lat[:],diffs_sig_up[1,:],color="plum",lw=6,alpha=1.0)
 ax2.plot(lat[:],diffs_sig_net[0,:],color="blue",lw=6,alpha=0.7)
@@ -258,7 +258,7 @@ collection = collections.BrokenBarHCollection.span_where(lat[:], ymin=-1.6, ymax
              where=means_exp_fice >0.1,facecolor='y',alpha=0.3)
 ax2.add_collection(collection)
 
-plt.savefig(figure_name+".png",dpi=150)
+plt.savefig(figure_name+".pdf")
 plt.show()
 
 exit()

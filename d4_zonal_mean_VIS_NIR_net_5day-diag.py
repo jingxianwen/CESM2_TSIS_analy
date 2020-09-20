@@ -280,7 +280,7 @@ collection = collections.BrokenBarHCollection.span_where(lat[:], ymin=-1.6, ymax
              where=means_yby_ctl_fice >0.1,facecolor='y',alpha=0.3)
 ax2.add_collection(collection)
 
-plt.savefig(figure_name+".png",dpi=150)
+plt.savefig(figure_name+".pdf")
 plt.show()
 
 exit()
