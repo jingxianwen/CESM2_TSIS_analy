@@ -270,8 +270,8 @@ ax2.set_ylim(-1.0,0.2)
 plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
 
-plt.savefig(figure_name+".eps")
-plt.savefig(figure_name+".png",dpi=(200))
+#plt.savefig(figure_name+".eps")
+plt.savefig(figure_name+".pdf")
 plt.show()
 
 exit()
