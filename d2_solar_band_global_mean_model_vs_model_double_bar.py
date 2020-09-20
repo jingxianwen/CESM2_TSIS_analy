@@ -196,11 +196,11 @@ diffs_sfc=means_exp_sfc-means_ctl_sfc
 ttest_sfc=stats.ttest_ind(means_yby_ctl_sfc,means_yby_exp_sfc,axis=0)
 pvalues_sfc= ttest_sfc.pvalue
 
-print(diffs_sfc[:])
-print("UV+VIS_surface=",np.sum(diffs_sfc[0:5]))
-print("NIR_surface=",np.sum(diffs_sfc[5:]))
-
-exit()
+#print(diffs_sfc[:])
+#print("UV+VIS_surface=",np.sum(diffs_sfc[0:5]))
+#print("NIR_surface=",np.sum(diffs_sfc[5:]))
+#
+#exit()
 #print(diffs_sfc)
 #print(diffs_sfc.sum())
 #print(stddev_diffs_toa)
@@ -307,7 +307,7 @@ for ip in range(pvalues_sfc.size):
 #fig=plt.figure(figsize=(7,8.5))
 #ax1=fig.add_axes([0.15,0.62,0.78,0.33])
 #ax2=fig.add_axes([0.15,0.14,0.78,0.33])
-fig=plt.figure(figsize=(10,5))
+fig=plt.figure(figsize=(6,3))
 ax1=fig.add_axes([0.1,0.25,0.35,0.4])
 #ax2=fig.add_axes([0.6,0.2,0.35,0.5])
 #ax2=fig.add_axes([0.13,0.14,0.78,0.33])
@@ -333,6 +333,7 @@ plt.xticks(x,bands,rotation=-90,fontsize=12)
 #ax1.set_xticklabels(labels=bands,rotation=-45,fontsize=12)
 plt.yticks(fontsize=12)
 ax1.legend(fontsize=12)
+#ax1.text(0.1,0.9,"(a)",fontsize=12)
 
 #ax2=fig.add_axes([0.15,0.14,0.78,0.33])
 ax2=fig.add_axes([0.55,0.25,0.35,0.4])
@@ -347,6 +348,7 @@ ax2.bar(x+0.2,diffs_sig_sfc,width=0.5,yerr=stddev_diffs_sfc_sig,color=color2,eco
 ax2.bar(x+0.2,diffs_unsig_sfc,width=0.5,yerr=stddev_diffs_sfc_unsig,color=color2,ecolor="gray",)
 
 ax2.text(13.7, -1.98, r'$\mu$m',fontsize=12)
+#ax2.text(0.1,0.9,"(b)",fontsize=12)
 
 #ax2.set_title("Diff in "+var_long_name+" (TSIS-1 - CESM2)",fontsize=14)
 ax2.set_title("Differences"+" (TSIS-1 - CESM2)",fontsize=12)
