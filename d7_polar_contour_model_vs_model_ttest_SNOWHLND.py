@@ -154,7 +154,7 @@ panel = [(0.27, 0.65, 0.3235, 0.25),\
          (0.27, 0.35, 0.3235, 0.25),\
          (0.27, 0.05, 0.3235, 0.25),\
         ]
-labels=[ctl_name,exp_name,exp_name+" - "+ctl_name] 
+labels=[exp_name,ctl_name,exp_name+" - "+ctl_name] 
 
 #contour_levs=np.linspace(0,0.3,7) #[120, 140, 160, 180, 200, 220, 240, 260, 280, 300]
 #contour_levs=[0.05,0.1,0.15,0.2,0.25,0.3,1.0,10.5]
