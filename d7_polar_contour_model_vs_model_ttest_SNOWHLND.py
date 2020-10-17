@@ -246,7 +246,7 @@ for i in range(0,3):
     #ax.set_title(units,loc="right",fontdict=plotSideTitle)
 
     # color bar
-    cbax = fig.add_axes((panel[i][0] + 0.35, panel[i][1] + 0.0354, 0.0326, 0.1792))
+    cbax = fig.add_axes((panel[i][0] + 0.35, panel[i][1] + 0.0324, 0.0326, 0.1792))
     cbar = fig.colorbar(p1, cax=cbax, ticks=cnlevels)
     #w, h = get_ax_size(fig, cbax)
     cbar.ax.tick_params(labelsize=9.0, length=0)
@@ -273,6 +273,7 @@ fig.suptitle(var_long_name, x=0.5, y=0.96, fontdict=plotTitle)
 #if os.environ["fig_save"]=="True":
 #    fname="d2_polar_contour_"+pole+"_"+varnm+"_"+season+"."+os.environ["fig_suffix"]
 plt.savefig(figure_name+".eps")
+plt.savefig(figure_name+".pdf")
 plt.show()
 plt.close()
 
