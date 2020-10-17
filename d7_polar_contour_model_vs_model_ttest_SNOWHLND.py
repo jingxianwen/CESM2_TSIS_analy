@@ -246,15 +246,15 @@ for i in range(0,3):
     #ax.set_title(units,loc="right",fontdict=plotSideTitle)
 
     # color bar
-    cbax = fig.add_axes((panel[i][0] + 0.32, panel[i][1] + 0.0354, 0.0326, 0.1792))
+    cbax = fig.add_axes((panel[i][0] + 0.35, panel[i][1] + 0.0354, 0.0326, 0.1792))
     cbar = fig.colorbar(p1, cax=cbax, ticks=cnlevels)
     #w, h = get_ax_size(fig, cbax)
     cbar.ax.tick_params(labelsize=9.0, length=0)
 
     # Mean, Min, Max
-    fig.text(panel[i][0] + 0.32, panel[i][1] + 0.225,
+    fig.text(panel[i][0] + 0.35, panel[i][1] + 0.225,
              "Max\nMean\nMin", ha='left', fontdict=plotText)
-    fig.text(panel[i][0] + 0.42, panel[i][1] + 0.225, "%.2f\n%.2f\n%.2f" %
+    fig.text(panel[i][0] + 0.45, panel[i][1] + 0.225, "%.2f\n%.2f\n%.2f" %
              (stats_now[2],stats_now[0],stats_now[1]), ha='right', fontdict=plotText)
 
     if i==2 and plot_sig:
