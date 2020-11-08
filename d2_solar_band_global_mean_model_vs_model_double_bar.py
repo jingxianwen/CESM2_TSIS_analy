@@ -48,13 +48,13 @@ months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 var_group_todo=22
 # variable group 1:
-if var_group_todo==1:
-   varnms=np.array(["FSSU13","FSSU12","FSSU11","FSSU10","FSSU09",\
-           "FSSU08","FSSU07","FSSU06","FSSU05","FSSU04",\
-           "FSSU03","FSSU02","FSSU01","FSSU14"])
-   var_long_name="Band-by-Band TOA Upward SW"
-   figure_name="Band_by_Band_TOA_Upward_SW_ANN_VIS_icealb"
-   units=r"Wm$^-$$^2$"
+#if var_group_todo==1:
+#   varnms=np.array(["FSSU13","FSSU12","FSSU11","FSSU10","FSSU09",\
+#           "FSSU08","FSSU07","FSSU06","FSSU05","FSSU04",\
+#           "FSSU03","FSSU02","FSSU01","FSSU14"])
+#   var_long_name="Band-by-Band TOA Upward SW"
+#   figure_name="Band_by_Band_TOA_Upward_SW_ANN_VIS_icealb"
+#   units=r"Wm$^-$$^2$"
 
 # variable group 2:
 if var_group_todo==22:
@@ -76,25 +76,25 @@ if var_group_todo==22:
    units=r"Wm$^-$$^2$"
 
 # variable group 3 (clear sky):
-if var_group_todo==3:
-   varnms=np.array(["FSSU13","FSSU12","FSSU11","FSSU10","FSSU09",\
-           "FSSU08","FSSU07","FSSU06","FSSU05","FSSU04",\
-           "FSSU03","FSSU02","FSSU01","FSSU14"])
-   varnms_sub=np.array(["FSSUCLR13","FSSUCLR12","FSSUCLR11","FSSUCLR10","FSSUCLR09",\
-           "FSSUCLR08","FSSUCLR07","FSSUCLR06","FSSUCLR05","FSSUCLR04",\
-           "FSSUCLR03","FSSUCLR02","FSSUCLR01","FSSUCLR14"])
-   var_long_name="Band-by-Band TOA SWCF"
-   figure_name="Band_by_Band_TOA_SWCF_ANN_VIS_icealb"
-   units=r"Wm$^-$$^2$"
+#if var_group_todo==3:
+#   varnms=np.array(["FSSU13","FSSU12","FSSU11","FSSU10","FSSU09",\
+#           "FSSU08","FSSU07","FSSU06","FSSU05","FSSU04",\
+#           "FSSU03","FSSU02","FSSU01","FSSU14"])
+#   varnms_sub=np.array(["FSSUCLR13","FSSUCLR12","FSSUCLR11","FSSUCLR10","FSSUCLR09",\
+#           "FSSUCLR08","FSSUCLR07","FSSUCLR06","FSSUCLR05","FSSUCLR04",\
+#           "FSSUCLR03","FSSUCLR02","FSSUCLR01","FSSUCLR14"])
+#   var_long_name="Band-by-Band TOA SWCF"
+#   figure_name="Band_by_Band_TOA_SWCF_ANN_VIS_icealb"
+#   units=r"Wm$^-$$^2$"
 
 # variable group 4:
-if var_group_todo==4:
-   varnms=np.array(["FSSD13","FSSD12","FSSD11","FSSD10","FSSD09",\
-           "FSSD08","FSSD07","FSSD06","FSSD05","FSSD04",\
-           "FSSD03","FSSD02","FSSD01","FSSD14"])
-   var_long_name="Band-by-Band TOA Downward SW"
-   figure_name="Band_by_Band_TOA_downward_SW_ANN"
-   units=r"Wm$^-$$^2$"
+#if var_group_todo==4:
+#   varnms=np.array(["FSSD13","FSSD12","FSSD11","FSSD10","FSSD09",\
+#           "FSSD08","FSSD07","FSSD06","FSSD05","FSSD04",\
+#           "FSSD03","FSSD02","FSSD01","FSSD14"])
+#   var_long_name="Band-by-Band TOA Downward SW"
+#   figure_name="Band_by_Band_TOA_downward_SW_ANN"
+#   units=r"Wm$^-$$^2$"
 
 #f1=fpath_ctl+"solar_TSIS_cesm211_standard-ETEST-f19_g17-ens1.cam.h0.0001-01.nc"
 #f2=fpath_exp+"tsis_ctl_cesm211_standard-ETEST-f19_g17-ens1.cam.h0.0001-01.nc"
@@ -362,8 +362,8 @@ ax2.yaxis.grid(color='lightgray', linestyle=':')
 #ax2.set_xticklabels(labels=bands,rotation=-45,fontsize=12)
 plt.xticks(x,bands,rotation=-90,fontsize=12)
 plt.yticks(fontsize=12)
-#plt.savefig(figure_name+".eps")
+plt.savefig("./figures/"+figure_name+".eps")
 #plt.savefig(figure_name+".png",dpi=800)
-plt.show()
+#plt.show()
 
 exit()
