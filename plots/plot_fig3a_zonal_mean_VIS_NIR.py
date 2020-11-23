@@ -38,8 +38,8 @@ exp_name="TSIS" #os.environ["exp_name"]
 ctl_pref="solar_CTL_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
 exp_pref="solar_TSIS_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
 
-fpath_ctl="/raid00/xianwen/cesm211_solar/"+ctl_pref+"/climo/"
-fpath_exp="/raid00/xianwen/cesm211_solar/"+exp_pref+"/climo/"
+fpath_ctl="/raid00/xianwen/data/cesm211_solar_exp/"+ctl_pref+"/climo/"
+fpath_exp="/raid00/xianwen/data/cesm211_solar_exp/"+exp_pref+"/climo/"
  
 years=np.arange(2010,2020) 
 #months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
@@ -198,7 +198,7 @@ ax1.plot(lat[:],means_ctl_dn[0,:],color="k",lw=2,ls="-",label="UV+VIS down")
 ax1.plot(lat[:],means_ctl_dn[1,:],color="r",lw=2,ls="-",label="NIR down")
 ax1.plot(lat[:],means_ctl_up[0,:],color="g",lw=2,ls="-",label="UV+VIS up")
 ax1.plot(lat[:],means_ctl_up[1,:],color="darkorchid",lw=2,ls="-",label="NIR up")
-ax1.legend(fontsize=8)
+ax1.legend(fontsize=10)
 ax1.set_title("SFC Fluxes (CESM2)",fontsize=14)
 ax1.set_xlabel("Latitude",fontsize=14)
 ax1.set_ylabel(units,fontsize=14)
