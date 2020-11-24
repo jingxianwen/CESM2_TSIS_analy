@@ -116,7 +116,7 @@ ax1.xaxis.grid(color='lightgray', linestyle=':')
 ax1.yaxis.grid(color='lightgray', linestyle=':')
 plt.xticks(x,bands,rotation=0,fontsize=12)
 plt.yticks(fontsize=12)
-ax1.legend(fontsize=10)
+ax1.legend(fontsize=10,loc="upper left")
 
 ax2=fig.add_axes([0.55,0.25,0.35,0.4])
 ax2.bar(x-0.3,means_SH[:,0],width=0.3,color=color1,label="Open_water",edgecolor="white")
