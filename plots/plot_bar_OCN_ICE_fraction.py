@@ -30,15 +30,15 @@ from pylab import *
 # data path
 ctl_name="CTL" #os.environ["ctl_name"]
 exp_name="TSIS" #os.environ["exp_name"]
-ctl_pref="solar_CTL_cesm211_VIS_icealb_ETEST-f19_g17-ens_mean_2010-2019"
-exp_pref="solar_TSIS_cesm211_VIS_icealb_ETEST-f19_g17-ens_mean_2010-2019"
+ctl_pref="solar_CTL_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
+exp_pref="solar_TSIS_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
 ctl_fssd_pref="solar_CTL_cesm211_ETEST-f19_g17-ens0_fssd"
 exp_fssd_pref="solar_TSIS_cesm211_ETEST-f19_g17-ens0_fssd"
 
-fpath_ctl="/raid00/xianwen/data/cesm211_solar_exp/"+ctl_pref+"/climo/"
-fpath_exp="/raid00/xianwen/data/cesm211_solar_exp/"+exp_pref+"/climo/"
-fpath_ctl_fssd="/raid00/xianwen/data/cesm211_solar_exp/"+ctl_fssd_pref+"/climo/"
-fpath_exp_fssd="/raid00/xianwen/data/cesm211_solar_exp/"+exp_fssd_pref+"/climo/"
+fpath_ctl="/raid00/xianwen/cesm211_solar/"+ctl_pref+"/climo/"
+fpath_exp="/raid00/xianwen/cesm211_solar/"+exp_pref+"/climo/"
+fpath_ctl_fssd="/raid00/xianwen/cesm211_solar/"+ctl_fssd_pref+"/climo/"
+fpath_exp_fssd="/raid00/xianwen/cesm211_solar/"+exp_fssd_pref+"/climo/"
  
 years=np.arange(2010,2020) 
 #months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
