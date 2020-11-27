@@ -26,8 +26,8 @@ exp_name="TSIS" #os.environ["exp_name"]
 fpath_ctl='/raid00/xianwen/data/cesm211_solar_exp/solar_CTL_cesm211_ETEST-f19_g17-ens_mean_2010-2019/climo/'
 fpath_exp='/raid00/xianwen/data/cesm211_solar_exp/solar_TSIS_cesm211_ETEST-f19_g17-ens_mean_2010-2019/climo/'
 
-f1=fpath_ctl+"solar_CTL_cesm211_ETEST-f19_g17-ens_mean_2010-2019_climo_DJF.nc"
-f2=fpath_exp+"solar_TSIS_cesm211_ETEST-f19_g17-ens_mean_2010-2019_climo_DJF.nc"
+f1=fpath_ctl+"solar_CTL_cesm211_ETEST-f19_g17-ens_mean_2010-2019_climo_JJA.nc"
+f2=fpath_exp+"solar_TSIS_cesm211_ETEST-f19_g17-ens_mean_2010-2019_climo_JJA.nc"
 
 # open data file
 file_ctl=netcdf_dataset(f1,"r")
@@ -47,15 +47,15 @@ varnm="CLDLOW"   #
 #varnm_off="FLUTC_OFF"  #offline computation
 #units=r"W/m$^2$"
 units=""
-figure_name="lat_lon_cldlow_wind"
+figure_name="lat_lon_cldlow_wind_JJA"
 
 dtctl=file_ctl.variables[varnm][:,:,:] 
 dtexp=file_exp.variables[varnm][:,:,:] 
 
-uctl=file_ctl.variables["U"][:,nlev-1,:,:] 
-uexp=file_exp.variables["U"][:,nlev-1,:,:] 
-vctl=file_ctl.variables["V"][:,nlev-1,:,:] 
-vexp=file_exp.variables["V"][:,nlev-1,:,:] 
+uctl=file_ctl.variables["U"][:,nlev-7,:,:] 
+uexp=file_exp.variables["U"][:,nlev-7,:,:] 
+vctl=file_ctl.variables["V"][:,nlev-7,:,:] 
+vexp=file_exp.variables["V"][:,nlev-7,:,:] 
 ocnfrac=file_ctl.variables["OCNFRAC"][:,:,:]
 icefrac=file_ctl.variables["ICEFRAC"][:,:,:]
 uctl=np.where(ocnfrac+icefrac==1.,uctl,np.nan)
@@ -129,7 +129,7 @@ for i in range(0,3):
         dtplot=dtexp[:,:,:]
         uplot=uexp[:,:,:]
         vplot=vexp[:,:,:]
-        sc=400
+        sc=300
         #cmap="PiYG_r" #parameters["colormap"]
         cmap="rainbow" #parameters["colormap"]
         #stats=stats_ctl[:]
@@ -137,7 +137,7 @@ for i in range(0,3):
         dtplot=dtctl[:,:,:]
         uplot=uctl[:,:,:]
         vplot=vctl[:,:,:]
-        sc=400
+        sc=300
         #cmap="PiYG_r" #parameters["colormap"]
         cmap="rainbow" #parameters["colormap"]
         #stats=stats_exp[:]
@@ -156,13 +156,13 @@ for i in range(0,3):
                 cmap=cmap,\
                 extend="both",\
         	    )
-    pw1 = ax.quiver(lon[::2],lat[::2],uplot[0,::2,::2],vplot[0,::2,::2],scale=sc,
-                   headwidth=3,headlength=3,transform=projection)
+    pw1 = ax.quiver(lon[::3],lat[::3],uplot[0,::3,::3],vplot[0,::3,::3],scale=sc,
+                   headwidth=2,headlength=3,transform=projection)
     ax.set_aspect("auto")
     ax.coastlines(lw=0.3)
     # title
     ax.set_title(labels[i],loc="left",fontdict=plotSideTitle)
-    ax.set_title("DJF",loc="center",fontdict=plotSideTitle)
+    ax.set_title("JJA",loc="center",fontdict=plotSideTitle)
     #ax.set_title("exp",fontdict=plotTitle)
     ax.set_title(units,loc="right",fontdict=plotSideTitle)
     ax.set_xticks([0, 60, 120, 180, 240, 300, 359.99], crs=ccrs.PlateCarree())
