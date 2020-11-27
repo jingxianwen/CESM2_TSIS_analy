@@ -157,11 +157,12 @@ for i in range(0,3):
                 extend="both",\
         	    )
     pw1 = ax.quiver(lon[::2],lat[::2],uplot[0,::2,::2],vplot[0,::2,::2],scale=sc,
-                   headwidth=1,headlength=3,transform=projection)
+                   headwidth=3,headlength=3,transform=projection)
     ax.set_aspect("auto")
     ax.coastlines(lw=0.3)
     # title
     ax.set_title(labels[i],loc="left",fontdict=plotSideTitle)
+    ax.set_title("DJF",loc="center",fontdict=plotSideTitle)
     #ax.set_title("exp",fontdict=plotTitle)
     ax.set_title(units,loc="right",fontdict=plotSideTitle)
     ax.set_xticks([0, 60, 120, 180, 240, 300, 359.99], crs=ccrs.PlateCarree())
