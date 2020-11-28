@@ -48,7 +48,7 @@ var_group_todo=1
 varnms=np.array(["T"])
 #varnms=np.array(["FSNTOA","FSNS","TS"])
 var_long_name="Atmosphere_Temperature"
-figure_name="fig6_Atmosphere_Temperature_zonal_ANN"
+figure_name="fig6_Atmosphere_Temperature_zonal_JJA"
 units="K"
 
 nlat=np.int64(96)
@@ -65,8 +65,8 @@ means_ps=np.zeros((nlat))
 
 for iy in range(0,years.size): 
     # open data file
-    fctl=fpath_ctl+ctl_pref+"_ANN_"+str(years[iy])+".nc"
-    fexp=fpath_exp+exp_pref+"_ANN_"+str(years[iy])+".nc"
+    fctl=fpath_ctl+ctl_pref+"_JJA_"+str(years[iy])+".nc"
+    fexp=fpath_exp+exp_pref+"_JJA_"+str(years[iy])+".nc"
     file_ctl=netcdf_dataset(fctl,"r")
     file_exp=netcdf_dataset(fexp,"r")
     
@@ -121,20 +121,24 @@ for iv in range(pvalues.shape[0]):
 # make the plot
 #--------------------
 
+print(np.nanmax(diffs[0,:,:]))
+print(np.nanmin(diffs[0,:,:]))
+
 fig=plt.figure(figsize=(8,5))
 panel = [(0.2,0.2,0.45,0.6),(0.6,0.1,0.35,0.6)]
-cnlevels= np.linspace(-0.5,0.5,11)
+cnlevels= np.linspace(-1.5,1.5,11)
 ax1=fig.add_axes(panel[0])
 p1 = ax1.contourf(lat[:],lev[:],diffs[0,:,:],levels=cnlevels,cmap="bwr",extend="both")
 
-ax1.set_title("\u0394T (TSIS-1 - CESM2)",fontsize=14)
+ax1.set_title("\u0394T (TSIS-1 - CESM2)",loc="left",fontsize=14)
+ax1.set_title("JJA",loc="right",fontsize=14)
 ax1.set_xlim(-90,90)
-ax1.set_ylim(1000,3.6)
+ax1.set_ylim(1000,4)
 ax1.set_xticks([-80,-60,-40,-20,0,20,40,60,80])
 ax1.set_xticklabels(["-80","-60","-40","-20","0","20","40","60","80"],fontsize=12)
 ax1.set_yscale("log")
-ax1.set_yticks([1000,800,600,400,300,200,100,3.6])
-ax1.set_yticklabels(["1000","800","600","400","300","200","100","3"],fontsize=12)
+ax1.set_yticks([1000,800,600,400,300,200,100,4])
+ax1.set_yticklabels(["1000","800","600","400","300","200","100","4"],fontsize=12)
 
 # color bar
 cbax = fig.add_axes((panel[0][0] + 0.47, panel[0][1]+ 0.0235, 0.02, 0.5))

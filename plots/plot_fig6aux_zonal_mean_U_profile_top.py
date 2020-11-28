@@ -40,16 +40,16 @@ exp_pref="solar_TSIS_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
 fpath_ctl="/raid00/xianwen/data/cesm211_solar_exp/"+ctl_pref+"/climo/"
 fpath_exp="/raid00/xianwen/data/cesm211_solar_exp/"+exp_pref+"/climo/"
  
-years=np.arange(2010,2011) 
+years=np.arange(2010,2020) 
 #months_all=["01","02","03","04","05","06","07","08","09","10","11","12"]
 
 var_group_todo=1
 # variable group 1:
-varnms=np.array(["QRL"])
+varnms=np.array(["U"])
 #varnms=np.array(["FSNTOA","FSNS","TS"])
-var_long_name="Longwave heating rate"
-figure_name="fig6_QRL_zonal_ANN"
-units="K/day"
+var_long_name="zonal wind"
+figure_name="fig6aux_vertical_heat_flux_zonal_JJA"
+units=r"m $^-$$^1$"
 
 nlat=np.int64(96)
 nlev=np.int64(32)
@@ -65,8 +65,8 @@ means_ps=np.zeros((nlat))
 
 for iy in range(0,years.size): 
     # open data file
-    fctl=fpath_ctl+ctl_pref+"_climo_ANN.nc"
-    fexp=fpath_exp+exp_pref+"_climo_ANN.nc"
+    fctl=fpath_ctl+ctl_pref+"_JJA_"+str(years[iy])+".nc"
+    fexp=fpath_exp+exp_pref+"_JJA_"+str(years[iy])+".nc"
     file_ctl=netcdf_dataset(fctl,"r")
     file_exp=netcdf_dataset(fexp,"r")
     
@@ -77,8 +77,8 @@ for iy in range(0,years.size):
     
     # read data and calculate mean/min/max
     for iv in range(0,varnms.size):
-        dtctl=file_ctl.variables[varnms[iv]][:,:,:,:] #+file_ctl.variables["QRS"][:,:,:,:] 
-        dtexp=file_exp.variables[varnms[iv]][:,:,:,:] #+file_exp.variables["QRS"][:,:,:,:] 
+        dtctl=file_ctl.variables[varnms[iv]]
+        dtexp=file_exp.variables[varnms[iv]] 
 
         means_yby_ctl[iy,iv,:]=np.mean(dtctl[:,:,:,:],axis=3)[0,:,:]
         means_yby_exp[iy,iv,:]=np.mean(dtexp[:,:,:,:],axis=3)[0,:,:]
@@ -86,9 +86,9 @@ for iy in range(0,years.size):
         means_yby_ps[iy,:]=np.mean(ps[:,:,:],axis=2)[0,:]
 
 # compute multi-year mean and ttest
-#siglev=0.05
-means_ctl=np.mean(means_yby_ctl,axis=0)*24.*3600.
-means_exp=np.mean(means_yby_exp,axis=0)*24.*3600.
+siglev=0.05
+means_ctl=np.mean(means_yby_ctl,axis=0)
+means_exp=np.mean(means_yby_exp,axis=0)
 means_ps=np.mean(means_yby_ps,axis=0)*0.01
 
 for ilat in range(0,nlat):
@@ -96,56 +96,70 @@ for ilat in range(0,nlat):
     means_exp[0,:,ilat]=np.where(lev<means_ps[ilat],means_exp[0,:,ilat],np.nan)
 
 # stadard deviation
-#s1=np.std(means_yby_exp,axis=0)
-#s2=np.std(means_yby_exp,axis=0)
-#nn=years.size
-#stddev_diffs=np.sqrt(((nn-1)*(s1**2.) + (nn-1)*s2**2.)/(nn+nn-2))
+s1=np.std(means_yby_exp,axis=0)
+s2=np.std(means_yby_exp,axis=0)
+nn=years.size
+stddev_diffs=np.sqrt(((nn-1)*(s1**2.) + (nn-1)*s2**2.)/(nn+nn-2))
 
 diffs=means_exp-means_ctl
-#ttest=stats.ttest_ind(means_yby_ctl,means_yby_exp,axis=0)
-#pvalues=ttest.pvalue
-#diffs_sig=np.zeros(diffs.shape)
-#diffs_sig[:,:,:]=np.nan
+ttest=stats.ttest_ind(means_yby_ctl,means_yby_exp,axis=0)
+pvalues=ttest.pvalue
+diffs_sig=np.zeros(diffs.shape)
+diffs_sig[:,:,:]=np.nan
 
 zeros=np.zeros(diffs.shape)
 
-#for iv in range(pvalues.shape[0]):
-#   for ip in range(pvalues.shape[1]):
-#      for ix in range(pvalues.shape[2]):
-#       if pvalues[iv,ip,ix] < siglev:
-#           diffs_sig[iv,ip,ix]=diffs[iv,ip,ix]
-#       #else:
-#       #    diffs_unsig[iv,ip]=diffs[iv,ip]
+for iv in range(pvalues.shape[0]):
+   for ip in range(pvalues.shape[1]):
+      for ix in range(pvalues.shape[2]):
+       if pvalues[iv,ip,ix] < siglev:
+           diffs_sig[iv,ip,ix]=diffs[iv,ip,ix]
+       #else:
+       #    diffs_unsig[iv,ip]=diffs[iv,ip]
 
 #--------------------
 # make the plot
 #--------------------
-print(np.nanmax(diffs))
-print(np.nanmin(diffs))
+#print(np.nanmax(diffs))
+#print(np.nanmin(diffs))
+#print(np.nanmax(means_ctl))
+#print(np.nanmin(means_ctl))
+
 fig=plt.figure(figsize=(8,5))
 panel = [(0.2,0.2,0.45,0.6),(0.6,0.1,0.35,0.6)]
-#cnlevels= np.linspace(-0.5,0.5,11)
-cnlevels= np.linspace(-0.020,0.020,11)
-ax1=fig.add_axes(panel[0])
-p1 = ax1.contourf(lat[:],lev[:],diffs[0,:,:],levels=cnlevels,cmap="bwr",extend="both")
 
-ax1.set_title("\u0394QRL (TSIS-1 - CESM2)",fontsize=14)
+fig_ID = 1 #1: CESM2. 2: TSIS - CESM2
+
+if fig_ID == 1:
+# plot CESM2 zonal weind 
+   cnlevels= np.linspace(-60.,60.,13)
+   ax1=fig.add_axes(panel[0])
+   p1 = ax1.contourf(lat[:],lev[:],means_ctl[0,:,:],levels=cnlevels,cmap="bwr",extend="both")
+   ax1.set_title("U (CESM2)",loc="left",fontsize=14)
+   ax1.set_title("JJA",loc="right",fontsize=14)
+elif fig_ID ==2: 
+   cnlevels= np.linspace(-3.,3.,13)
+   ax1=fig.add_axes(panel[0])
+   p1 = ax1.contourf(lat[:],lev[:],diffs[0,:,:],levels=cnlevels,cmap="bwr",extend="both")
+   ax1.set_title("\u0394U (TSIS-1 - CESM2)",loc="left",fontsize=14)
+   ax1.set_title("JJA",loc="right",fontsize=14)
+   p2 = ax1.contourf(lat[:],lev[:],diffs_sig[0,:,:],levels=cnlevels,cmap="bwr",hatches=['...'],extend="both")
+
 ax1.set_xlim(-90,90)
 ax1.set_ylim(1000,3.6)
 ax1.set_xticks([-80,-60,-40,-20,0,20,40,60,80])
 ax1.set_xticklabels(["-80","-60","-40","-20","0","20","40","60","80"],fontsize=12)
 ax1.set_yscale("log")
-ax1.set_yticks([1000,800,600,400,300,200,100,3.6])
-ax1.set_yticklabels(["1000","800","600","400","300","200","100","3"],fontsize=12)
+ax1.set_yticks([1000,800,600,400,300,200,100,4])
+ax1.set_yticklabels(["1000","800","600","400","300","200","100","4"],fontsize=12)
 
 # color bar
 cbax = fig.add_axes((panel[0][0] + 0.47, panel[0][1]+ 0.0235, 0.02, 0.5))
 cbar = fig.colorbar(p1, cax=cbax, ticks=cnlevels)
 cbar.ax.tick_params(labelsize=13.0, length=0)
 
-ax1.text(99, 5, 'K/day',fontsize=14)
+ax1.text(99, 6, units,fontsize=14)
 
-#p2 = ax1.contourf(lat[:],lev[:],diffs_sig[0,:,:],levels=cnlevels,cmap="bwr",hatches=['...'],extend="both")
 
 ax1.set_ylabel("Pressure (hPa)",fontsize=13)
 ax1.set_xlabel("Latitude",fontsize=13)
