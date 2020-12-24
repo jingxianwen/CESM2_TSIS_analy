@@ -33,7 +33,7 @@ ctl_name="CTL" #os.environ["ctl_name"]
 ctl_pref="solar_CTL_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
 #exp_pref="solar_TSIS_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
 
-fpath_ctl="/raid00/xianwen/data/cesm211_solar_exp/"+ctl_pref+"/climo/"
+fpath_ctl="/Volumes/WD4T_1/cesm2_solar_exp/"+ctl_pref+"/climo/"
 #fpath_exp="/raid00/xianwen/data/cesm211_solar_exp/"+exp_pref+"/climo/"
  
 #years=np.arange(2010,2020) 
@@ -44,51 +44,69 @@ figure_name="fig_bar_ocn_ice_fraction"
 #units="Wm$^-$$^2$"
 varnms=[ "OCNFRAC", "ICEFRAC", "SNOWHICE" ]
 seasons=["DJF","MAM","JJA","SON"]
+months=[["12","01","02"],["03","04","05"],["06","07","08"],["09","10","11"],]
 #define empty variables to save global means-->
 means_NH=np.zeros((4,3)) # ocean frac, bare ice frac, snow frac
 means_SH=np.zeros((4,3)) # ocean frac, bare ice frac, snow frac
 diffs=np.zeros((4,3)) #multi-year exp-ctl diff for each variable
 
 for iss in range(0,4): 
-    # open data file
-    fctl=fpath_ctl+ctl_pref+"_climo_"+seasons[iss]+".nc"
-    #fexp=fpath_exp+exp_pref+"_climo_"+seasons[iss]+".nc"
-
-    file_ctl=netcdf_dataset(fctl,"r")
-    #file_exp=netcdf_dataset(fexp,"r")
     
-    # read lat and lon
-    lat=file_ctl.variables["lat"]
-    lon=file_ctl.variables["lon"]
+    for imon in range(0,3):
+        # open data file
+        fctl=fpath_ctl+ctl_pref+"_climo_"+months[iss][imon]+".nc"
+        file_ctl=netcdf_dataset(fctl,"r")
+        
+        # read lat and lon
+        lat=file_ctl.variables["lat"]
+        lon=file_ctl.variables["lon"]
 
-    # read ocean/ice fraction and snowdepth
-    ocnf_ctl=file_ctl.variables["OCNFRAC"][:,:,:]
-    icef_ctl=file_ctl.variables["ICEFRAC"][:,:,:]
-    snwd_ctl=file_ctl.variables["SNOWHICE"][:,:,:]
+        # read ocean/ice fraction and snowdepth
+        ocnf_ctl=file_ctl.variables["OCNFRAC"][:,:,:]
+        icef_ctl=file_ctl.variables["ICEFRAC"][:,:,:]
+        snwd_ctl=file_ctl.variables["SNOWHICE"][:,:,:]
+        lndf_ctl=file_ctl.variables["LANDFRAC"][:,:,:]
 
-    icef_snw=np.where(snwd_ctl[:,:,:]>=0.05,icef_ctl,0.0)
-    icef_bare=np.where(snwd_ctl[:,:,:]<0.05,icef_ctl,0.0)
+        icef_snw_tmp=np.where(snwd_ctl[:,:,:]>=0.01,icef_ctl,0.0)
+        icef_bare_tmp=np.where(snwd_ctl[:,:,:]<0.01,icef_ctl,0.0)
+        ocnf_open_tmp=ocnf_ctl
+        if imon == 0:
+            icef_snw=icef_snw_tmp
+            icef_bare=icef_bare_tmp
+            ocnf_open=ocnf_open_tmp
+        else:
+            icef_snw=icef_snw_tmp + icef_snw
+            icef_bare=icef_bare_tmp + icef_bare
+            ocnf_open=ocnf_open_tmp + ocnf_open
+    icef_snw = icef_snw / 3.
+    icef_bare = icef_bare / 3.
+    ocnf_open = ocnf_open / 3.
+    #icef_snw = np.where(lndf_ctl < 0.01, icef_snw, np.nan)
+    #icef_bare = np.where(lndf_ctl < 0.01, icef_bare, np.nan)
+    #ocnf_open = np.where(lndf_ctl < 0.01, ocnf_open, np.nan)
 
     # compute Arctic and Antarctic averages
     # 1. Arctic 
     latbound1=np.min(np.where(lat[:]>55))
     latbound2=lat.size
     means_NH[iss,0]=get_area_mean_min_max( \
-                     ocnf_ctl[0,latbound1:latbound2,:],lat[latbound1:latbound2])[0]
+                     ocnf_open[0,latbound1:latbound2,:],lat[latbound1:latbound2])[0]
     means_NH[iss,1]=get_area_mean_min_max( \
                      icef_snw[0,latbound1:latbound2,:],lat[latbound1:latbound2])[0]
     means_NH[iss,2]=get_area_mean_min_max( \
                      icef_bare[0,latbound1:latbound2,:],lat[latbound1:latbound2])[0]
+    means_NH[iss,:] = means_NH[iss,:]/np.sum(means_NH[iss,:])
 
     # 2. Antarctic
     latbound1=0
     latbound2=np.max(np.where(lat[:]<-55))+1    
     means_SH[iss,0]=get_area_mean_min_max( \
-                     ocnf_ctl[0,latbound1:latbound2,:],lat[latbound1:latbound2])[0]
+                     ocnf_open[0,latbound1:latbound2,:],lat[latbound1:latbound2])[0]
     means_SH[iss,1]=get_area_mean_min_max( \
                      icef_snw[0,latbound1:latbound2,:],lat[latbound1:latbound2])[0]
     means_SH[iss,2]=get_area_mean_min_max( \
                      icef_bare[0,latbound1:latbound2,:],lat[latbound1:latbound2])[0]
+    means_SH[iss,:] = means_SH[iss,:]/np.sum(means_SH[iss,:])
 
 print(means_NH)
 print(means_SH)
@@ -103,10 +121,10 @@ bands=["DJF","MAM","JJA","SON"]
 color1="tab:cyan"
 color2="tab:olive"
 color3="tab:gray"
-ax1.bar(x-0.3,means_NH[:,0],width=0.3,color=color1,label="Open_water",edgecolor="white")
-ax1.bar(x    ,means_NH[:,1],width=0.3,color=color2,label="Snow_ice",edgecolor="white")
-ax1.bar(x+0.3,means_NH[:,2],width=0.3,color=color3,label="Bare_ice",edgecolor="white")
-ax1.set_ylim(0,0.6)
+ax1.bar(x-0.3,means_NH[:,0],width=0.3,color=color1,label="open_water",edgecolor="white")
+ax1.bar(x    ,means_NH[:,1],width=0.3,color=color2,label="snow_ice",edgecolor="white")
+ax1.bar(x+0.3,means_NH[:,2],width=0.3,color=color3,label="bare_ice",edgecolor="white")
+ax1.set_ylim(0,1.0)
 #ax1.text(13.7, -24.0, r'$\mu$m',fontsize=12)
 ax1.set_title("Arctic",fontsize=12)
 ax1.set_ylabel("Fraction",fontsize=12)
@@ -116,13 +134,13 @@ ax1.xaxis.grid(color='lightgray', linestyle=':')
 ax1.yaxis.grid(color='lightgray', linestyle=':')
 plt.xticks(x,bands,rotation=0,fontsize=12)
 plt.yticks(fontsize=12)
-ax1.legend(fontsize=10,loc="upper left")
+ax1.legend(fontsize=10,loc="upper right")
 
 ax2=fig.add_axes([0.55,0.25,0.35,0.4])
-ax2.bar(x-0.3,means_SH[:,0],width=0.3,color=color1,label="Open_water",edgecolor="white")
-ax2.bar(x    ,means_SH[:,1],width=0.3,color=color2,label="Snow_ice",edgecolor="white")
-ax2.bar(x+0.3,means_SH[:,2],width=0.3,color=color3,label="Bare_ice",edgecolor="white")
-ax2.set_ylim(0,0.6)
+ax2.bar(x-0.3,means_SH[:,0],width=0.3,color=color1,label="open_water",edgecolor="white")
+ax2.bar(x    ,means_SH[:,1],width=0.3,color=color2,label="snow_ice",edgecolor="white")
+ax2.bar(x+0.3,means_SH[:,2],width=0.3,color=color3,label="bare_ice",edgecolor="white")
+ax2.set_ylim(0,1.0)
 #ax2.text(13.7, -24.0, r'$\mu$m',fontsize=12)
 ax2.set_title("Antarctic",fontsize=12)
 ax2.set_ylabel("Fraction",fontsize=12)

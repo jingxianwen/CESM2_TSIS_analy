@@ -217,6 +217,7 @@ def get_area_mean_min_max(varin,lat):
     weights=np.cos(latr)
     #first calculate zonal mean
     zonal_mean=varin.mean(axis=1)
+    #zonal_mean=np.nanmean(varin,axis=1)
     #then calculate weighted global mean
     area_mean=np.average(zonal_mean,axis=0,weights=weights)
    # 2. min and max

@@ -34,7 +34,7 @@ exp_name="TSIS-1" #os.environ["exp_name"]
 ctl_pref="solar_CTL_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
 #exp_pref="solar_TSIS_cesm211_ETEST-f19_g17-ens_mean_2010-2019"
 
-fpath_ctl="/raid00/xianwen/data/cesm211_solar_exp/"+ctl_pref+"/climo/"
+fpath_ctl="/Volumes/WD4T_1/cesm2_solar_exp/"+ctl_pref+"/climo/"
 #fpath_exp="/raid00/xianwen/data/cesm211_solar_exp/"+exp_pref+"/climo/"
 
 fctl=fpath_ctl+"solar_CTL_cesm211_ETEST-f19_g17-ens_mean_2010-2019_climo_ANN.nc"
@@ -58,8 +58,11 @@ dtexp=file_ctl.variables[varnm3][0,:,:] / file_ctl.variables[varnm4][0,:,:]
 dtdif=dtexp[:,:]-dtctl[:,:]
 
 lat=file_ctl.variables["lat"]
-lon=file_ctl.variables["lon"]
+lon_in=file_ctl.variables["lon"]
 lev=file_ctl.variables["lev"]
+
+lon=np.where(lon_in[:]>180,lon_in[:]-360.,lon_in[:])
+print(lon[:])
 
 pole='N'
 season="ANN"
@@ -92,8 +95,8 @@ nlev=32
 #file_exp=netcdf_dataset(fexp,"r")
 
 # read lat and lon
-lat=file_ctl.variables["lat"]
-lon=file_ctl.variables["lon"]
+#lat=file_ctl.variables["lat"]
+#lon=file_ctl.variables["lon"]
 
 #means_ctl[:,:]=file_ctl.variables[varnm][0,:,:]
 #means_ctl2[:,:]=file_ctl.variables[varnm2][0,:,:]
@@ -130,11 +133,11 @@ elif pole == "S":
 #          plot_sig=True
 
 # add cyclic
-dtctlc=add_cyclic_point(dtctl[:,:])
-dtexpc=add_cyclic_point(dtexp[:,:])
-dtdifc=add_cyclic_point(dtdif[:,:])
-#dtdif_sig=add_cyclic_point(diffs_sig[:,:])
-lon=np.append(lon[:],360.)
+#dtctlc=add_cyclic_point(dtctl[:,:])
+#dtexpc=add_cyclic_point(dtexp[:,:])
+#dtdifc=add_cyclic_point(dtdif[:,:])
+#lon=np.append(lon[:],0.)
+#print(lon[:])
 
 #-----------------
 # make the plot
@@ -145,11 +148,12 @@ lon=np.append(lon[:],360.)
 data_crs=ccrs.PlateCarree()
 #parameters=get_parameters(varnm,season)
 if pole == "N":
-    projection = ccrs.NorthPolarStereo(central_longitude=0)
+    #projection = ccrs.NorthPolarStereo(central_longitude=0)
+    projection = ccrs.PlateCarree()
 elif pole == "S":
     projection = ccrs.SouthPolarStereo(central_longitude=0)
 
-fig = plt.figure(figsize=[5.0,6.0],dpi=150.)
+fig = plt.figure(figsize=[5.0,5.0],dpi=150.)
 
 # set text properties
 plotTitle = {'fontsize': 13.}
@@ -165,26 +169,32 @@ levels = None
 norm = None
 cnlevels=np.array([0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9])
 
-ax = fig.add_axes(panel[0],projection=projection,autoscale_on=True)
+ax = fig.add_axes(panel[0],projection=projection) #,autoscale_on=False)
 ax.set_global()
+##if pole == "N":
+##    ax.gridlines(color="gray",linestyle=":",\
+##		#xlocs=[0,60,120,180,240,300,360],ylocs=[50,60,70,80,89.5])
+##		xlocs=[-180,-120,-60,0,60,120,180],ylocs=[50,60,70,80,89.5])
+##elif pole == "S":
+##    ax.gridlines(color="gray",linestyle=":",\
+##		xlocs=[0,60,120,180,240,300,360],ylocs=[-50,-60,-70,-80,-89.5])
+##
 if pole == "N":
-    ax.gridlines(color="gray",linestyle=":",\
-		xlocs=[0,60,120,180,240,300,360],ylocs=[50,60,70,80,89.5])
-elif pole == "S":
-    ax.gridlines(color="gray",linestyle=":",\
-		xlocs=[0,60,120,180,240,300,360],ylocs=[-50,-60,-70,-80,-89.5])
-
-if pole == "N":
-    ax.set_extent([-180, 180, 55, 90], crs=ccrs.PlateCarree())
+    #ax.set_extent([-180, 180, 55, 90], crs=ccrs.PlateCarree())
+    ax.set_extent([-180, 180, -90, 90], crs=ccrs.PlateCarree())
 elif pole == "S":
     ax.set_extent([-180, 180, -55, -90], crs=ccrs.PlateCarree())
 
-dtplot=dtctlc[:,:]
+dtplot=dtctl[:,:]
 #cmap=parameters["colormap_diff"]
 cmap="jet"
 #stats_now=stats_dif
 
-p1 = ax.contourf(lon[:],lat[latbound1:latbound2],dtplot[latbound1:latbound2,:],\
+#print(dtplot[latbound1:latbound2,:])
+print(dtplot[:,0])
+
+#p1 = ax.contourf(lon[:],lat[latbound1:latbound2],dtplot[latbound1:latbound2,:],\
+p1 = ax.contourf(lon[:],lat[:],dtplot[:,:],\
             transform=data_crs,\
             #norm=norm,\
             levels=cnlevels,\
@@ -194,17 +204,17 @@ p1 = ax.contourf(lon[:],lat[latbound1:latbound2],dtplot[latbound1:latbound2,:],\
     	    )
 ax.coastlines(lw=0.3)
 
-theta = np.linspace(0, 2 * np.pi, 100)
-# correct center location to match latitude circle and contours.
-center, radius = [0.5, 0.5], 0.50
-verts = np.vstack([np.sin(theta), np.cos(theta)]).T
-circle = mpath.Path(verts * radius + center)
-ax.set_boundary(circle, transform=ax.transAxes)
-ax.set_title(label,loc="center",fontdict=plotSideTitle)
+#theta = np.linspace(0, 2 * np.pi, 100)
+## correct center location to match latitude circle and contours.
+#center, radius = [0.5, 0.5], 0.50
+#verts = np.vstack([np.sin(theta), np.cos(theta)]).T
+#circle = mpath.Path(verts * radius + center)
+#ax.set_boundary(circle, transform=ax.transAxes)
+#ax.set_title(label,loc="center",fontdict=plotSideTitle)
 # color bar
-cbax = fig.add_axes((panel[0][0] + 0.62, panel[0][1] + 0.1, 0.04, 0.35))
-cbar = fig.colorbar(p1, cax=cbax, ticks=cnlevels)
-cbar.ax.tick_params(labelsize=12.0, length=0)
+#cbax = fig.add_axes((panel[0][0] + 0.62, panel[0][1] + 0.1, 0.04, 0.35))
+#cbar = fig.colorbar(p1, cax=cbax, ticks=cnlevels)
+#cbar.ax.tick_params(labelsize=12.0, length=0)
 
 # Mean, Min, Max
 #fig.text(panel[0][0] + 0.62, panel[0][1] + 0.48,
